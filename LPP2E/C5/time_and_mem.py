@@ -139,3 +139,72 @@ print(next(squares))
 print(next(squares))
 print(next(squares))
 print(next(squares))
+
+
+# gen.yield.return.py
+def geometric_progression(a, q):
+    k = 0
+    while True:
+        result = a * q**k
+        if result <= 1000000:
+            yield result
+        else:
+            return
+        k += 1
+
+
+for i in geometric_progression(2, 5):
+    print(i)
+
+
+# first.n.squares.manual.method.py
+def get_squares_gen(n):
+    for x in range(n):
+        yield x ** 2
+
+
+squares = get_squares_gen(3)
+print(squares.__next__())
+print(squares.__next__())
+print(squares.__next__())
+print(squares.__next__())
+
+
+# gen.send.preparation.py
+def counter(start=0):
+    n = start
+    while True:
+        yield n
+        n += 1
+
+
+c = counter()
+print(next(c))
+print(next(c))
+print(next(c))
+print(next(c))
+
+
+# gen.send.preparation.stop.py
+stop = False
+def counter(start=0):
+    n = start
+    while not stop:
+        yield n
+        n += 1
+
+
+c = counter()
+print(next(c))
+print(next(c))
+print(next(c))
+stop = True
+print(next(c))
+
+
+# gen.send.py
+def counter(start=0):
+    n = start
+    while True:
+        result = yield n
+        print(type(result), result)
