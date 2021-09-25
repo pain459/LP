@@ -118,19 +118,25 @@ print(pairs)
 # traditional approach
 def get_squares(n):
     return [i ** 2 for i in range(n)]
+
+
 print(get_squares(10))
+
 
 # generator approach
 def get_squares_gen(n):
     for i in range(n):
         yield i ** 2  # we yield, we don't return in generators.
 
+
 print(list(get_squares_gen(10)))
+
 
 # first.n.squares.manual.py
 def get_squares_gen(n):
     for x in range(n):
         yield x ** 2
+
 
 squares = get_squares_gen(4)
 print(squares)
@@ -145,7 +151,7 @@ print(next(squares))
 def geometric_progression(a, q):
     k = 0
     while True:
-        result = a * q**k
+        result = a * q ** k
         if result <= 1000000:
             yield result
         else:
@@ -184,9 +190,10 @@ print(next(c))
 print(next(c))
 print(next(c))
 
-
 # gen.send.preparation.stop.py
 stop = False
+
+
 def counter(start=0):
     n = start
     while not stop:
@@ -208,3 +215,73 @@ def counter(start=0):
     while True:
         result = yield n
         print(type(result), result)
+        if result == 'Q':
+            break
+        n += 1
+
+
+c = counter()
+print(next(c))
+print(c.send('Wow!'))
+print(next(c))
+print(c.send('Q'))
+
+
+# gen.yield.for.py
+def print_squares(start, end):
+    for n in range(start, end):
+        yield n ** 2
+
+
+for n in print_squares(2, 5):
+    print(n)
+
+
+# gen.yield.from.py  Using the yield from expression.
+def print_squares(start, end):
+    yield from (n ** 2 for n in range(start, end))
+
+
+for n in print_squares(2, 5):
+    print(n)
+
+# Generator expression.
+# We will see some difference between generator expressions and normal iterations.
+cubes = [i ** 3 for i in range(10)]
+print(cubes)  # will receive [0, 1, 8, 27, 64, 125, 216, 343, 512, 729] as a list.
+type(cubes)  # <class 'list'>
+
+# Using generator.
+_ = list
+cubes_gen = (i ** 3 for i in range(10))
+print(cubes_gen)  # prints memory location <generator object <genexpr> at 0x000001A932CBB448>
+print(_(cubes_gen))  # prints [0, 1, 8, 27, 64, 125, 216, 343, 512, 729]
+print(_(cubes_gen))  # returns empty list as the o/p is now exhausted.
+
+# gen.map.py
+def adder(*n):
+    return sum(n)
+
+
+s1 = sum(map(lambda *n: adder(*n), range(100), range(1, 101)))
+print(s1)
+
+# Using a filter
+_ = list
+cubes = [x ** 3 for x in range(10)]
+
+odd_cubes1 = filter(lambda cube: cube % 2, cubes)
+print(_(odd_cubes1))
+
+odd_cubes2 = (cube for cube in cubes if cube % 2)
+print(_(odd_cubes2))
+
+
+# Dealing with some memory intensive calculations.
+# sum.example.2.py
+s = sum([i**2 for i in range(10**8)])  # This might kill some small machines.
+print(s)
+
+# Optimised way with generators.
+s1 = sum(i**2 for i in range(10**8))  # This succeeds. Oh generator you beauty.
+print(s1)  #prints 333333328333333350000000
