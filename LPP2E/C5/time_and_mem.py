@@ -5,6 +5,8 @@
 
 # Wrapping code of list constructor. Using aliases.
 # traditional
+import math
+
 range(7)  # Will return range(0, 7)
 list(range(7))  # [0, 1, 2, 3, 4, 5, 6]
 # Using aliases
@@ -285,3 +287,66 @@ print(s)
 # Optimised way with generators.
 s1 = sum(i**2 for i in range(10**8))  # This succeeds. Oh generator you beauty.
 print(s1)  #prints 333333328333333350000000
+
+# Performance considerations.
+# performances.py
+from time import time
+mx = 5000
+
+t = time()  # start time for the for loop
+floop = []
+for a in range(1, mx):
+    for b in range(a, mx):
+        floop.append(divmod(a, b))
+print('for loop: {:.4f} s'.format(time() - t))  # elapsed time
+
+t = time()  # Start time for list comprehension.
+compr = [
+    divmod(a, b) for a in range(1, mx) for b in range(a, mx)]
+print('list comprehension: {:.4f} s'.format(time() - t))
+
+t = time()
+gener = list(
+    divmod(a, b) for a in range(1, mx) for b in range(a, mx))
+print('generator expression: {:.4f} s'.format(time() - t))
+
+# Examples comparing for loop and a map call
+# performances.map.py
+from time import time
+mx = 2 * 10 ** 7
+
+t = time()
+absloop = []
+for n in range(mx):
+    absloop.append(abs(n))
+print('for loop: {:.4f} s'.format(time() - t))
+
+t = time()
+abslist = [abs(n) for n in range(mx)]
+print('list comprehension {:.4f} s'.format(time() - t))
+
+t = time()
+_ = list
+absmap = _(map(abs, range(mx)))
+print('map: {:.4f} s'.format(time() - t))
+
+# pythagorean.triple.generation.for.py
+import math
+from time import time
+
+def gen_triples(N):
+    for m in range(1, int(N**.5) + 1):
+        for n in range(1, m):
+            if (m - n) % 2 and math.gcd(m, n) == 1:
+                c = m**2 + n**2
+                if c <= N:
+                    a = m**2 - n **2
+                    b = 2 * m * n
+                    yield (a, b, c)
+
+t = time()
+triples = sorted(
+    gen_triples(500), key=lambda *triple: sum(*triple))
+print('time taken for execution {:.4f} s'.format(time() - t))
+print(triples)
+
