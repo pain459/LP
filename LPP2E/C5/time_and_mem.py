@@ -350,3 +350,66 @@ triples = sorted(
 print('time taken for execution {:.4f} s'.format(time() - t))
 print(triples)
 
+# Name localization
+
+# scopes.py
+A = 100
+ex1 = [A for A in range(5)]
+print(A)
+
+ex2 = list(A for A in range(5))
+print(A)
+
+ex3 = dict((A, 2 * A) for A in range(5))
+print(A)
+
+ex4 = set(A for A in range(5))
+print(A)
+
+s = 0
+for A in range(5):
+    s += A
+print(A)
+print(globals())
+
+# One last example
+
+#fibonacci.first.py
+def fibonacci(N):
+    """Return all fibonacci numbers up to N."""
+    result = [0]
+    next_n = 1
+    while next_n <= N:
+        result.append(next_n)
+        next_n = sum(result[-2:])
+    return result
+
+
+print(fibonacci(125))
+
+# fibonacci.second.py
+def fibonacci(N):
+    """Return all fibonacci numbers up to N."""
+    yield 0
+    if N == 0:
+        return
+    a = 0
+    b = 1
+    while b <= N:
+        yield b
+        a, b = b, a + b
+
+
+print(list(fibonacci(100)))
+
+
+# fibonacci.elegant.py
+def fibonacci(N):
+    """Return all fibonacci numbers up to N."""
+    a, b = 0, 1
+    while a <= N:
+        yield a
+        a, b = b, a + b
+
+
+print(list(fibonacci(100)))
