@@ -344,6 +344,7 @@ def gen_triples(N):
                     b = 2 * m * n
                     yield (a, b, c)
 
+
 t = time()
 triples = sorted(
     gen_triples(500), key=lambda *triple: sum(*triple))

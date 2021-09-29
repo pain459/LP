@@ -1,4 +1,4 @@
-from time import sleep, time
+from time import time, sleep
 
 
 def f(sleep_time=0.1):
@@ -11,6 +11,7 @@ def measure(func, *args, **kwargs):
     print(func.__name__, 'took:', time() - t)
 
 
-measure(f, sleep_time=0.5)
-measure(f, 0.3)
-measure(f)
+measure(f, sleep_time=0.3)
+measure(f, 0.2)
+
+measure(f, sleep_time=1.2)

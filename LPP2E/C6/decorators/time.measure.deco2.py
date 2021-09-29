@@ -14,9 +14,10 @@ def measure(func):
 
 @measure
 def f(sleep_time=0.1):
-    """I'm a cat. I love to sleep!"""
+    """I'm a cat. I love to sleep"""
     sleep(sleep_time)
 
 
 f(sleep_time=0.3)
+f(0.5)
 print(f.__name__, ':', f.__doc__)

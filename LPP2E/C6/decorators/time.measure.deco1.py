@@ -14,7 +14,8 @@ def measure(func):
     return wrapper
 
 
-f = measure(f)  # decoration point
+f = measure(f)  # decoration point.
+
 f(0.2)
-f(sleep_time=0.3)
+f(sleep_time=0.5)
 print(f.__name__)

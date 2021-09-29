@@ -1,10 +1,13 @@
 from time import sleep, time
 
+
 def f():
-    sleep(0.3)
+    sleep(.3)
+
 
 def g():
-    sleep(0.5)
+    sleep(.5)
+
 
 def measure(func):
     t = time()
