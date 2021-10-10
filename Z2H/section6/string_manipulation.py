@@ -15,6 +15,7 @@ def camel_creator(a):
                 x += 1
             else:
                 pass
+    print(a)
     return a_camel
 
 a = 'asdfasfgasdfgasdfasdfgasdgd'
