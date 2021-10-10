@@ -1,3 +1,15 @@
+from random import random
+
+def greetings():
+    print('Hello all. Welcome to tic tac toe by a noob!')
+
+def player_name_entries():
+    print('Please enter the player names as requested.')
+    p = dict()
+    p['p1'] = input('Enter your name Player 1 : ')
+    p['p2'] = input('Enter your name Player 2 : ')
+    return p
+
 def display_board(board):
     print(f'-------------')
     print(f'| {board[7]} | {board[8]} | {board[9]} |')
@@ -8,21 +20,8 @@ def display_board(board):
     print(f'-------------')
 
 
-test_board = ['#','X','O','X','O','X','O','X','O','X']
-display_board(test_board)
 
-def player_input():
-    
-    choice = 'wrong'
-    while choice not in ['X', 'O']:
-        choice = input('Pick your marker for the game (X, O):')
-        
-        if choice not in ['X', 'O']:
-            print('Sorry, invalid choice')
-            
-    return choice
+greetings()
+players_info = player_name_entries()
 
-player_input()
-
-def place_marker(board, marker, position):
-    pass
+players_info['p1']  # now I can call from outside of the function
