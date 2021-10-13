@@ -1,0 +1,3 @@
+from random_scripts.my_modules import date_and_time_now
+
+date_and_time_now.date_and_time_today()
