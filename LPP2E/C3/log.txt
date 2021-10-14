@@ -1,6 +1,0 @@
-Iterating and Making Decisions
-covering the below topics
-
-1. Conditional programming
-2. Looping in Python
-3. A quick peek at the itertools module
