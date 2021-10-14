@@ -1,6 +1,7 @@
 import argparse
 
 DEFAULT_C = 10
+DEFAULT_D = 1
 
 
 def create_argument_parser():
@@ -36,6 +37,20 @@ def create_argument_parser():
         help='optional value for function 3'
     )
 
+    parser.add_argument(
+        '--d_value',
+        '-d',
+        dest='d',
+        type=int,
+        help='optional value for function 4'
+    )
+
+    parser.add_argument(
+        '--e_value',
+        '--e',
+        help='without tails'
+    )
+
     return parser
 
 
@@ -53,15 +68,30 @@ def func3(c):
     return c * 100
 
 
+def func4(d):
+    if d is None:
+        pass
+    else:
+        d = DEFAULT_D
+        return d * 3.14
+
+
+def func5():
+    print("From optional function")
+
+
 def main():
     parser = create_argument_parser()
     arguments = parser.parse_args()
     a = arguments.a
     b = arguments.b
     c = arguments.c
+    d = arguments.d
+    e = arguments.e
     print(func1(a))
     print(func2(b))
     print(func3(c))
+    print(func4(d))
 
 
 if __name__ == "__main__":
