@@ -457,3 +457,28 @@ TrafficLight.GREEN.name  # returns 'GREEN'
 TrafficLight.GREEN.value  # returns 1
 TrafficLight(1)  # returns <TrafficLight.GREEN: 1>
 TrafficLight(2)  # returns <TrafficLight.YELLOW: 2>
+
+
+k = ['1', '2']
+j = 0
+for i in k:
+    i = int(i)
+    k[j] = i
+    j += 1
+print(k)
+
+d1 = {'k1': [1, 2, 3], 'k2': [4, 5, 6]}
+d1['k1'] = [7, 8, 9]
+d1['k2'] = ['1', '2', '3']
+d1
+
+
+
+
+from datetime import datetime
+
+# datetime object containing current date and time
+now = datetime.now()
+now.strftime("%d-%m-%Y %H:%M:%S")
+
+datetime.now().strftime("%Y-%m-%d %H:%M:%S")
