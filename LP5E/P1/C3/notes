@@ -1,0 +1,33 @@
+# To reload modules and see the outputs..
+# Useful when you made edits for the modules and want to test it.
+>>> from imp import reload
+>>> reload(script1)
+win32
+65536
+Spam!Spam!Spam!Spam!Spam!Spam!Spam!Spam!
+<module 'script1' from '.\\script1.py'>
+>>>
+
+----
+# Import methods from modules
+(venv) (base) ➜  C3 git:(main) ✗ ll
+total 12K
+-rw-rw-r-- 1 user user  29 Oct 17 15:51 myfile.py
+>>> import myfile
+>>> myfile.title
+'The Meaning of Life'
+>>> exit()
+(venv) (base) ➜  C3 git:(main) ✗
+----
+# one more way
+>>> from myfile import title
+>>> title
+'The Meaning of Life'
+>>> title
+'The Meaning of Life'
+>>>
+----
+# executing the module without importing it.
+>>> exec(open('threenames.py').read())
+dead parrot sketch
+>>>
