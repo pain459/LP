@@ -53,7 +53,7 @@ while not game_over:
         correct_answer=answer, user_answer=user_answer)
     if result == 0:
         score += 1
-        print('Next question!')
+        print(f"You're right! Current score: {score}")
         game_over = False
     else:
         print('Game Over!')
