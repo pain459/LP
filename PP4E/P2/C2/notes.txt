@@ -1,0 +1,41 @@
+Python System Modules
+most of these reside in os and sys modules.
+
+glob
+    For filename expansion
+socket
+    For network connections and Inter-Process Communication (IPC)
+threading, _thread, queue
+    For running and synchronizing concurrent threads
+time, timeit
+    For accessing system time details
+subprocess, multiprocessing
+    For launching and controlling parallel processes
+signal, select, shutil, tempfile, and others
+    For various other system-related tasks
+
+
+---
+splitlines function
+In [19]: line = 'aaa\nbbb\nccc\n'
+
+In [20]: line.split('\n')
+Out[20]: ['aaa', 'bbb', 'ccc', '']
+
+In [21]: line.splitlines()
+Out[21]: ['aaa', 'bbb', 'ccc']
+---
+
+String Method Basics
+
+In [22]: mystr = 'xxxSPAMxxx'
+
+In [23]: mystr.find('SPAM')
+Out[23]: 3
+
+In [24]: mystr = 'xxaaxxaa'
+
+In [25]: mystr.replace('aa', 'SPAM')  # global replacement
+Out[25]: 'xxSPAMxxSPAM'
+
+In [26]: 
