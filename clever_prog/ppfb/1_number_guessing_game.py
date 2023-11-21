@@ -44,6 +44,7 @@ while _exit_game != 0 :
         if _continue == 1:
             print("Lets try your luck again. New game starts now.")
         else:
+            print("Bye!")
             break
     except ValueError:
         print("Bye!")
