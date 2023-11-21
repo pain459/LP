@@ -4,9 +4,25 @@
 # If correct, give a congratulations note and ask user option to exit or retry again of different level.
 
 import random
+import sys
 
-_n = random.randint(1, 10)
-
+_a = [1, -1000]
+_b = [10, 100, 1000]
+print("Welcome to the number guessing game. We have 3 levels of difficulty\n"
+      "1 --> guess between 1 to 10\n"
+      "2 --> guess between 1 to 100\n"
+      "3 --> guess between -1000 to 1000\n")
+_level = int(input("Enter the level of difficulty: "))
+if _level not in [1, 2, 3]:
+    print("Invalid choice! Program will now exit.")
+    sys.exit(1)
+# _n = random.randint(1, 10)
+if _level == 1:
+    _n = random.randint(_a[0], _b[0])
+elif _level == 2:
+    _n = random.randint(_a[0], _b[1])
+elif _level == 3:
+    _n = random.randint(_a[1], _b[2])
 print("The default range for this game is 1 to 10")
 print("The Random number is ", _n)
 _guess = int(input("Enter a number you are guessing in range: "))
