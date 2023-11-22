@@ -34,6 +34,20 @@ try:
     else:
         median = _user_list[len(_user_list) // 2]
     print(median)
+    # Mode calculation. Finding the most frequent number in the given list.
+    list1 = []
+    _user_list = list1
+    frequency = {}
+    for i in list1:
+        frequency.setdefault(i, 0)
+        frequency[i] += 1
+    frequent = max(frequency.values())
+    for i, j in frequency.items():
+        if j == frequent:
+            mode = i
+        else:
+            mode = 0
+    print(mode)
 
 
 except ZeroDivisionError:
