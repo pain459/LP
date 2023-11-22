@@ -25,6 +25,15 @@ try:
     # mean calculation.
     _mean = sum(_user_list) / len(_user_list)
     print("Mean of the user provided list is", "%.2f" % round(_mean, 2))
+    # median calculation.
+    _user_list.sort()
+    if len(_user_list) % 2 == 0:
+        m1 = _user_list[len(_user_list) // 2]
+        m2 = _user_list[len(_user_list) // 2 - 1]
+        median = (m1 + m2) / 2
+    else:
+        median = _user_list[len(_user_list) // 2]
+    print(median)
 
 
 except ZeroDivisionError:
