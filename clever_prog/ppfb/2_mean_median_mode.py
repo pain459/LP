@@ -5,18 +5,20 @@
 print("Welcome to mean, median and mode calculator.")
 _trap = True
 _user_list = []
+_error_message = "Unsupported type entered. Please try again."
 while _trap:
-    _user_input = int(input("Enter the element to input to list, press 0 to exit: "))
-    if _user_input != 0:
-        _user_list.append(_user_input)
-    else:
-        _trap = False
-        # break
-_list1 = [12, 34, 22, 34, 56, 78, 90, 32, 56, 32]  # Even count
-_list2 = [78, 56, 89, 66, 88, 34, 42, 35, 12, 16, 76]  # Odd count
-
-# _mean = sum(_list1) / len(_list1)
-# print("Mean is list 1 is", _mean)
+    try:
+        _user_input = int(input("Enter an int number for list, press 0 to exit: "))
+        if _user_input != 0:
+            _user_list.append(_user_input)
+        else:
+            var = _trap = False
+    except TypeError:
+        print(_error_message)
+        _trap = True
+    except ValueError:
+        print(_error_message)
+        _trap = True
 
 try:
     print("User input list is", _user_list)
