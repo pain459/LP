@@ -12,7 +12,7 @@ print(a)
 
 # one more dummy piece of code to calculate the execution time.
 x = 0
-for j in range(10000000):
+for j in range(100000000):
     x += j
 print(x)
 
