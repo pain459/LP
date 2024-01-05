@@ -17,3 +17,9 @@ figure = px.scatter(data_frame=data,
                     title="Relationship between likes and Impressions")
 
 figure.show()
+
+plt.figure(figsize=(10,8))
+plt.style.use("fivethirtyeight")
+plt.title("Relationship between Likes and Impressions")
+sns.regplot(x="Impressions", y="Likes", data=data)
+plt.show()
