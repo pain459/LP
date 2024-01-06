@@ -3,6 +3,9 @@ LABEL Maintainer="pain"
 
 WORKDIR /usr/app/src
 
-COPY test.py ./
+COPY test.py requirements.txt ./
+
+RUN pip install --no-dependencies transformers && \
+    pip install filelock huggingface-hub numpy packaging pyyaml regex requests tqdm sacremoses
 
 CMD ["python", "./test.py"]
