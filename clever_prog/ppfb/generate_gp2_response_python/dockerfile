@@ -1,0 +1,29 @@
+# Use Python base image
+FROM python:3.8
+
+LABEL Maintainer="pain"
+
+# Create a new user and group
+RUN groupadd -r myuser && useradd -r -g myuser -m myuser
+
+# Set the working directory in the container
+WORKDIR /usr/app/src
+
+# Change ownership of the working directory to the new user
+RUN chown -R myuser:myuser /usr/app/src
+
+# Change to the new user
+USER myuser
+
+# Copy the script into the container
+COPY requirements.txt /usr/app/src/requirements.txt
+COPY app.py /usr/app/src/app.py
+
+# Install necessary Python packages
+RUN pip install -r requirements.txt
+
+# Expose the Flask port
+EXPOSE 5000
+
+# Command to run the Flask server
+CMD ["python", "app.py"]

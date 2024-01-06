@@ -1,0 +1,23 @@
+use postman to post the request.
+
+
+Open Postman.
+Create a new request with the POST method.
+Enter the URL: http://your-server-address:5000/generate.
+Set the request headers:
+Key: Content-Type
+Value: application/json
+In the request body, select the raw option and enter the JSON data:
+
+{
+    "input": "Hi, My name is John Cena, I am here"
+}
+
+Click "Send" to execute the request. Postman will display the response containing the generated text. Adjust the input text as needed for your use case.
+
+
+----
+
+docker build -t text-generation-service .
+docker run -p 5000:5000 text-generation-service
+access at localhost:5000
