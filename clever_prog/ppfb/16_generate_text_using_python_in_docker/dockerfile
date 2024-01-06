@@ -1,0 +1,8 @@
+FROM python:3
+LABEL Maintainer="pain"
+
+WORKDIR /usr/app/src
+
+cp test.py ./
+
+CMD ["python", "./test.py"]
