@@ -3,11 +3,20 @@ FROM python:3.8
 
 LABEL Maintainer="pain"
 
+# Create a new user and group
+RUN groupadd -r myuser && useradd -r -g myuser -m myuser
+
 # Set working directory in the container
 WORKDIR /usr/app/src
 
+# Change ownership of the working directory to the new user
+RUN chown -R myuser:myuser /usr/app/src
+
+# Change to the new user
+USER myuser
+
 # Copy and install requirements
-COPY requirements.txt test.py .
+COPY requirements.txt test.py gpt2_ex_python.py .
 
 # Install necessary packages
 RUN pip install --upgrade pip && \
@@ -17,4 +26,4 @@ RUN pip install --upgrade pip && \
 COPY . .
 
 # Command to run your application
-CMD ["python", "test.py"]
+CMD ["python", "gpt2_ex_python.py"]
