@@ -3,6 +3,6 @@ LABEL Maintainer="pain"
 
 WORKDIR /usr/app/src
 
-cp test.py ./
+COPY test.py ./
 
 CMD ["python", "./test.py"]
