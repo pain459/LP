@@ -27,3 +27,7 @@ COPY . .
 
 # Command to run your application
 CMD ["python", "gpt2_ex_python.py"]
+
+# run as below.
+# docker run my-python-app "Enter the statement based on which the text to be generated"
+
