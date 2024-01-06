@@ -1,8 +1,13 @@
 from transformers import pipeline
+import sys
 
 model = pipeline("text-generation", model="gpt2")
 
-user_input = input("Enter the statement based on which the text to be generated: ")
+if len(sys.argv) < 2:
+    print("Please provide a statement as an argument.")
+    sys.exit(1)
+
+user_input = " ".join(sys.argv[1:])
 
 sentences = model(user_input,
                   do_sample=True, top_k=50,
