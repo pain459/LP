@@ -1,17 +1,46 @@
 import logging
-from fastapi import FastAPI, Query
+from fastapi import FastAPI, Query, HTTPException, Depends
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from faker import Faker
 import pandas as pd
 import time
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 fake = Faker()
+security = HTTPBasic()
+
+# Username and password for authentication
+USERNAME = "user"
+PASSWORD = "password"
 
 # Configure logging
 logging.basicConfig(filename='backend_logs.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# CORS configuration
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    # Add other origins as needed
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+def authenticate_user(credentials: HTTPBasicCredentials = Depends(security)):
+    correct_username = credentials.username == USERNAME
+    correct_password = credentials.password == PASSWORD
+    if not (correct_username and correct_password):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    return True
+
 @app.get("/api/generate_profiles/")
-def generate_profiles(num_records: int = Query(default=10, ge=1, le=100)):
+def generate_profiles(authenticated: bool = Depends(authenticate_user), num_records: int = Query(default=10, ge=1, le=100)):
     # Log the requested number of records
     logging.info(f"Requested {num_records} profiles generation")
 
