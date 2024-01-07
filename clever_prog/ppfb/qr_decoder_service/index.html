@@ -8,7 +8,7 @@
     <h1>Upload QR Code Image</h1>
     <form id="uploadForm" enctype="multipart/form-data">
         <input type="file" name="file" accept="image/*">
-        <button type="submit">Upload</button>
+        <button type="submit">Decode</button>
     </form>
     <div>
         <h2>Decoded Message:</h2>
@@ -21,13 +21,22 @@
             const formData = new FormData(this);
 
             try {
-                const response = await fetch('http://localhost:5000/upload/', {  // Change the URL if necessary
+                const response = await fetch('http://localhost:5000/upload/', {
                     method: 'POST',
                     body: formData
                 });
 
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
                 const data = await response.json();
-                document.getElementById('decodedText').value = data.decoded_data || 'No QR code found';
+                const decodedTextElement = document.getElementById('decodedText');
+                if (data.decoded_data) {
+                    decodedTextElement.value = data.decoded_data;
+                } else {
+                    decodedTextElement.value = 'No QR code found';
+                }
             } catch (error) {
                 console.error('Error:', error);
             }
