@@ -2,6 +2,7 @@ import logging
 from fastapi import FastAPI, Query
 from faker import Faker
 import pandas as pd
+import time
 
 app = FastAPI()
 fake = Faker()
@@ -13,6 +14,9 @@ logging.basicConfig(filename='backend_logs.log', level=logging.INFO, format='%(a
 def generate_profiles(num_records: int = Query(default=10, ge=1, le=100)):
     # Log the requested number of records
     logging.info(f"Requested {num_records} profiles generation")
+
+    # Start time
+    start_time = time.time()
 
     # Generate profiles
     data = []
@@ -27,6 +31,11 @@ def generate_profiles(num_records: int = Query(default=10, ge=1, le=100)):
         data.append(profile)
 
     df = pd.DataFrame(data)
+
+    # Log the time taken to complete the task
+    end_time = time.time()
+    duration = end_time - start_time
+    logging.info(f"Task completed in {duration:.4f} seconds")
 
     # Log the created records information
     logging.info(f"Created profiles:\n{df.to_string(index=False)}")
