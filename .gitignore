@@ -186,3 +186,5 @@ fabric.properties
 
 .idea/LP.iml
 .idea/misc.xml
+!/.idea/misc.xml
+!/.idea/LP.iml
