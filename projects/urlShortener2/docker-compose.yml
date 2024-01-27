@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  url-shortener:
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - sql-server
+
+  sql-server:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: "your-password"
+      ACCEPT_EULA: "Y"
+    ports:
+      - "1433:1433"
