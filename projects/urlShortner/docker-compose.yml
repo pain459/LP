@@ -1,0 +1,16 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: your_root_password
+      MYSQL_DATABASE: your_database
+      MYSQL_USER: your_username
+      MYSQL_PASSWORD: your_password
+
+  url-shortener:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql
