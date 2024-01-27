@@ -12,5 +12,40 @@
         <input type="text" id="originalUrl" name="originalUrl" required>
         <button type="submit">Shorten</button>
     </form>
+
+    <h2>Shortened URLs:</h2>
+    <ul id="shortenedUrls">
+        <!-- Display shortened URLs here -->
+    </ul>
 </body>
 </html>
+
+<script>
+    // Function to update the list of shortened URLs
+    function updateShortenedUrls(shortenedUrls) {
+        const listElement = document.getElementById('shortenedUrls');
+        listElement.innerHTML = '';
+
+        shortenedUrls.forEach((url) => {
+            const listItem = document.createElement('li');
+            listItem.textContent = url;
+            listElement.appendChild(listItem);
+        });
+    }
+
+    // Fetch and update the list of shortened URLs on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        fetch('/shorten', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                'originalUrl': '',
+            }),
+        })
+        .then(response => response.json())
+        .then(data => updateShortenedUrls(data.shortened_urls))
+        .catch(error => console.error('Error:', error));
+    });
+</script>
