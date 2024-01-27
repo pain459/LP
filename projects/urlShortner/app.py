@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
+from flask import jsonify
 
 app = Flask(__name__)
 # Update the MySQL connection URL to match the service name specified in docker-compose.yml
@@ -11,12 +13,19 @@ class UrlMapping(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     short_url = db.Column(db.String(50), unique=True, nullable=False)
     original_url = db.Column(db.String(255), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
 
 
 @app.route('/shorten', methods=['POST'])
 def shorten_url():
-    # Implement logic to shorten URL and store in the database.
-    return "Shortened URL"
+    original_url = request.form['originalUrl']
+    # Implement logic to shorten URL and store in the database
+
+    # Fetch all shortened URLs from the database
+    all_shortened_urls = UrlMapping.query.all()
+
+    # Return a list of shortened URLs
+    return jsonify(shortened_urls=[url.short_url for url in all_shortened_urls])
 
 
 @app.route('/<short_url>')
