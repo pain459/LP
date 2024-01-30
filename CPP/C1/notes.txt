@@ -1,1 +1,3 @@
 Entire list of packages included in python can be viewed at https://www.pythonanywhere.com/batteries_included/
+
+To view the bytecode of any Python program, execute the program as "$ python -m dis program.py"
