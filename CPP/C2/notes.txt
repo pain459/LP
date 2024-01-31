@@ -1,0 +1,3 @@
+# To get the list of packages installed in the env, use the commands help('modules')
+# you can use the documentation help from IDLE using help() and then access the topics. You can choose the topic from the list using the name of it. Case-sensitive.
+# You can access the documentation via web ui using the python docs section.
