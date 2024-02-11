@@ -1,0 +1,1 @@
+docker run --name my-postgres-container -e POSTGRES_PASSWORD=mypassword -d -p 5433:5433 --cpus=1 --memory=1g postgres
