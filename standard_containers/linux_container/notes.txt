@@ -1,0 +1,9 @@
+Build the container first.
+docker build -t ubuntu-ssh-postgres .
+
+Then run the container
+docker run -d --name my-container -p 2222:22 ubuntu-ssh-postgres
+
+
+Then perform ssh
+ssh root@localhost -p 2222
