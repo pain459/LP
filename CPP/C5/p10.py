@@ -11,3 +11,6 @@ print("Octal to Decimal =", n)
 str3 = input("Enter a binary number: ")
 n = int(str3, 2)
 print("Binary to Decimal =", n)
+
+a, b = [int(i) for i in input("Enter 2 numbers: ").split()]
+print(f'The entered numbers are {a} and {b}')
