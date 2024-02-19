@@ -1,7 +1,7 @@
 # usage
 # python script.py --input_folder input_folder --output_folder output_folder
 # python script.py --show_codecs
-# python script.py --input_folder 'folder_path' --output_folder 'folder_path' --video_codec mpeg4
+# python main.py --input_folder 'folder_path' --output_folder 'folder_path' --video_codec mpeg4
 
 import os
 import threading
