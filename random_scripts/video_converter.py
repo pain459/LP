@@ -1,13 +1,9 @@
 import os
 import threading
 import sys
+import argparse
 from moviepy.editor import *
 from loguru import logger
-
-# Redirect stdout and stderr to loguru
-logger.remove()  # Remove the default configuration
-logger.add(sys.stdout, colorize=True)  # Add stdout to logger
-logger.add("conversion_logs.txt", level="INFO")  # Add file for logs
 
 def convert_avi_to_mp4(input_path, output_path, video_bitrate='5000k', audio_bitrate='320k'):
     video_clip = VideoFileClip(input_path)
@@ -33,7 +29,13 @@ def batch_convert_avi_to_mp4(input_folder, output_folder, video_bitrate='5000k',
     for thread in threads:
         thread.join()
 
-# Example usage
-input_folder = "S1"
-output_folder = "S1"
-batch_convert_avi_to_mp4(input_folder, output_folder)
+def main(input_folder, output_folder):
+    batch_convert_avi_to_mp4(input_folder, output_folder)
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Convert AVI files to MP4.")
+    parser.add_argument("--input_folder", help="Path to the input folder containing AVI files.", required=True)
+    parser.add_argument("--output_folder", help="Path to the output folder where MP4 files will be saved.", required=True)
+    args = parser.parse_args()
+
+    main(args.input_folder, args.output_folder)
