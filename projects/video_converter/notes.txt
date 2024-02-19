@@ -4,3 +4,5 @@
 Available video codecs: ['libx264', 'mpeg4', 'libvpx', 'libvpx-vp9', 'rawvideo']
 Available audio codecs: ['aac', 'mp3', 'libvorbis', 'pcm_s16le']
 
+# Running this in windows friendly format.
+docker run -v c/Users/username/Downloads/Testing/d1:/app/input_folder -v c/Users/username/Downloads/Testing/d1:/app/output_folder video-converter:0.0.1 --input_folder /app/input_folder --output_folder /app/output_folder
