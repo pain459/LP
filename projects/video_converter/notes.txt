@@ -1,0 +1,6 @@
+# to show only codecs
+
+(venv) $> docker run video-converter:0.0.1 --show_codecs
+Available video codecs: ['libx264', 'mpeg4', 'libvpx', 'libvpx-vp9', 'rawvideo']
+Available audio codecs: ['aac', 'mp3', 'libvorbis', 'pcm_s16le']
+
