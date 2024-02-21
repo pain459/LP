@@ -5,7 +5,7 @@ FROM python:3.9-slim
 WORKDIR /app
 
 # Copy the Python script into the container at /app
-COPY your_script.py /app/your_script.py
+COPY main.py /app/main.py
 
 # Copy the entrypoint script into the container at /app
 COPY entrypoint.sh /app/entrypoint.sh

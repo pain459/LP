@@ -6,3 +6,10 @@ Available audio codecs: ['aac', 'mp3', 'libvorbis', 'pcm_s16le']
 
 # Running this in windows friendly format.
 docker run -v c/Users/username/Downloads/Testing/d1:/app/input_folder -v c/Users/username/Downloads/Testing/d1:/app/output_folder video-converter:0.0.1 --input_folder /app/input_folder --output_folder /app/output_folder
+
+# Sample for single file conversion
+python your_script.py --input_path /path/to/input_file.avi --output_path /path/to/output_file.mp4 --single_file
+
+# Docker cli
+docker run -v /path/to/input_file.avi:/app/input_file.avi -v /path/to/output_folder:/app/output_folder video-converter --input_path /app/input_file.avi --output_path /app/output_folder/output_file.mp4 --single_file
+docker run -v /c/Users/username/Downloads/Testing/d1/'LTWW S01E03 - Swingers.avi':/app/input_file.avi -v /c/Users/username/Downloads/Testing/d1:/app/output_folder video-converter:0.0.2 --input_path /app/input_file.avi --output_path /app/output_folder/output_file.mp4 --single_file

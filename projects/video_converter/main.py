@@ -1,11 +1,4 @@
-# usage
-# python script.py --input_folder input_folder --output_folder output_folder
-# python script.py --show_codecs
-# python main.py --input_folder 'folder_path' --output_folder 'folder_path' --video_codec mpeg4
-
 import os
-import threading
-import sys
 import argparse
 from moviepy.editor import *
 from loguru import logger
@@ -33,24 +26,27 @@ def batch_convert_avi_to_mp4(input_folder, output_folder, video_codec='libx264',
     input_files = os.listdir(input_folder)
     avi_files = [file for file in input_files if file.endswith(".avi")]
     total_files = len(avi_files)
-    threads = []
     for avi_file in avi_files:
-        thread = threading.Thread(target=convert_worker, args=(input_folder, output_folder, avi_file, video_codec, audio_codec))
-        thread.start()
-        threads.append(thread)
-    for thread in threads:
-        thread.join()
+        convert_worker(input_folder, output_folder, avi_file, video_codec, audio_codec)
 
-def main(input_folder, output_folder, video_codec='libx264', audio_codec='aac'):
-    batch_convert_avi_to_mp4(input_folder, output_folder, video_codec, audio_codec)
+def convert_single_avi_to_mp4(input_file, output_file, video_codec='libx264', audio_codec='aac'):
+    convert_avi_to_mp4(input_file, output_file, video_codec, audio_codec)
+    logger.info(f"Conversion completed: {output_file}")
+
+def main(input_path, output_path, video_codec='libx264', audio_codec='aac', single_file=None):
+    if single_file:
+        convert_single_avi_to_mp4(input_path, output_path, video_codec, audio_codec)
+    else:
+        batch_convert_avi_to_mp4(input_path, output_path, video_codec, audio_codec)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Convert AVI files to MP4.")
-    parser.add_argument("--input_folder", help="Path to the input folder containing AVI files.")
-    parser.add_argument("--output_folder", help="Path to the output folder where MP4 files will be saved.")
+    parser.add_argument("--input_path", help="Path to the input file or folder containing AVI files.")
+    parser.add_argument("--output_path", help="Path to the output file or folder where MP4 files will be saved.")
     parser.add_argument("--video_codec", help="Preferred video codec for conversion. Default is libx264.", default='libx264')
     parser.add_argument("--audio_codec", help="Preferred audio codec for conversion. Default is aac.", default='aac')
     parser.add_argument("--show_codecs", help="Show available codecs for reference.", action='store_true')
+    parser.add_argument("--single_file", help="Convert a single file instead of batch conversion.", action='store_true')
 
     args, unknown = parser.parse_known_args()
 
@@ -58,9 +54,9 @@ if __name__ == "__main__":
         video_codecs, audio_codecs = get_available_codecs()
         print("Available video codecs:", video_codecs)
         print("Available audio codecs:", audio_codecs)
-        sys.exit()
+        exit()
 
-    if not args.input_folder or not args.output_folder:
-        parser.error("--input_folder and --output_folder must be provided.")
+    if not args.input_path or not args.output_path:
+        parser.error("--input_path and --output_path must be provided.")
 
-    main(args.input_folder, args.output_folder, args.video_codec, args.audio_codec)
+    main(args.input_path, args.output_path, args.video_codec, args.audio_codec, args.single_file)
