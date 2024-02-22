@@ -11,6 +11,9 @@ elif m == n:
 else:
     x = n
 
+'''Writing ternary operators is a pain.'''
+# x = (m if m < n else (print("exiting"), sys.exit(0)) if m == n else n) if m < n else n
+
 if x % 2 != 0:
     x += 1
 
