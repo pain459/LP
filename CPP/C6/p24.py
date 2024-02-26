@@ -6,3 +6,4 @@ while x >= 1:
     x -= 1
     if x == 5:
         break
+print("Out of the loop.")
