@@ -17,21 +17,42 @@ class DatabaseService:
                 balance REAL
             )
         """)
+
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS transactions (
+                id INTEGER PRIMARY KEY,
+                account_id INTEGER,
+                amount REAL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (account_id) REFERENCES accounts(id)
+            )
+        """)
         self.connection.commit()
 
     def add_account(self, user_id, account_type, initial_balance):
-        # Add a new account to the database
         self.cursor.execute("""
             INSERT INTO accounts (user_id, account_type, balance)
             VALUES (?, ?, ?)
         """, (user_id, account_type, initial_balance))
+
+        account_id = self.cursor.lastrowid
+        # Add initial transaction record for opening balance
+        self.cursor.execute("""
+            INSERT INTO transactions (account_id, amount)
+            VALUES (?, ?)
+        """, (account_id, initial_balance))
+
         self.connection.commit()
 
-    def get_accounts(self, user_id):
-        # Get accounts associated with the specified user_id
-        self.cursor.execute("""
-               SELECT * FROM accounts WHERE user_id = ?
-           """, (user_id,))
+    def get_accounts(self, user_id=None):
+        if user_id is not None:
+            self.cursor.execute("""
+                SELECT * FROM accounts WHERE user_id = ?
+            """, (user_id,))
+        else:
+            self.cursor.execute("""
+                SELECT * FROM accounts
+            """)
         accounts = self.cursor.fetchall()
         account_details = []
         for account in accounts:
@@ -44,8 +65,13 @@ class DatabaseService:
             account_details.append(account_dict)
         return account_details
 
+    def get_account_transactions(self, account_id):
+        self.cursor.execute("""
+            SELECT * FROM transactions WHERE account_id = ?
+        """, (account_id,))
+        return self.cursor.fetchall()
+
     def update_balance(self, account_id, new_balance):
-        # Update the balance of an account
         self.cursor.execute("""
             UPDATE accounts SET balance = ? WHERE id = ?
         """, (new_balance, account_id))
