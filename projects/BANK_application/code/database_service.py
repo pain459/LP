@@ -1,5 +1,6 @@
 import sqlite3
 
+
 class DatabaseService:
     def __init__(self, db_name):
         self.db_name = db_name
@@ -27,11 +28,21 @@ class DatabaseService:
         self.connection.commit()
 
     def get_accounts(self, user_id):
-        # Get all accounts of a user
+        # Get all accounts of a user as a list of dictionaries
         self.cursor.execute("""
             SELECT * FROM accounts WHERE user_id = ?
         """, (user_id,))
-        return self.cursor.fetchall()
+        accounts = self.cursor.fetchall()
+        account_details = []
+        for account in accounts:
+            account_dict = {
+                "id": account[0],
+                "user_id": account[1],
+                "account_type": account[2],
+                "balance": account[3]
+            }
+            account_details.append(account_dict)
+        return account_details
 
     def update_balance(self, account_id, new_balance):
         # Update the balance of an account
@@ -40,9 +51,20 @@ class DatabaseService:
         """, (new_balance, account_id))
         self.connection.commit()
 
+
 # Usage example:
 # db_service = DatabaseService("bank.db")
 # db_service.create_tables()
 # db_service.add_account(1, "Savings", 1000.0)
 # accounts = db_service.get_accounts(1)
 # print(accounts)
+
+
+db_service = DatabaseService("bank.db")
+db_service.create_tables()
+# db_service.add_account(1, "Savings", 1000.0)
+# db_service.add_account(2, "Savings", 10000000.0)
+# db_service.add_account(1, "Savings1", 1000.0)
+# accounts = db_service.get_accounts(1)
+accounts = db_service.get_accounts(2)
+print(accounts)
