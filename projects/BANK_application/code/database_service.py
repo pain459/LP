@@ -28,10 +28,10 @@ class DatabaseService:
         self.connection.commit()
 
     def get_accounts(self, user_id):
-        # Get all accounts of a user as a list of dictionaries
+        # Get accounts associated with the specified user_id
         self.cursor.execute("""
-            SELECT * FROM accounts WHERE user_id = ?
-        """, (user_id,))
+               SELECT * FROM accounts WHERE user_id = ?
+           """, (user_id,))
         accounts = self.cursor.fetchall()
         account_details = []
         for account in accounts:
@@ -66,5 +66,5 @@ db_service.create_tables()
 # db_service.add_account(2, "Savings", 10000000.0)
 # db_service.add_account(1, "Savings1", 1000.0)
 # accounts = db_service.get_accounts(1)
-accounts = db_service.get_accounts(2)
-print(accounts)
+# accounts = db_service.get_accounts(2)
+# print(accounts)

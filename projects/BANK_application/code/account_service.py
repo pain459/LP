@@ -1,5 +1,6 @@
 from database_service import DatabaseService
 
+
 class AccountService:
     def __init__(self, db_name):
         self.db_service = DatabaseService(db_name)
@@ -22,6 +23,7 @@ class AccountService:
         user_accounts = self.db_service.get_accounts(user_id)
         return user_accounts
 
+
 # Usage example:
 account_service = AccountService("bank.db")
 # result = account_service.create_account(1, "Savings", 1000.0)
@@ -29,3 +31,4 @@ account_service = AccountService("bank.db")
 #     print("Error:", result)
 # else:
 #     print(result)
+print(account_service.get_user_accounts(2))
