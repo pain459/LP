@@ -33,7 +33,7 @@ class AccountService:
 
 # Usage example:
 account_service = AccountService("bank.db")
-# result = account_service.create_account(2, "Savings", 1000000.0)
+# result = account_service.create_account(2, "Savings", 100000000.0)
 # if isinstance(result, str):
 #     print(result)
 # else:
