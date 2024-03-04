@@ -38,5 +38,5 @@ class TransactionService:
 
 # Usage example:
 transaction_service = TransactionService("bank.db")
-success, message = transaction_service.transfer_funds(2, 1, 50000.0)
+success, message = transaction_service.transfer_funds(2, 1, 500.0)
 print(success, message)
