@@ -65,11 +65,29 @@ class DatabaseService:
             account_details.append(account_dict)
         return account_details
 
+    def add_transaction(self, account_id, amount, transaction_type):
+        self.cursor.execute("""
+            INSERT INTO transactions (account_id, amount, transaction_type)
+            VALUES (?, ?, ?)
+        """, (account_id, amount, transaction_type))
+        self.connection.commit()
+
     def get_account_transactions(self, account_id):
         self.cursor.execute("""
             SELECT * FROM transactions WHERE account_id = ?
         """, (account_id,))
-        return self.cursor.fetchall()
+        transactions = self.cursor.fetchall()
+        transaction_details = []
+        for transaction in transactions:
+            transaction_dict = {
+                "id": transaction[0],
+                "account_id": transaction[1],
+                "amount": transaction[2],
+                "transaction_type": transaction[3],
+                "timestamp": transaction[4]  # Assuming timestamp is at index 4
+            }
+            transaction_details.append(transaction_dict)
+        return transaction_details
 
     def update_balance(self, account_id, new_balance):
         self.cursor.execute("""
