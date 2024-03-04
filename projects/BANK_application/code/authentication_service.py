@@ -18,6 +18,13 @@ class AuthenticationService:
                 password_hash TEXT
             )
         """)
+        self.cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sessions (
+                user_id INTEGER,
+                session_token TEXT UNIQUE,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            )
+        """)
         self.connection.commit()
 
     def register_user(self, username, password):
@@ -48,6 +55,18 @@ class AuthenticationService:
         if user:
             # Generate a session token
             session_token = secrets.token_hex(16)
+            # Store the session token in the sessions table
+            self.cursor.execute("""
+                INSERT INTO sessions (user_id, session_token) VALUES (?, ?)
+            """, (user[0], session_token))
+            self.connection.commit()
             return session_token
         else:
             return None
+
+    def logout_user(self, session_token):
+        # Remove the session token from the sessions table
+        self.cursor.execute("""
+            DELETE FROM sessions WHERE session_token = ?
+        """, (session_token,))
+        self.connection.commit()
