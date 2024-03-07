@@ -3,8 +3,8 @@ import argparse
 
 
 # Constants
-# server = 'WATER'
-# database = 'AdventureWorks2022'
+SERVER = 'WATER'
+DATABASE = 'AdventureWorks2022'
 
 
 def query_sql_server(server, database, query):
@@ -38,8 +38,8 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Query SQL server.')
 
     # Add arguments
-    parser.add_argument('--server', required=True, help='SQL Server hostname or IP address')
-    parser.add_argument('--database', required=True, help='Database name')
+    parser.add_argument('--server', default=SERVER, help='SQL Server hostname or IP address')
+    parser.add_argument('--database', default=DATABASE, help='Database name')
     parser.add_argument('--query_part', required=True, help='Part of your query')
 
     # Return Parse arguments object
@@ -64,3 +64,5 @@ if __name__ == "__main__":
 
 # Sample invocation
 # $ python main.py --server 'WATER' --database 'AdventureWorks2022' --query_part 'DaysToManufacture > 1 and DaysToManufacture < 4'
+# Execution using default arguments
+# $ python main.py --query_part 'DaysToManufacture > 1 and DaysToManufacture < 4'
