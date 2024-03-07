@@ -1,6 +1,7 @@
 import pyodbc
 import argparse
 
+
 # Constants
 # server = 'WATER'
 # database = 'AdventureWorks2022'
@@ -32,7 +33,7 @@ def query_sql_server(server, database, query):
         conn.close()
 
 
-def main():
+def parse_arguments():
     # create argument parser
     parser = argparse.ArgumentParser(description='Query SQL server.')
 
@@ -41,8 +42,12 @@ def main():
     parser.add_argument('--database', required=True, help='Database name')
     parser.add_argument('--query_part', required=True, help='Part of your query')
 
-    # Parse arguments
-    args = parser.parse_args()
+    # Return Parse arguments object
+    return parser.parse_args()
+
+
+def main():
+    args = parse_arguments()
 
     # Construct full query
     query = f"select ProductID,Name, ProductNumber, DaysToManufacture from Production.Product where {args.query_part}"
