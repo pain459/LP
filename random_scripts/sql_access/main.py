@@ -9,13 +9,15 @@ def query_sql_server(server, database, query):
     cursor = conn.cursor()
 
     try:
+        query_results = []
         # Execute the query
         cursor.execute(query)
         # Fetch all results
         rows = cursor.fetchall()
         # Print the results
         for i in rows:
-            print(i)
+            query_results.append(list(i))
+        return query_results
 
     except Exception as e:
         print("Error executing SQL: ", e)
@@ -34,4 +36,5 @@ query = """
         and DaysToManufacture < 4
         """
 
-query_sql_server(server=server, database=database, query=query)
+result = query_sql_server(server=server, database=database, query=query)
+print(result)
