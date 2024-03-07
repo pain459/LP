@@ -11,7 +11,17 @@ for i in range(n):
     x.append(int(input())) # carrying the input from above line.
 
 print("Original array: ", x)
+print("Enter element to search: ", end='')
+s = int(input()) # accept the element to be searched.
 # linear search or sequential search
+flag = False # This becomes true if element is found
+
+for i in range(len(x)):
+    if s == x[i]:
+        print('Found at the position= ', i+1)
+        flag =- True
+    else:
+        print("Not found in an array.")
 
 
 #
