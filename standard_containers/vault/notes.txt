@@ -1,0 +1,6 @@
+# build the image
+# docker build -t my-vault .
+
+# Start with resource specification
+
+docker run -d --name=my-vault-container --memory=1g --cpus=0.5 -p 8200:8200 my-vault server -dev
