@@ -1,7 +1,7 @@
 FROM vault:1.13.3
 
 # Expose the port
-EXPOSE 8200
+EXPOSE 8000
 
 # Set resource limits
 RUN ulimit -n 65536
@@ -19,4 +19,4 @@ COPY config.hcl /vault/config/config.hcl
 CMD ["vault", "server", "-config=/vault/config/config.hcl"]
 
 # Set resource limits
-CMD ["vault", "server", "-dev", "-dev-listen-address=0.0.0.0:8200", "-dev-root-token-id=root", "-config=/vault/config/config.hcl"]
+CMD ["vault", "server", "-dev", "-dev-listen-address=0.0.0.0:8000", "-dev-root-token-id=root", "-config=/vault/config/config.hcl"]
