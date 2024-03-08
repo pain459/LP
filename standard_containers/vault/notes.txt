@@ -3,4 +3,4 @@
 
 # Start with resource specification
 
-docker run -d --name=my-vault-container --memory=1g --cpus=0.5 -p 8200:8200 my-vault server -dev
+docker run -d --name=my-vault-container --memory=1g --cpus=0.5 --cap-add IPC_LOCK -p 8000:8000 my-vault:0.0.1
