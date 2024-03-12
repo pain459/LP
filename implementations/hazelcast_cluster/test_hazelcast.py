@@ -1,6 +1,5 @@
 import hazelcast
 
-
 def main():
     # Connect to the Hazelcast cluster
     config = hazelcast.ClientConfig()
