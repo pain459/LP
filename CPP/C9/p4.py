@@ -13,5 +13,8 @@ def fact(n):
         n -= 1
 
 
-x = fact(999)
-print(x)
+# x = fact(999)
+# print(x)
+# Display factorial for first 10 numbers
+for i in range(1, 11):
+    print(f'Factorial of {i} is {fact(i)}')
