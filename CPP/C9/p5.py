@@ -2,6 +2,8 @@
 
 def check_prime(n):
     x = 0
+    if n <= 0 or n == 1:
+        x = -2
     for i in range(2, n):
         if n % i == 0:
             x = -1
@@ -17,5 +19,7 @@ result = check_prime(num)
 
 if result == -1:
     print(f'{num} is not prime.')
+elif result == -2:
+    print("Invalid entries.")
 else:
     print(f'{num} is prime.')
