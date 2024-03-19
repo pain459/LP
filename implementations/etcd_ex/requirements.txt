@@ -1,0 +1,4 @@
+Flask
+python-etcd
+uvicorn
+fastapi
