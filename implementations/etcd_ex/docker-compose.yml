@@ -1,11 +1,6 @@
 version: '3'
 
 services:
-  app:
-    build: .
-    ports:
-      - "5000:5000"
-
   etcd:
     image: quay.io/coreos/etcd:latest
     container_name: etcd-server
@@ -22,3 +17,19 @@ services:
     ports:
       - "2379:2379"
       - "2380:2380"
+    volumes:
+#      - etcd_data:/etcd-data
+      - etcd_data:/var/lib/docker/volumes/etcd_data
+
+  app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - etcd
+    volumes:
+      - etcd_data:/var/lib/docker/volumes/etcd_data
+
+volumes:
+  etcd_data:
+    external: true
