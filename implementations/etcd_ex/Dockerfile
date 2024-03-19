@@ -8,6 +8,6 @@ RUN pip install -r requirements.txt
 COPY . .
 
 # Install uvicorn
-RUN pip install uvicorn fastapi
+# RUN pip install uvicorn fastapi
 
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
