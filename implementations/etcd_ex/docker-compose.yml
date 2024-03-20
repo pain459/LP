@@ -14,12 +14,14 @@ services:
       --initial-cluster etcd-node=http://etcd:2380
       --initial-cluster-token etcd-cluster-token
       --initial-cluster-state new
+      --snapshot-count 10000
     ports:
       - "2379:2379"
       - "2380:2380"
     volumes:
-#      - etcd_data:/etcd-data
       - etcd_data:/var/lib/docker/volumes/etcd_data
+      - ./backup:/var/tmp/etcd_backup
+
 
   app:
     build: .

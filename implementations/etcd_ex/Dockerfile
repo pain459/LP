@@ -1,13 +1,25 @@
 FROM python:3.9-slim
 
+# Set working directory
 WORKDIR /app
 
+# Copy requirements file
 COPY requirements.txt requirements.txt
+
+# Install dependencies
 RUN pip install -r requirements.txt
 
+# Copy the FastAPI app
 COPY . .
 
-# Install uvicorn
-# RUN pip install uvicorn fastapi
+# Copy entrypoint script
+COPY entrypoint.sh /entrypoint.sh
 
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "5000"]
+# Grant execute permissions to the entrypoint script
+RUN chmod +x /entrypoint.sh
+
+# Expose port
+EXPOSE 5000
+
+# Run entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]

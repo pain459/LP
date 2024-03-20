@@ -30,3 +30,11 @@ Host: localhost:5000
     The /get_key/<key> route handles retrieving the value of a key.
     The /update_key/<key> route handles updating the value of an existing key-value pair.
     The /delete_key/<key> route handles deleting a key-value pair.
+
+
+Backup on demand
+/ # ETCDCTL_API=3 etcdctl snapshot save /var/tmp/etcd_backup/etcd-snapshot.db
+Snapshot saved at /var/tmp/etcd_backup/etcd-snapshot.db
+/ #
+Saving backup
+docker cp <container_id_or_name>:/backup/etcd-snapshot.db /path/on/host/machine

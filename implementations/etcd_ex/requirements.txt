@@ -2,3 +2,4 @@ Flask
 python-etcd
 uvicorn
 fastapi
+bash
