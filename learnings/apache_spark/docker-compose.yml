@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  spark-master:
+    image: bitnami/spark:latest
+    container_name: spark-master
+    ports:
+      - "8080:8080"  # Spark Master UI
+      - "7077:7077"  # Spark Master
+    environment:
+      - SPARK_MODE=master
+    networks:
+      - spark-network
+
+  spark-worker-1:
+    image: bitnami/spark:latest
+    container_name: spark-worker-1
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    networks:
+      - spark-network
+
+  spark-worker-2:
+    image: bitnami/spark:latest
+    container_name: spark-worker-2
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    networks:
+      - spark-network
+
+networks:
+  spark-network:
+    driver: bridge
