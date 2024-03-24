@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  ubuntu-git-vim:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ubuntu-dev
+    volumes:
+      - ./workspace:/workspace
+    tty: true
+    stdin_open: true

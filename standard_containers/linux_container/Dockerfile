@@ -1,9 +1,13 @@
-# Use a Debian-based image as the base
-FROM debian:latest
+# Use the official Ubuntu base image
+FROM ubuntu:latest
 
-# Update package lists and install PostgreSQL client
+# Install Git and Vim
 RUN apt-get update && \
-    apt-get install -y postgresql-client
+    apt-get install -y git vim && \
+    apt-get clean
 
-# Define the default command to run when the container starts
-CMD ["bash"]
+# Set working directory
+WORKDIR /workspace
+
+# Default command
+CMD ["/bin/bash"]
