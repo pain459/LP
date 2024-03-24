@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 def read_excel_file(file_path):
     try:
         df = pd.read_excel(file_path)
@@ -10,6 +11,7 @@ def read_excel_file(file_path):
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
+
 
 def query_details(df, start_date, end_date, headers):
     try:
@@ -25,6 +27,7 @@ def query_details(df, start_date, end_date, headers):
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
+
 
 if __name__ == "__main__":
     file_path = input("Enter the path of the Excel file: ")
