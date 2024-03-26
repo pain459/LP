@@ -18,18 +18,18 @@ RUN apt-get update && apt-get install -y \
     && apt-get update \
     && ACCEPT_EULA=Y apt-get install -y msodbcsql17
 
+# Install Faker library for generating dummy data
+RUN pip install faker
+
 # Install pyodbc
 RUN pip install pyodbc
 
 # Set the working directory in the container
 WORKDIR /app
 
-# Copy the Python script into the container
+# Copy the Python scripts into the container
 COPY connect_to_sql.py /app/connect_to_sql.py
-
-# Copy the entrypoint script into the container
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+COPY generate_dummy_data.py /app/generate_dummy_data.py
 
 # Set the entrypoint
-ENTRYPOINT ["/entrypoint.sh"]
+CMD ["python", "connect_to_sql.py"]

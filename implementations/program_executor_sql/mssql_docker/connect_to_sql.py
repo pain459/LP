@@ -1,4 +1,5 @@
 import pyodbc
+import time
 
 # Connection parameters
 server = 'mssql'  # Service name of the MSSQL Server container
@@ -10,21 +11,25 @@ port = '1433'
 # Connection string
 conn_str = f'DRIVER=ODBC Driver 17 for SQL Server;SERVER={server},{port};DATABASE={database};UID={username};PWD={password}'
 
-try:
-    # Connect to the database
-    conn = pyodbc.connect(conn_str)
-    cursor = conn.cursor()
+# Function to connect to the database and check if the connection is successful
+def check_connection():
+    try:
+        conn = pyodbc.connect(conn_str, timeout=5)  # Adjust timeout as needed
+        conn.close()
+        return True
+    except pyodbc.Error:
+        return False
 
-    # Execute a sample query
-    cursor.execute("SELECT @@version")
-    row = cursor.fetchone()
+# Main function
+def main():
+    while True:
+        if check_connection():
+            print("Connectivity to SQL Server established.")
+            # Here you can call other functions or scripts
+            break  # Exit loop if connectivity is established
+        else:
+            print("Connection failed. Retrying in 1 minute...")
+            time.sleep(60)  # Wait for 1 minute before trying again
 
-    # Print query result
-    print("SQL Server version:", row[0])
-
-    # Close the cursor and connection
-    cursor.close()
-    conn.close()
-
-except pyodbc.Error as e:
-    print("Error connecting to the database:", e)
+if __name__ == "__main__":
+    main()
