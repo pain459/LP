@@ -2,7 +2,7 @@
 class Person(object):
     def __init__(self):
         self.name = 'Charles'
-        self.db = self.dob()
+        self.db = self.dob()  # Creating inner class object.
 
     def display(self):
         print(f'Name = {self.name}')
@@ -20,5 +20,5 @@ class Person(object):
 x = Person()
 x.display()
 
-y = x.db
+y = x.db  # Inner class object creation with keyword db
 y.display()
