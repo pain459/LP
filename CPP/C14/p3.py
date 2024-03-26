@@ -1,5 +1,5 @@
 # Student class
-class student(object):
+class Student(object):
     def setid(self, id):
         self.id = id
     def getid(self):
