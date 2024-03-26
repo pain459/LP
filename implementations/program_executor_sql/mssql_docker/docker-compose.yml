@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: mssql_server
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: "YourStrong!Passw0rd"  # Change this password
+      ACCEPT_EULA: "Y"
+
+  python_client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python_client
+    depends_on:
+      - mssql
+    volumes:
+      - ./connect_to_sql.py:/app/connect_to_sql.py  # Mount script into the container
+      - ./entrypoint.sh:/entrypoint.sh  # Mount entrypoint script into the container
+    entrypoint: /entrypoint.sh
