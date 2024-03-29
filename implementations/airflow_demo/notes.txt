@@ -1,0 +1,8 @@
+# For running in background
+docker compose up -d
+# For stoping the containers
+docker compose down
+# For reset or clear all the Persist volumes
+docker compose down --volumes --rmi all
+# For Force Build option
+docker compose up --build
