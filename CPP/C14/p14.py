@@ -37,5 +37,3 @@ class P(X, Y, C):
 
 p = P()
 p.method()
-
-
