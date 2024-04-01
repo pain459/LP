@@ -1,0 +1,1 @@
+Writing 3.142857142857143 into myfile.txt
