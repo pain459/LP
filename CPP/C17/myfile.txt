@@ -1,3 +1,6 @@
 dum
 dum
 dum
+line1
+line2
+line3
