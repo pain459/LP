@@ -1,0 +1,6 @@
+ERROR:root:division by zero
+Traceback (most recent call last):
+  File "", line 9, in <module>
+    c = a / b
+        ~~^~~
+ZeroDivisionError: division by zero
