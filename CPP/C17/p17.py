@@ -13,7 +13,7 @@ n = int(size / reclen)
 print(f'No. of records = {n}')
 
 # Open the file in binary mode for reading.
-with open('cities.bin', 'rb') as f:
+with open('cities.bin', 'r+b') as f:
     name = input('Enter city name: ')
     # Convert name into binary string
     name = name.encode()
