@@ -30,14 +30,14 @@ def main():
     location = get_location()
     if location:
         lat, lon = location.split(',')
-        print(f"Latitude: {lat}, Longitude: {lon}")
+        # Print if you want lat and longitude captured.
+        # print(f"Latitude: {lat}, Longitude: {lon}")
 
         # Make API call
         data = api_call(lat, lon, args.appid)
 
         if data:
-            # Pipe the output to jq for filtering
-            subprocess.run(['echo', data, '|', 'jq'])
+            subprocess.run(['echo', data])
     else:
         print("Error getting location.")
 
