@@ -31,3 +31,7 @@ if __name__ == "__main__":
 
 
 # Sample call python api_caller.py --latitude 17.3934959 --longitude 78.3661469 --appid <your_api_key>
+# filtering with jq
+# python main.py --latitude 17.3934959 --longitude 78.3661469 --appid <your_api_key> | jq '.main.temp, .weather[0].description'
+# 307.2
+# "scattered clouds"
