@@ -12,6 +12,7 @@ def main():
     t1 = time.perf_counter()
     secs = [5, 4, 3, 2, 1]
     with concurrent.futures.ThreadPoolExecutor() as executor:
+        # new_list = [expression for variable in iterable]
         threads = [executor.submit(do_something, sec) for sec in secs]
 
         for thread in concurrent.futures.as_completed(threads):
