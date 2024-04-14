@@ -1,3 +1,4 @@
+# blank script to run the function without any optimization
 import time
 
 start_time =  time.perf_counter()
@@ -8,6 +9,7 @@ def do_something():
     print('Done sleeping for 1 second...')
 
 
+do_something()
 do_something()
 
 end_time = time.perf_counter()
