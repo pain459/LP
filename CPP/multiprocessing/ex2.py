@@ -1,5 +1,4 @@
 # multiprocessing introduced.
-import multiprocessing.process
 import time
 import multiprocessing
 
