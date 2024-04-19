@@ -36,8 +36,7 @@ def main():
     df = pd.DataFrame.from_dict(json_data)
 
     webhook_url = 'YOUR_WEBHOOK_URL'
-    # webhook_url = 'https://hooks.slack.com/services/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'
-
+    
     # Post DataFrame to Slack
     post_df_to_slack(webhook_url, df[['id', 'name', 'age', 'city', 'gender']])
 
