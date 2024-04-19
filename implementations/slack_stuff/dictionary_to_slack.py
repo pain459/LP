@@ -1,7 +1,10 @@
 import requests
 import json
 
-def post_to_slack(webhook_url, message):
+def post_to_slack(webhook_url, data_dict):
+    # Convert dictionary to Markdown table format
+    table = "\n".join([f"| {key} | {', '.join(str(val) for val in value)} |" for key, value in data_dict.items()])
+    message = f"```\n{table}\n```"  # Enclose the table in triple backticks for code block in Slack
     payload = {'text': message}
     response = requests.post(webhook_url, data=json.dumps(payload))
     if response.status_code == 200:
@@ -12,7 +15,5 @@ def post_to_slack(webhook_url, message):
 if __name__ == "__main__":
     # Replace 'YOUR_WEBHOOK_URL' with the actual webhook URL obtained from Slack
     webhook_url = 'YOUR_WEBHOOK_URL'
-    # message = "This is firstline.\nThis is second line."
-    # message = "This is not blocked text\n>This is blocked\nTHis is not blocked\n>This is blocked."
-    message = ":rotating_light:"
-    post_to_slack(webhook_url, message)
+    data_dict = {'Fruits': ['apple', 'orange', 'pine']}
+    post_to_slack(webhook_url, data_dict)
