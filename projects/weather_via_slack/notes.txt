@@ -1,0 +1,4 @@
+uvicorn app:app --reload
+
+ravik@SHARK:~$ curl -X POST -d "location=Shillong, Meghalaya, India" http://localhost:8000/get-weather-today; echo
+{"response_type":"in_channel","text":"The weather in Shillong, Meghalaya, India is few clouds."}
