@@ -1,6 +1,5 @@
 # Script to generate passwords of required lengths.
 
-# imports
 import random
 import string
 
@@ -12,6 +11,7 @@ def generate_special_chars():
     upper_case_letters = string.ascii_uppercase
     spl_sequence = [random.choice(special_characters), random.choice(numbers), random.choice(upper_case_letters)]
     return spl_sequence
+
 
 # generate a password with length -3 .
 def generate_password_of_length(password_length):
@@ -32,16 +32,18 @@ def generate_final_password(p_s, s_s):
     return final_password
 
 
-# main function
 
 def main():
 
-    password_length = int(input("Enter the password length to generate: "))
-    s1 = generate_special_chars()
-    s2 = generate_password_of_length(password_length=password_length)
-    s3 = generate_final_password(p_s=s1, s_s=s2)
-    print(f'Generated password is {s3}')
-    print("Program completed!")
+    try:
+        password_length = int(input("Enter the password length to generate: "))
+        s1 = generate_special_chars()
+        s2 = generate_password_of_length(password_length=password_length)
+        s3 = generate_final_password(p_s=s1, s_s=s2)
+        print(f'Generated password is {s3}')
+        print("Program completed!")
+    except:
+        print("Invalid input. Program will now terminate.")
 
 
 if __name__ == "__main__":
