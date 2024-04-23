@@ -10,7 +10,7 @@ def greet(who):
 
 
 @app.get("/snape")
-def snape(name):
+def snape():
     return f'Page no. 269.'
 
 
