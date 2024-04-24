@@ -44,7 +44,7 @@ def main():
     s1 = generate_special_chars()
     s2 = generate_password_of_length(password_length=password_length)
     s3 = generate_final_password(p_s=s1, s_s=s2)
-    print(f'Generated password is {s3}')
+    print(f"Generated password is '{s3}'")
 
 
 if __name__ == "__main__":
