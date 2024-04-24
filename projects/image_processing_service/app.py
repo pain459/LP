@@ -20,13 +20,14 @@ def process():
     
     img_bytes = file.read()
     npimg = np.frombuffer(img_bytes, np.uint8)
-    img = cv2.imdecode(npimg, cv2.IMREAD_COLOR)
+    img = cv2.imdecode(npimg, cv2.IMREAD_GRAYSCALE)  # Read as grayscale image
 
-    # Convert color image to grayscale
-    gray_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    # Check if the grayscale image has two dimensions
+    if len(img.shape) != 2:
+        return "Invalid image format"
 
-    # Convert grayscale image back to color
-    color_img = cv2.cvtColor(gray_img, cv2.COLOR_GRAY2BGR)
+    # Convert grayscale image to color using colormap
+    color_img = cv2.applyColorMap(img, cv2.COLORMAP_JET)
 
     # Convert numpy array back to bytes
     _, img_encoded = cv2.imencode('.jpg', color_img)
