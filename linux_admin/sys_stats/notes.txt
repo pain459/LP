@@ -1,0 +1,10 @@
+Docker container to run the test script.
+
+build:
+docker build -t system-info-test .
+
+run:
+docker run -d -p 2222:22 --name system-info-container system-info-test
+
+ssh:
+ssh -p 2222 root@localhost
