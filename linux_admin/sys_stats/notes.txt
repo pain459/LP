@@ -8,3 +8,8 @@ docker run -d -p 2222:22 --name system-info-container system-info-test
 
 ssh:
 ssh -p 2222 root@localhost
+
+
+wrapper:
+python wrapper.py --host <ip/name> --username <username> --password <password>
+python wrapper.py --host localhost:22 --username root --password password

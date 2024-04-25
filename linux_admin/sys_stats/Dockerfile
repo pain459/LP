@@ -24,9 +24,11 @@ RUN pip3 install paramiko
 # Expose SSH port
 EXPOSE 22
 
-# Copy the script files into the container
-COPY collect_stats.py /usr/src/app/
-COPY wrapper.py /usr/src/app/
+# Set root password
+RUN echo 'root:password' | chpasswd
 
-# Set working directory
-WORKDIR /usr/src/app
+# Permit root login via SSH
+RUN sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# Start SSH server in the background
+CMD /usr/sbin/sshd -D -e -f /etc/ssh/sshd_config & tail -f /dev/null
