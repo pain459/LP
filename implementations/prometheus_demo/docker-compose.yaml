@@ -4,6 +4,7 @@ services:
     image: prom/prometheus
     volumes:
       - "./prometheus.yml:/etc/prometheus/prometheus.yml"
+      - "./rules.yml:/etc/prometheus/rules.yml"
     networks:
       - localprom
     ports:
@@ -14,6 +15,14 @@ services:
       - localprom
     ports:
       - 9100:9100
+  alert-manager:
+    image: prom/alertmanager
+    volumes:
+      - "./alertmanager.yml:/alertmanager/alertmanager.yml"
+    networks:
+      - localprom
+    ports:
+      - 9093:9093
 networks:
   localprom:
     driver: bridge
