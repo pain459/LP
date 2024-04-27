@@ -8,6 +8,12 @@ services:
       - localprom
     ports:
       - 9090:9090
+  node-exporter:
+    image: prom/node-exporter
+    networks:
+      - localprom
+    ports:
+      - 9100:9100
 networks:
   localprom:
     driver: bridge
