@@ -24,13 +24,13 @@ moon = ephem.Moon()
 moon.compute(observer)
 illumination = moon.moon_phase
 
-# Compute visible planets
-planets = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn']
-visible_planets = [p for p in planets if getattr(ephem, p)(observer).alt > 0]
+# # Compute visible planets
+# planets = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn']
+# visible_planets = [p for p in planets if getattr(ephem, p)().compute(observer).alt > 0]
 
-# Compute visible constellations
-constellations = ['Andromeda', 'Aquarius', 'Aries', 'Cancer', 'Capricornus', 'Cygnus', 'Gemini', 'Leo', 'Libra', 'Orion', 'Pegasus', 'Pisces', 'Sagittarius', 'Scorpius', 'Taurus', 'Virgo']
-visible_constellations = [c for c in constellations if getattr(ephem, c)(observer).alt > 0]
+# # Compute visible constellations
+# constellations = ['Andromeda', 'Aquarius', 'Aries', 'Cancer', 'Capricornus', 'Cygnus', 'Gemini', 'Leo', 'Libra', 'Orion', 'Pegasus', 'Pisces', 'Sagittarius', 'Scorpius', 'Taurus', 'Virgo']
+# visible_constellations = [c for c in constellations if getattr(ephem, c)().compute(observer).alt > 0]
 
 # Print summary
 print("Astronomical Summary for", tomorrow.strftime("%Y-%m-%d"))
@@ -39,5 +39,5 @@ print("Sunset:", sunset.strftime("%H:%M:%S"))
 print("Moonrise:", moonrise.strftime("%H:%M:%S"))
 print("Moonset:", moonset.strftime("%H:%M:%S"))
 print("Moon Illumination (Phase):", round(illumination, 2))
-print("Visible Planets:", ', '.join(visible_planets))
-print("Visible Constellations:", ', '.join(visible_constellations))
+# print("Visible Planets:", ', '.join(visible_planets))
+# print("Visible Constellations:", ', '.join(visible_constellations))
