@@ -26,11 +26,11 @@ illumination = moon.moon_phase
 
 # Compute visible planets
 planets = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn']
-visible_planets = [p for p in planets if ephem.constellation(getattr(ephem, p)(observer))[1] != '']
+visible_planets = [p for p in planets if getattr(ephem, p)(observer).alt > 0]
 
 # Compute visible constellations
 constellations = ['Andromeda', 'Aquarius', 'Aries', 'Cancer', 'Capricornus', 'Cygnus', 'Gemini', 'Leo', 'Libra', 'Orion', 'Pegasus', 'Pisces', 'Sagittarius', 'Scorpius', 'Taurus', 'Virgo']
-visible_constellations = [c for c in constellations if ephem.constellation(getattr(ephem, c)(observer))[1] != '']
+visible_constellations = [c for c in constellations if getattr(ephem, c)(observer).alt > 0]
 
 # Print summary
 print("Astronomical Summary for", tomorrow.strftime("%Y-%m-%d"))
