@@ -24,4 +24,4 @@ services:
       - ./data:/bitnami/spark/data
     depends_on:
       - spark-master
-
+      
