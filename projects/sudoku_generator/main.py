@@ -4,6 +4,12 @@ from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import Paragraph
 from reportlab.platypus import Table, TableStyle
+from sudoku import Sudoku
+
+def generate_sudoku_puzzle():
+    puzzle = Sudoku(3).difficulty(0.9)  # Create a Sudoku puzzle with 90% cells empty
+    puzzle.solve()  # Solve the puzzle to ensure it's valid
+    return puzzle.board
 
 def draw_grid(canvas, text_list):
     width, height = letter
@@ -39,16 +45,6 @@ def draw_grid(canvas, text_list):
 
 # Create a PDF
 c = canvas.Canvas("sudoku.pdf", pagesize=letter)
-text_list = [
-    [8, None, None, None, None, None, None, 6, None],
-    [None, None, None, None, None, None, 9, None, None],
-    [None, None, None, None, None, 8, None, None, None],
-    [None, None, None, 9, None, None, None, 7, None],
-    [None, None, None, 7, None, None, None, 9, None],
-    [None, None, None, None, None, None, None, None, None],
-    [None, None, None, None, 6, None, None, None, None],
-    [None, None, None, None, None, None, None, None, None],
-    [None, None, None, None, None, None, None, None, None]
-]
+text_list = generate_sudoku_puzzle()
 draw_grid(c, text_list)
 c.save()
