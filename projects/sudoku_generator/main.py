@@ -1,9 +1,7 @@
+import argparse
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.platypus import Paragraph
-from reportlab.platypus import Table, TableStyle
 from sudoku import Sudoku
 
 def generate_sudoku_puzzle(difficulty=0.9):
@@ -52,18 +50,27 @@ def draw_grid(canvas, text_list, title):
                 canvas.setFont(style.fontName, style.fontSize)
                 canvas.drawString(x, y, text)
 
-# Create a PDF
-c = canvas.Canvas("sudoku.pdf", pagesize=letter)
-puzzle, solution = generate_sudoku_puzzle()
+def main():
+    parser = argparse.ArgumentParser(description='Generate Sudoku PDF')
+    parser.add_argument('-d', '--difficulty', type=float, default=0.9, help='Difficulty level of the Sudoku puzzle (default: 0.9)')
+    parser.add_argument('-f', '--filename', type=str, default='sudoku.pdf', help='Name of the output PDF file (default: sudoku.pdf)')
+    args = parser.parse_args()
 
-# Draw puzzle
-draw_grid(c, puzzle, "Sudoku Puzzle")
+    # Create a PDF
+    c = canvas.Canvas(args.filename, pagesize=letter)
+    puzzle, solution = generate_sudoku_puzzle(args.difficulty)
 
-# Move to the next page
-c.showPage()
+    # Draw puzzle
+    draw_grid(c, puzzle, "Sudoku Puzzle")
 
-# Draw solution
-draw_grid(c, solution, "Sudoku Solution")
+    # Move to the next page
+    c.showPage()
 
-# Save the PDF
-c.save()
+    # Draw solution
+    draw_grid(c, solution, "Sudoku Solution")
+
+    # Save the PDF
+    c.save()
+
+if __name__ == "__main__":
+    main()
