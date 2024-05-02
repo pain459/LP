@@ -6,12 +6,12 @@ from reportlab.platypus import Paragraph
 from reportlab.platypus import Table, TableStyle
 from sudoku import Sudoku
 
-def generate_sudoku_puzzle():
-    puzzle = Sudoku(3).difficulty(0.9)  # Create a Sudoku puzzle with 90% cells empty
-    puzzle.solve()  # Solve the puzzle to ensure it's valid
-    return puzzle.board
+def generate_sudoku_puzzle(difficulty=0.9):
+    puzzle = Sudoku(3).difficulty(difficulty)  # Create a Sudoku puzzle with specified difficulty
+    solution = puzzle.solve()  # Solve the puzzle to get its solution
+    return puzzle.board, solution.board
 
-def draw_grid(canvas, text_list):
+def draw_grid(canvas, text_list, title):
     width, height = letter
     cell_size = min((width - 100) / 9, (height - 100) / 9)
 
@@ -26,6 +26,15 @@ def draw_grid(canvas, text_list):
             canvas.setLineWidth(2)
             canvas.line(50, height - 50 - i * cell_size + 1, width - 50, height - 50 - i * cell_size + 1)
             canvas.line(50 + i * cell_size + 1, height - 50, 50 + i * cell_size + 1, height - 50 - 9 * cell_size + 1)  # Adjusted end point
+
+    # Add title
+    style = getSampleStyleSheet()['Title']
+    style.fontSize = 20
+    title_width = canvas.stringWidth(title, style.fontName, style.fontSize)
+    x = (width - title_width) / 2
+    y = height - 50
+    canvas.setFont(style.fontName, style.fontSize)
+    canvas.drawString(x, y, title)
 
     # Add text to cells
     style = getSampleStyleSheet()['BodyText']
@@ -45,6 +54,16 @@ def draw_grid(canvas, text_list):
 
 # Create a PDF
 c = canvas.Canvas("sudoku.pdf", pagesize=letter)
-text_list = generate_sudoku_puzzle()
-draw_grid(c, text_list)
+puzzle, solution = generate_sudoku_puzzle()
+
+# Draw puzzle
+draw_grid(c, puzzle, "Sudoku Puzzle")
+
+# Move to the next page
+c.showPage()
+
+# Draw solution
+draw_grid(c, solution, "Sudoku Solution")
+
+# Save the PDF
 c.save()
