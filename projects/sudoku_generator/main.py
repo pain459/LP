@@ -4,10 +4,15 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.styles import getSampleStyleSheet
 from sudoku import Sudoku
 
-def generate_sudoku_puzzle(difficulty=0.9):
-    puzzle = Sudoku(3).difficulty(difficulty)  # Create a Sudoku puzzle with specified difficulty
-    solution = puzzle.solve()  # Solve the puzzle to get its solution
-    return puzzle.board, solution.board
+def generate_sudoku_puzzle(difficulty=0.9, count=1):
+    puzzles = []
+    solutions = []
+    for _ in range(count):
+        puzzle = Sudoku(3).difficulty(difficulty)  # Create a Sudoku puzzle with specified difficulty
+        solution = puzzle.solve()  # Solve the puzzle to get its solution
+        puzzles.append(puzzle.board)
+        solutions.append(solution.board)
+    return puzzles, solutions
 
 def draw_grid(canvas, text_list, title):
     width, height = letter
@@ -53,21 +58,32 @@ def draw_grid(canvas, text_list, title):
 def main():
     parser = argparse.ArgumentParser(description='Generate Sudoku PDF')
     parser.add_argument('-d', '--difficulty', type=float, default=0.9, help='Difficulty level of the Sudoku puzzle (default: 0.9)')
+    parser.add_argument('-c', '--count', type=int, default=1, help='Number of Sudoku puzzles to generate (default: 1)')
     parser.add_argument('-f', '--filename', type=str, default='sudoku.pdf', help='Name of the output PDF file (default: sudoku.pdf)')
     args = parser.parse_args()
 
     # Create a PDF
     c = canvas.Canvas(args.filename, pagesize=letter)
-    puzzle, solution = generate_sudoku_puzzle(args.difficulty)
+    puzzle_count = args.count
+    puzzles, solutions = generate_sudoku_puzzle(args.difficulty, puzzle_count)
 
-    # Draw puzzle
-    draw_grid(c, puzzle, "Sudoku Puzzle")
+    # Draw puzzles
+    page_num = 1
+    for i in range(0, puzzle_count, 4):
+        puzzles_to_draw = puzzles[i:i+4]
+        c.setLineWidth(1)
+        for j, puzzle in enumerate(puzzles_to_draw):
+            draw_grid(c, puzzle, f"Sudoku Puzzle {page_num}")
+            if j < len(puzzles_to_draw) - 1:
+                c.showPage()
+                page_num += 1
 
-    # Move to the next page
+    # Draw solutions
     c.showPage()
-
-    # Draw solution
-    draw_grid(c, solution, "Sudoku Solution")
+    for i, solution in enumerate(solutions):
+        draw_grid(c, solution, f"Sudoku Solution {i+1}")
+        if i < len(solutions) - 1:
+            c.showPage()
 
     # Save the PDF
     c.save()
