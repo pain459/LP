@@ -21,7 +21,7 @@ def test_api(cards):
 
 if __name__ == '__main__':
     # Sample cards for one player
-    cards = ['D', 'I', 'C', 'T', 'I', 'O', 'N', 'A', 'R', '*']
+    cards = ['S', 'W', 'I', 'F', 'T', 'Z', 'U', 'U', 'A', 'K']
 
     # Call the test function with the sample cards
     test_api(cards)
