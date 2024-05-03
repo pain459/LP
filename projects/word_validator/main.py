@@ -33,7 +33,7 @@ def provide_feedback(word, is_valid, description=None, classification=None):
 def main():
     wordnet_dict = load_wordnet()
     while True:
-        user_input = input("Enter a word to validate (or 'quit' to exit): ")
+        user_input = input("Enter a word to validate \n(or 'quit' to exit): ")
         if user_input.lower() == 'quit':
             break
         is_valid, word_info = validate_word(user_input, wordnet_dict)
