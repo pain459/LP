@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Validation Result</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap">
     <style>
         body {
             background-color: #121212; /* dark background */
@@ -12,23 +13,37 @@
             text-align: center;
             margin-top: 20vh; /* center vertically */
         }
+        h1 {
+            font-family: 'Dancing Script', cursive; /* Use Dancing Script font */
+            font-size: 48px; /* Larger font size */
+            margin-bottom: 20px; /* Add margin */
+        }
         p {
-            font-size: 18px;
-            margin-bottom: 20px;
+            font-size: 18px; /* Larger font size */
+            margin-bottom: 20px; /* Add margin */
         }
-        a {
-            color: #007bff; /* blue link */
-            text-decoration: none;
-            font-weight: bold;
+        .classification-box {
+            background-color: #333; /* dark gray background */
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 40px; /* Add margin to separate from validation result */
+            text-align: left; /* Align text to the left */
         }
-        a:hover {
-            text-decoration: underline; /* underline on hover */
+        .classification {
+            font-size: 14px; /* Decrease font size for classification details */
         }
     </style>
 </head>
 <body>
     <h1>Validation Result</h1>
     <p>{{ result }}</p>
+    <div class="classification-box">
+        <p><strong>Classification Definitions:</strong></p>
+        <p class="classification"><strong>Noun:</strong> A word that represents a person, place, thing, or idea.</p>
+        <p class="classification"><strong>Verb:</strong> A word that describes an action, occurrence, or state of being.</p>
+        <p class="classification"><strong>Adjective:</strong> A word that describes or modifies a noun or pronoun.</p>
+        <!-- Add more classification definitions as needed -->
+    </div>
     <a href="/">Back to Home</a>
 </body>
 </html>
