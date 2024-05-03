@@ -1,0 +1,7 @@
+# build command
+docker build -t word-validator .
+
+
+# run command
+docker run -p 5000:5000 word-validator
+
