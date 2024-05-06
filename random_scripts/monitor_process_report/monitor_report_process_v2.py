@@ -3,51 +3,61 @@ import subprocess
 import requests
 import socket
 import argparse
+import signal
+import sys
+import os
+import logging
 
-# Argument parser
-parser = argparse.ArgumentParser(description='Monitor a process and alert if it is not running.')
-parser.add_argument('--process_name', '-pname', type=str, required=True, help='Name of the process to monitor.')
+# Setup logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-args = parser.parse_args()
+def setup_arg_parser():
+    parser = argparse.ArgumentParser(description='Monitor a process and alert if it is not running.')
+    parser.add_argument('--process_name', '-pname', type=str, required=True, help='Name of the process to monitor.')
+    parser.add_argument('--slack_webhook_url', type=str, default=os.getenv("SLACK_WEBHOOK_URL", "https://hooks.slack.com/services/webhook"),
+                        help='Slack webhook URL for notifications.')
+    parser.add_argument('--interval', type=int, default=int(os.getenv("CHECK_INTERVAL", 300)),
+                        help='Time interval between checks in seconds.')
+    return parser.parse_args()
 
-# Use the process name from the command-line arguments
-process_name = args.process_name
-
-# Constants
-slack_webhook_url = "https://hooks.slack.com/services/webhook"
-hostname = socket.gethostname()
-interval = 5 * 60  # 5 minutes in seconds
+def get_hostname():
+    return socket.gethostname()
 
 def check_process(process_name):
     try:
-        output = subprocess.check_output(["pgrep", "-f", process_name, 'grep', '-v', 'grep'])
+        output = subprocess.check_output(["pgrep", "-f", f"{process_name} | grep -v grep"], shell=True)
         pids = output.decode().strip().split("\n")
-        print(f"Process '{process_name}' found on '{hostname}' with PIDs: {', '.join(pids)}")
+        logging.info(f"Process '{process_name}' found with PIDs: {', '.join(pids)}")
         return True
     except subprocess.CalledProcessError:
-        print(f"Process '{process_name}' not found on '{hostname}'.")
+        logging.warning(f"Process '{process_name}' not found.")
         return False
 
-def post_slack_message(message):
+def post_slack_message(webhook_url, message):
     payload = {"text": message}
-    response = requests.post(slack_webhook_url, json=payload)
+    response = requests.post(webhook_url, json=payload)
     if response.status_code != 200:
-        print(f"Failed to send message to Slack: {response.status_code}")
+        logging.error(f"Failed to send message to Slack: {response.status_code}")
 
-def post_success_metric(success):
+def post_success_metric(webhook_url, process_name, success):
     if success:
-        print("Posting success metric: Process is running")
+        logging.info("Process is running")
     else:
-        message = f"ALERT: Process '{process_name}' is not running on '{hostname}'!"
-        post_slack_message(message)
+        message = f"ALERT: Process '{process_name}' is not running on '{get_hostname()}'!"
+        post_slack_message(webhook_url, message)
 
-def main():
-    print(f"Starting process monitoring for '{process_name}' on {hostname}...")
+def signal_handler(signum, frame):
+    logging.info('Gracefully shutting down')
+    sys.exit(0)
+
+def main(args):
+    logging.info(f"Starting process monitoring for '{args.process_name}' on {get_hostname()}...")
+    signal.signal(signal.SIGINT, signal_handler)
     while True:
-        success = check_process(process_name)
-        post_success_metric(success)
-        time.sleep(interval)
-
+        success = check_process(args.process_name)
+        post_success_metric(args.slack_webhook_url, args.process_name, success)
+        time.sleep(args.interval)
 
 if __name__ == "__main__":
-    main()
+    args = setup_arg_parser()
+    main(args)
