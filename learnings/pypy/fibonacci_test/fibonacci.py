@@ -16,7 +16,7 @@ def measure_time(n):
 
 
 def main():
-    n = 99
+    n = 399
     measure_time(n)
 
 
