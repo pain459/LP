@@ -1,1 +1,9 @@
 In this example we determine the performance difference using pypy vs python to calculate fibonacci series.
+
+$ pypy3 fibonacci.py 
+Fibonacci of 50 is 12586269025
+Time taken is 100.37962198257446 seconds.
+
+$ python fibonacci.py 
+Fibonacci of 50 is 12586269025
+Time taken is 2059.100098133087 seconds.
