@@ -4,7 +4,7 @@ def fibonacci(n):
     if n <= 1:
         return n
     else:
-        fibonacci(n - 1) + fibonacci(n - 2)
+        return fibonacci(n - 1) + fibonacci(n - 2)
 
 
 def measure_time(n):
@@ -16,7 +16,7 @@ def measure_time(n):
 
 
 def main():
-    n = 2999
+    n = 99
     measure_time(n)
 
 
