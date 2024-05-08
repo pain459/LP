@@ -93,3 +93,12 @@ x.append(5) is O(1) since it is 1 operation to add at the end and no reindexing 
 x.pop() is also O(1), since it pops the item at the end.
 
 x.insert(1, 'Hi') is O(n). 3 steps needed... find the memory block, insert the element and recreate the index. Worst case is O(n)
+
+---
+
+Giving definitions
+
+O(n^2) = loop with in a loop
+O(n) = proportioanal
+O(log n) = Divide and conquer
+O(1) = constant
