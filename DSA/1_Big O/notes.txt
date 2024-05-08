@@ -19,3 +19,7 @@ This rule is called as dropping the constants.
 
 ---
 If a loop is running for n time and a loop is running internal to another loop, the complexity will be n * n, that is O(n^2)
+
+---
+Drop non-dominants. Same example where we have one operation of O(n^2) and O(n), it will become O(n^2 + n), now the non-dominant one is n and will be dropped.
+So the complexity for this type of situation is O(n^2)
