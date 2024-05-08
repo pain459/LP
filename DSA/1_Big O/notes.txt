@@ -57,3 +57,24 @@ hence complexity is O(log n)
 ---
 
 However, the most efficient one is O(n log n) used in sorting algorithms.
+
+---
+
+Different terms for inputs.
+
+if a function is having 2 inputs like
+def print_numbers(a, b):
+    for i in range(a):
+        print(i)
+    for j in range(b):
+        print(j)
+
+complexity is not O(n), instead we should simplify it as O(a + b)
+
+similarly for the below program
+def print_numbers(a, b):
+    for i in range(a):
+        for j in range(b):
+            print(i, j)
+
+complexity is O(a * b) instead.
