@@ -1,0 +1,9 @@
+only 3 cases in the program
+
+omega   -  Ω
+theta   -  θ
+omicron -  Ο
+
+best case is omega, mid case is theta and worst case is Omicron.
+
+In terms of Big O, its always the worst case only.
