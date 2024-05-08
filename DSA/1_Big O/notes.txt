@@ -23,3 +23,6 @@ If a loop is running for n time and a loop is running internal to another loop, 
 ---
 Drop non-dominants. Same example where we have one operation of O(n^2) and O(n), it will become O(n^2 + n), now the non-dominant one is n and will be dropped.
 So the complexity for this type of situation is O(n^2)
+
+---
+O(1) -- any simple operation like addition to the nth number is classified a O(1) complexity
