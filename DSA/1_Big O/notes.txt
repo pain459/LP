@@ -26,3 +26,34 @@ So the complexity for this type of situation is O(n^2)
 
 ---
 O(1) -- any simple operation like addition to the nth number is classified a O(1) complexity
+
+---
+
+O(log n) -- mostly used to searching the elements. example below
+
+# list as example
+x = [1, 2, 3, 4, 5, 6, 7, 8]
+
+Step - 1: cut to half and see if we have the element we are searching. Example we are searching for 1.
+
+  set - 1            set - 2
+1, 2, 3, 4   ...   5, 6, 7, 8    # Operation 1
+
+set - 2 discarded, cut set 1 into half again and repeat
+
+1, 2 ... 3, 4    # Operation 2
+
+repeat
+
+1 ... 2    # Operatoon 3
+
+Found 1!
+
+2 ** 3 = 8
+log 8 to base 2 = 3
+
+hence complexity is O(log n)
+
+---
+
+However, the most efficient one is O(n log n) used in sorting algorithms.
