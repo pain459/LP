@@ -78,3 +78,18 @@ def print_numbers(a, b):
             print(i, j)
 
 complexity is O(a * b) instead.
+
+
+---
+
+Big O of lists.
+
+for ex. list as below.
+
+x = [1, 2, 3, 4]
+
+x.append(5) is O(1) since it is 1 operation to add at the end and no reindexing is needed.
+
+x.pop() is also O(1), since it pops the item at the end.
+
+x.insert(1, 'Hi') is O(n). 3 steps needed... find the memory block, insert the element and recreate the index. Worst case is O(n)
