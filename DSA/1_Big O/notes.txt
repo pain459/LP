@@ -12,3 +12,7 @@ In terms of Big O, its always the worst case only.
 ---
 
 O(n) -- always a proportioanal graph
+
+---
+if a job take n time and 2 iterations take 2n times, the complexity shouldn't be O(2n), instead it is O(n)
+This rule is called as dropping the constants.
