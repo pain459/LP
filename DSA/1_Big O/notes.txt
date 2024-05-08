@@ -16,3 +16,6 @@ O(n) -- always a proportioanal graph
 ---
 if a job take n time and 2 iterations take 2n times, the complexity shouldn't be O(2n), instead it is O(n)
 This rule is called as dropping the constants.
+
+---
+If a loop is running for n time and a loop is running internal to another loop, the complexity will be n * n, that is O(n^2)
