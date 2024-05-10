@@ -1,0 +1,7 @@
+Recognizing the use of sliding window in the wild:
+
+1. Things that we iterate over sequentially.
+    - continous sequence of elements
+    - strings, arrays and linked lists
+2. Min, Max, Shortest, Longest, Contained
+    - may be we need to calculate something.
