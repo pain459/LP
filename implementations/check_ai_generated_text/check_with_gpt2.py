@@ -1,13 +1,16 @@
 from transformers import pipeline
 import torch
 
+# Your Hugging Face API token - replace 'your_token_here' with your actual token
+HF_TOKEN = 'token_here'
+
 # Initialize the AI text detector model
 def load_model():
     if torch.cuda.is_available():
         device = 0  # Use GPU if available
     else:
         device = -1  # Use CPU otherwise
-    detector = pipeline("text-classification", model="mrm8488/GPT-2-output-dataset-detector", device=device)
+    detector = pipeline("text-classification", model="mrm8488/GPT-2-output-dataset-detector", device=device, use_auth_token=HF_TOKEN)
     return detector
 
 # Function to read text from a file
@@ -33,4 +36,3 @@ if __name__ == "__main__":
     file_path = 'path_to_your_text_file.txt'  # Replace with your text file path
     result = main(file_path)
     print("Prediction:", result)
-
