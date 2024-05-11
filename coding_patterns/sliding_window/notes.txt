@@ -5,3 +5,9 @@ Recognizing the use of sliding window in the wild:
     - strings, arrays and linked lists
 2. Min, Max, Shortest, Longest, Contained
     - may be we need to calculate something.
+
+Possible opportunities to implement:
+
+1. Stock analysis.
+2. Find perfect moment in a movie.
+3. Find right time frame in a day of details are given.
