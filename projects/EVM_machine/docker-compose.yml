@@ -4,6 +4,8 @@ services:
     build: ./control_unit
     ports:
       - "5000:5000"
+    volumes:
+      - ./control_unit/voters.db:/app/voters.db
   voting_unit:
     build: ./voting_unit
     ports:
