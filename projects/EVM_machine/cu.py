@@ -3,6 +3,7 @@ import sqlite3
 
 app = Flask(__name__)
 
+
 @app.route('/validate', methods=['POST'])
 def validate_voter():
     voter_id = request.json['voter_id']
@@ -15,6 +16,7 @@ def validate_voter():
         return jsonify({"access": "granted", "polling_booth_id": voter[3]})
     return jsonify({"access": "denied"})
 
+
 @app.route('/cast_vote', methods=['POST'])
 def cast_vote():
     voter_id = request.json['voter_id']
@@ -25,6 +27,6 @@ def cast_vote():
     conn.commit()
     return jsonify({"status": "vote registered"})
 
+
 if __name__ == '__main__':
     app.run(port=5001, ssl_context=('cert.pem', 'key.pem'))
-

@@ -6,12 +6,14 @@ app = Flask(__name__)
 votes = {}
 
 # Greek letter names as candidates
-candidates = [chr(913+i) for i in range(20)]  # Greek capital letters Alpha to Tau
+candidates = [chr(913 + i) for i in range(20)]  # Greek capital letters Alpha to Tau
 votes = {candidate: 0 for candidate in candidates}
+
 
 @app.route('/candidates', methods=['GET'])
 def list_candidates():
     return jsonify(candidates)
+
 
 @app.route('/vote', methods=['POST'])
 def cast_vote():
@@ -22,6 +24,6 @@ def cast_vote():
     else:
         return jsonify({"status": "failed", "reason": "Invalid candidate"}), 400
 
+
 if __name__ == '__main__':
     app.run(port=5001, ssl_context=('cert.pem', 'key.pem'))
-
