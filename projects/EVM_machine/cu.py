@@ -26,4 +26,5 @@ def cast_vote():
     return jsonify({"status": "vote registered"})
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=5001, ssl_context=('cert.pem', 'key.pem'))
+

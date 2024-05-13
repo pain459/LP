@@ -23,4 +23,5 @@ def cast_vote():
         return jsonify({"status": "failed", "reason": "Invalid candidate"}), 400
 
 if __name__ == '__main__':
-    app.run(port=5001)
+    app.run(port=5001, ssl_context=('cert.pem', 'key.pem'))
+
