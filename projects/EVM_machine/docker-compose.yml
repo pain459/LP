@@ -1,0 +1,14 @@
+version: '3'
+services:
+  control_unit:
+    build: ./control_unit
+    ports:
+      - "5000:5000"
+  voting_unit:
+    build: ./voting_unit
+    ports:
+      - "5001:5001"
+  counting_machine:
+    build: ./counting_machine
+    ports:
+      - "5002:5002"
