@@ -1,0 +1,7 @@
+
+Step 1: Design the System Architecture
+
+    Control Unit (CU) Container: This unit authenticates voters and allows them to proceed to the voting unit. It might communicate with a voter database to verify voter IDs.
+    Voting Unit (VU) Container: This is where the voter actually casts their votes. The interface allows selecting from available options.
+    Counting Machine (CM) Container: This container stores the results and can tally the votes when required.
+
