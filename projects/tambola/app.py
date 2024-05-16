@@ -4,6 +4,8 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO
 from flask_bcrypt import Bcrypt
 import random
+from sqlalchemy.ext.mutable import MutableList
+from sqlalchemy import PickleType
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -14,8 +16,8 @@ db = SQLAlchemy(app)
 socketio = SocketIO(app, async_mode='gevent')
 bcrypt = Bcrypt(app)
 
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configure logging to write to a file
+logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 class User(db.Model):
@@ -27,7 +29,7 @@ class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     numbers = db.Column(db.PickleType, nullable=False)
-    marked_numbers = db.Column(db.PickleType, nullable=False, default=[])
+    marked_numbers = db.Column(MutableList.as_mutable(PickleType), nullable=False, default=[])
     ticket_number = db.Column(db.Integer, nullable=False)
 
 used_numbers = set()
@@ -219,15 +221,23 @@ def mark_number():
     ticket_id = request.form['ticket_id']
     ticket = Ticket.query.filter_by(user_id=user.id, id=ticket_id).first()
     number = int(request.form['number'])
+    logger.debug(f"Initial marked numbers: {ticket.marked_numbers}")
     if number in ticket.marked_numbers:
         ticket.marked_numbers.remove(number)
         action = "unmarked"
     else:
         ticket.marked_numbers.append(number)
         action = "marked"
+    logger.debug(f"Marked numbers before commit: {ticket.marked_numbers}")
     db.session.commit()
+    # Fetch the updated ticket again to confirm the changes were saved
+    updated_ticket = Ticket.query.filter_by(id=ticket_id).first()
     logger.info(f"Number {number} {action} on ticket {ticket_id} by user {user.username}")
+    logger.debug(f"Ticket {ticket_id} marked numbers after update: {updated_ticket.marked_numbers}")
     return jsonify({'success': True})
+
+
+
 
 @app.route('/save_state', methods=['POST'])
 def save_state():
@@ -238,6 +248,21 @@ def save_state():
     db.session.commit()
     logger.info(f"State saved for user: {user.username}")
     return jsonify({'success': True})
+
+@app.route('/get_marked_numbers', methods=['POST'])
+def get_marked_numbers():
+    if 'username' not in session:
+        return jsonify({'success': False, 'error': 'User not logged in'}), 401
+    user = User.query.filter_by(username=session['username']).first()
+    ticket_id = request.form['ticket_id']
+    ticket = Ticket.query.filter_by(user_id=user.id, id=ticket_id).first()
+    if not ticket:
+        logger.error(f"Ticket not found for ticket_id {ticket_id} and user {user.username}")
+        return jsonify({'success': False, 'error': 'Ticket not found'}), 404
+    logger.info(f"Retrieved marked numbers for ticket {ticket_id} by user {user.username}: {ticket.marked_numbers}")
+    logger.debug(f"Ticket {ticket_id} data: {ticket}")
+    return jsonify({'success': True, 'marked_numbers': ticket.marked_numbers})
+
 
 @app.route('/logout')
 def logout():
@@ -258,19 +283,6 @@ def create_admin_user():
         logger.info(f"Admin user created with username: {admin_username} and password: {admin_password}")
     else:
         logger.info('Admin user already exists.')
-
-@app.route('/get_marked_numbers', methods=['POST'])
-def get_marked_numbers():
-    if 'username' not in session:
-        return jsonify({'success': False, 'error': 'User not logged in'}), 401
-    user = User.query.filter_by(username=session['username']).first()
-    ticket_id = request.form['ticket_id']
-    ticket = Ticket.query.filter_by(user_id=user.id, id=ticket_id).first()
-    if not ticket:
-        return jsonify({'success': False, 'error': 'Ticket not found'}), 404
-    logger.info(f"Retrieved marked numbers for ticket {ticket_id} by user {user.username}")
-    return jsonify({'success': True, 'marked_numbers': ticket.marked_numbers})
-
 
 if __name__ == '__main__':
     with app.app_context():
