@@ -94,6 +94,18 @@ def delete_user():
         db.session.commit()
     return redirect(url_for('admin'))
 
+@app.route('/admin/end_game', methods=['POST'])
+def end_game():
+    if 'username' not in session or session.get('role') != 'admin':
+        return redirect(url_for('home'))
+    password = request.form['password']
+    if password == 'admin_end_game':  # predefined end game password
+        Ticket.query.delete()
+        db.session.commit()
+        return 'Game ended and all tickets have been flushed!'
+    else:
+        return 'Invalid password'
+
 @app.route('/game')
 def game():
     if 'username' not in session:

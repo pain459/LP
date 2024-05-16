@@ -6,23 +6,16 @@
     <style>
         .marked {
             background-color: #ffdddd;
-            position: relative;
-        }
-        .marked::before {
-            content: '✖';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            font-weight: bold;
             font-size: 24px;
-            color: red;
         }
         .btn-number {
             width: 100%;
             height: 100%;
-            font-size: 20px;
+            font-size: 24px;
             border: none;
             background: none;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -87,6 +80,14 @@
                 {% endfor %}
             </tbody>
         </table>
+        <h2 class="mt-5">End Game</h2>
+        <form method="POST" action="/admin/end_game">
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-danger">End Game</button>
+        </form>
     </div>
 </body>
 </html>
