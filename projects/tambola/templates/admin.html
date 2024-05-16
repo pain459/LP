@@ -5,9 +5,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         .marked {
-            background-color: #ffdddd;
-            font-weight: bold;
-            font-size: 24px;
+            background-color: red;
+            color: white;
         }
         .btn-number {
             width: 100%;
@@ -47,7 +46,7 @@
             <button type="submit" class="btn btn-primary">Generate Ticket</button>
         </form>
         <h2 class="mt-5">Generated Tickets</h2>
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th scope="col">User</th>
@@ -64,7 +63,9 @@
                             {% for row in ticket.numbers %}
                             <tr>
                                 {% for num in row %}
-                                <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">{{ num }}</td>
+                                <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
+                                    <button type="button" class="btn btn-number {% if num in ticket.marked_numbers %}marked{% endif %}">{{ num }}</button>
+                                </td>
                                 {% endfor %}
                             </tr>
                             {% endfor %}

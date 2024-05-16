@@ -102,7 +102,8 @@ def end_game():
     if password == 'admin_end_game':  # predefined end game password
         Ticket.query.delete()
         db.session.commit()
-        return 'Game ended and all tickets have been flushed!'
+        session.clear()
+        return redirect(url_for('admin_login'))
     else:
         return 'Invalid password'
 
@@ -111,8 +112,8 @@ def game():
     if 'username' not in session:
         return redirect(url_for('home'))
     user = User.query.filter_by(username=session['username']).first()
-    ticket = Ticket.query.filter_by(user_id=user.id).first()
-    return render_template('game.html', ticket=ticket)
+    tickets = Ticket.query.filter_by(user_id=user.id).all()
+    return render_template('game.html', tickets=tickets)
 
 @app.route('/generate_ticket', methods=['POST'])
 def generate_ticket():
@@ -130,11 +131,23 @@ def mark_number():
     if 'username' not in session:
         return redirect(url_for('home'))
     user = User.query.filter_by(username=session['username']).first()
-    ticket = Ticket.query.filter_by(user_id=user.id).first()
+    ticket_id = request.form['ticket_id']
+    ticket = Ticket.query.filter_by(user_id=user.id, id=ticket_id).first()
     number = int(request.form['number'])
-    if number not in ticket.marked_numbers:
+    if number in ticket.marked_numbers:
+        ticket.marked_numbers.remove(number)
+    else:
         ticket.marked_numbers.append(number)
-        db.session.commit()
+    db.session.commit()
+    return jsonify({'success': True})
+
+@app.route('/save_state', methods=['POST'])
+def save_state():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    user = User.query.filter_by(username=session['username']).first()
+    tickets = Ticket.query.filter_by(user_id=user.id).all()
+    db.session.commit()
     return jsonify({'success': True})
 
 def generate_ticket_numbers():
@@ -167,4 +180,4 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
         create_admin_user()
-    socketio.run(app)
+    socketio.run(app, host='0.0.0.0', port=5000)

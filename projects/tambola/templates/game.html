@@ -5,9 +5,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         .marked {
-            background-color: #ffdddd;
-            font-weight: bold;
-            font-size: 24px;
+            background-color: red;
+            color: white;
         }
         .btn-number {
             width: 100%;
@@ -17,6 +16,9 @@
             background: none;
             font-weight: bold;
         }
+        .ticket {
+            margin-bottom: 30px;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -24,32 +26,45 @@
 <body>
     <div class="container">
         <h1 class="mt-5">Tambola Game</h1>
-        <h2>Your Ticket:</h2>
-        <table class="table table-bordered">
-            <tbody>
-                {% for row in ticket.numbers %}
-                <tr>
-                    {% for num in row %}
-                    <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
-                        <button type="button" class="btn btn-number" onclick="confirmMarkNumber({{ num }})">{{ num }}</button>
-                    </td>
+        {% for ticket in tickets %}
+        <div class="ticket" data-ticket-id="{{ ticket.id }}">
+            <h2>Your Ticket:</h2>
+            <table class="table table-bordered">
+                <tbody>
+                    {% for row in ticket.numbers %}
+                    <tr>
+                        {% for num in row %}
+                        <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
+                            <button type="button" class="btn btn-number {% if num in ticket.marked_numbers %}marked{% endif %}" onclick="toggleNumber({{ num }}, {{ ticket.id }})">{{ num }}</button>
+                        </td>
+                        {% endfor %}
+                    </tr>
                     {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                </tbody>
+            </table>
+        </div>
+        {% endfor %}
+        <button class="btn btn-primary mt-3" onclick="saveState()">Save State</button>
     </div>
     <script>
-        function confirmMarkNumber(number) {
-            if (confirm('Do you want to mark number ' + number + '?')) {
-                $.post('/mark_number', { number: number }, function(response) {
-                    if (response.success) {
-                        $('button').filter(function() {
-                            return $(this).text() == number;
-                        }).parent().addClass('marked');
-                    }
-                });
-            }
+        function toggleNumber(number, ticket_id) {
+            $.post('/mark_number', { number: number, ticket_id: ticket_id }, function(response) {
+                if (response.success) {
+                    const button = $('button').filter(function() {
+                        return $(this).text() == number.toString() && $(this).closest('.ticket').data('ticket-id') == ticket_id;
+                    });
+                    button.toggleClass('marked');
+                    button.parent().toggleClass('marked');
+                }
+            });
+        }
+
+        function saveState() {
+            $.post('/save_state', function(response) {
+                if (response.success) {
+                    alert('State saved successfully!');
+                }
+            });
         }
     </script>
 </body>
