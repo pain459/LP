@@ -120,7 +120,7 @@ def mark_number():
     user = User.query.filter_by(username=session['username']).first()
     ticket = Ticket.query.filter_by(user_id=user.id).first()
     number = int(request.form['number'])
-    if number in ticket.numbers and number not in ticket.marked_numbers:
+    if number not in ticket.marked_numbers:
         ticket.marked_numbers.append(number)
         db.session.commit()
     return redirect(url_for('game'))
