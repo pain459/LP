@@ -171,7 +171,7 @@ def game():
         return redirect(url_for('home'))
     user = User.query.filter_by(username=session['username']).first()
     tickets = Ticket.query.filter_by(user_id=user.id).all()
-    return render_template('game.html', tickets=tickets)
+    return render_template('game.html', tickets=tickets, username=session['username'])
 
 @app.route('/generate_ticket', methods=['POST'])
 def generate_ticket():
@@ -226,6 +226,12 @@ def create_admin_user():
         print(f'Admin user created with username: {admin_username} and password: {admin_password}')
     else:
         print('Admin user already exists.')
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('home'))
+
 
 if __name__ == '__main__':
     with app.app_context():

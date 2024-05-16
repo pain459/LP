@@ -38,7 +38,13 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Tambola Game</h1>
+        <div class="d-flex justify-content-between align-items-center mt-5">
+            <h1>Tambola Game</h1>
+            <div>
+                <span>Welcome, {{ username }}</span>
+                <a href="/logout" class="btn btn-danger ml-3">Logout</a>
+            </div>
+        </div>
         <h2>Your Tickets:</h2>
         {% for ticket in tickets %}
         <div class="ticket" data-ticket-id="{{ ticket.id }}">
