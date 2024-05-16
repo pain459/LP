@@ -1,9 +1,11 @@
+import logging
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_socketio import SocketIO
 from flask_bcrypt import Bcrypt
 import random
 
+# Initialize the Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tambola.db'
@@ -11,6 +13,10 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 socketio = SocketIO(app, async_mode='gevent')
 bcrypt = Bcrypt(app)
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,6 +35,7 @@ used_numbers = set()
 def reset_used_numbers():
     global used_numbers
     used_numbers = set()
+    logger.info("Used numbers reset")
 
 def generate_ticket_numbers():
     global used_numbers
@@ -83,11 +90,13 @@ def generate_ticket_numbers():
 
 @app.route('/')
 def home():
+    logger.info("Home page accessed")
     return render_template('home.html')
 
 @app.route('/select_role', methods=['POST'])
 def select_role():
     role = request.form['role']
+    logger.info(f"Role selected: {role}")
     if role == 'admin':
         return redirect(url_for('admin_login'))
     else:
@@ -102,8 +111,10 @@ def admin_login():
         if user and bcrypt.check_password_hash(user.password, password):
             session['username'] = username
             session['role'] = 'admin'
+            logger.info(f"Admin logged in: {username}")
             return redirect(url_for('admin'))
         else:
+            logger.warning(f"Invalid admin login attempt: {username}")
             return 'Invalid credentials'
     return render_template('admin_login.html')
 
@@ -116,8 +127,10 @@ def login():
         if user and bcrypt.check_password_hash(user.password, password):
             session['username'] = username
             session['role'] = 'player'
+            logger.info(f"Player logged in: {username}")
             return redirect(url_for('game'))
         else:
+            logger.warning(f"Invalid player login attempt: {username}")
             return 'Invalid credentials'
     return render_template('login.html')
 
@@ -130,11 +143,13 @@ def admin():
         password = request.form['password']
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
+            logger.warning(f"Attempt to create existing user: {username}")
             return 'User already exists!'
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
         new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
+        logger.info(f"New user created: {username}")
         return 'User created successfully!'
     users = User.query.all()
     tickets = Ticket.query.all()
@@ -150,6 +165,7 @@ def delete_user():
         Ticket.query.filter_by(user_id=user_id).delete()
         db.session.delete(user)
         db.session.commit()
+        logger.info(f"User deleted: {user.username}")
     return redirect(url_for('admin'))
 
 @app.route('/admin/end_game', methods=['POST'])
@@ -162,8 +178,10 @@ def end_game():
         db.session.commit()
         session.clear()
         reset_used_numbers()
+        logger.info("Game ended by admin")
         return redirect(url_for('admin_login'))
     else:
+        logger.warning("Invalid end game password attempt")
         return 'Invalid password'
 
 @app.route('/game')
@@ -172,6 +190,7 @@ def game():
         return redirect(url_for('home'))
     user = User.query.filter_by(username=session['username']).first()
     tickets = Ticket.query.filter_by(user_id=user.id).all()
+    logger.info(f"Game page accessed by user: {user.username}")
     return render_template('game.html', tickets=tickets, username=session['username'])
 
 @app.route('/generate_ticket', methods=['POST'])
@@ -189,6 +208,7 @@ def generate_ticket():
     if ticket_number % 6 == 0:
         reset_used_numbers()
     
+    logger.info(f"Ticket generated for user ID: {user_id}, Ticket Number: {ticket_number}")
     return redirect(url_for('admin'))
 
 @app.route('/mark_number', methods=['POST'])
@@ -201,9 +221,12 @@ def mark_number():
     number = int(request.form['number'])
     if number in ticket.marked_numbers:
         ticket.marked_numbers.remove(number)
+        action = "unmarked"
     else:
         ticket.marked_numbers.append(number)
+        action = "marked"
     db.session.commit()
+    logger.info(f"Number {number} {action} on ticket {ticket_id} by user {user.username}")
     return jsonify({'success': True})
 
 @app.route('/save_state', methods=['POST'])
@@ -213,7 +236,15 @@ def save_state():
     user = User.query.filter_by(username=session['username']).first()
     tickets = Ticket.query.filter_by(user_id=user.id).all()
     db.session.commit()
+    logger.info(f"State saved for user: {user.username}")
     return jsonify({'success': True})
+
+@app.route('/logout')
+def logout():
+    username = session.get('username', 'Unknown')
+    session.clear()
+    logger.info(f"User logged out: {username}")
+    return redirect(url_for('home'))
 
 def create_admin_user():
     admin_username = "admin"
@@ -224,15 +255,9 @@ def create_admin_user():
         new_admin = User(username=admin_username, password=hashed_password)
         db.session.add(new_admin)
         db.session.commit()
-        print(f'Admin user created with username: {admin_username} and password: {admin_password}')
+        logger.info(f"Admin user created with username: {admin_username} and password: {admin_password}")
     else:
-        print('Admin user already exists.')
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('home'))
-
+        logger.info('Admin user already exists.')
 
 if __name__ == '__main__':
     with app.app_context():
