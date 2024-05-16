@@ -19,7 +19,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Create User</button>
         </form>
-        <h2 class="mt-5">Generated Tickets</h2>
+        <h2 class="mt-5">Generate Ticket</h2>
         <form method="POST" action="/generate_ticket">
             <div class="form-group">
                 <label for="user_id">Select User</label>
@@ -31,7 +31,8 @@
             </div>
             <button type="submit" class="btn btn-primary">Generate Ticket</button>
         </form>
-        <table class="table mt-3">
+        <h2 class="mt-5">Generated Tickets</h2>
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">User</th>
@@ -44,9 +45,15 @@
                 <tr>
                     <td>{{ ticket.user_id }}</td>
                     <td>
-                        {% for row in ticket.numbers %}
-                        <div>{{ row }}</div>
-                        {% endfor %}
+                        <table class="table table-bordered">
+                            {% for row in ticket.numbers %}
+                            <tr>
+                                {% for num in row %}
+                                <td class="{% if num in ticket.marked_numbers %}bg-success{% endif %}">{{ num }}</td>
+                                {% endfor %}
+                            </tr>
+                            {% endfor %}
+                        </table>
                     </td>
                     <td>
                         <form method="POST" action="/admin/delete_user">
@@ -58,44 +65,6 @@
                 {% endfor %}
             </tbody>
         </table>
-        <h2 class="mt-5">Call a Number</h2>
-        <form method="POST" action="/call_number">
-            <div class="form-group">
-                <label for="number">Number</label>
-                <input type="number" class="form-control" id="number" name="number" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Call Number</button>
-        </form>
-        <h2 class="mt-5">Goals</h2>
-        <form method="POST" action="/strike_goal">
-            <div class="form-group">
-                {% for goal, completed in goals.items() %}
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="{{ goal }}" id="{{ goal }}" {% if completed %} checked {% endif %}>
-                    <label class="form-check-label" for="{{ goal }}">
-                        {{ goal }}
-                    </label>
-                </div>
-                {% endfor %}
-            </div>
-            <button type="submit" class="btn btn-primary">Strike Goal</button>
-        </form>
-        <h2 class="mt-5">Stop Game</h2>
-        <form method="POST" action="/admin/stop_game">
-            <div class="form-group">
-                <label for="password">Admin Password</label>
-                <input type="password" class="form-control" id="password" name="password" required>
-            </div>
-            <button type="submit" class="btn btn-danger">Stop Game</button>
-        </form>
-        <h2 class="mt-5">Numbers Called:</h2>
-        <div class="row">
-            {% for number in range(1, 91) %}
-            <div class="col-1">
-                <button class="btn {% if number in called_numbers %}btn-success{% else %}btn-outline-secondary{% endif %}">{{ number }}</button>
-            </div>
-            {% endfor %}
-        </div>
     </div>
 </body>
 </html>

@@ -19,12 +19,9 @@ class User(db.Model):
 
 class Ticket(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    numbers = db.Column(db.PickleType, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
-called_numbers = []
-admin_password = 'admin_stop'  # predefined password to stop the game
-goals = {"4 corners": False, "first five": False, "full house": False}
+    numbers = db.Column(db.PickleType, nullable=False)
+    marked_numbers = db.Column(db.PickleType, nullable=False, default=[])
 
 @app.route('/')
 def home():
@@ -83,7 +80,7 @@ def admin():
         return 'User created successfully!'
     users = User.query.all()
     tickets = Ticket.query.all()
-    return render_template('admin.html', users=users, tickets=tickets, goals=goals, called_numbers=called_numbers)
+    return render_template('admin.html', users=users, tickets=tickets)
 
 @app.route('/admin/delete_user', methods=['POST'])
 def delete_user():
@@ -97,26 +94,13 @@ def delete_user():
         db.session.commit()
     return redirect(url_for('admin'))
 
-@app.route('/admin/stop_game', methods=['POST'])
-def stop_game():
-    if 'username' not in session or session.get('role') != 'admin':
-        return redirect(url_for('home'))
-    password = request.form['password']
-    if password == admin_password:
-        Ticket.query.delete()
-        db.session.commit()
-        session.clear()
-        return 'Game stopped and all sessions cleared!'
-    else:
-        return 'Invalid password'
-
 @app.route('/game')
 def game():
     if 'username' not in session:
         return redirect(url_for('home'))
     user = User.query.filter_by(username=session['username']).first()
     ticket = Ticket.query.filter_by(user_id=user.id).first()
-    return render_template('game.html', called_numbers=called_numbers, ticket=ticket.numbers if ticket else [])
+    return render_template('game.html', ticket=ticket)
 
 @app.route('/generate_ticket', methods=['POST'])
 def generate_ticket():
@@ -129,24 +113,17 @@ def generate_ticket():
     db.session.commit()
     return redirect(url_for('admin'))
 
-@app.route('/call_number', methods=['POST'])
-def call_number():
-    if 'username' not in session or session.get('role') != 'admin':
+@app.route('/mark_number', methods=['POST'])
+def mark_number():
+    if 'username' not in session:
         return redirect(url_for('home'))
+    user = User.query.filter_by(username=session['username']).first()
+    ticket = Ticket.query.filter_by(user_id=user.id).first()
     number = int(request.form['number'])
-    if number not in called_numbers:
-        called_numbers.append(number)
-        socketio.emit('number_called', {'number': number}, namespace='/', broadcast=True)
-    return redirect(url_for('admin'))
-
-@app.route('/strike_goal', methods=['POST'])
-def strike_goal():
-    if 'username' not in session or session.get('role') != 'admin':
-        return redirect(url_for('home'))
-    goal = request.form['goal']
-    if goal in goals:
-        goals[goal] = True
-    return redirect(url_for('admin'))
+    if number in ticket.numbers and number not in ticket.marked_numbers:
+        ticket.marked_numbers.append(number)
+        db.session.commit()
+    return redirect(url_for('game'))
 
 def generate_ticket_numbers():
     ticket = []

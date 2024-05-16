@@ -3,40 +3,37 @@
 <head>
     <title>Tambola Game</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div class="container">
         <h1 class="mt-5">Tambola Game</h1>
         <h2>Your Ticket:</h2>
-        <table class="table">
-            <tbody>
-                {% for row in ticket %}
-                <tr>
-                    {% for num in row %}
-                    <td><button class="btn btn-outline-primary">{{ num }}</button></td>
+        <form method="POST" action="/mark_number">
+            <table class="table table-bordered">
+                <tbody>
+                    {% for row in ticket.numbers %}
+                    <tr>
+                        {% for num in row %}
+                        <td>
+                            <button type="button" class="btn {% if num in ticket.marked_numbers %}btn-success{% else %}btn-outline-primary{% endif %}" onclick="confirmMarkNumber({{ num }})">{{ num }}</button>
+                        </td>
+                        {% endfor %}
+                    </tr>
                     {% endfor %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <h2>Numbers Called:</h2>
-        <div class="row">
-            {% for number in range(1, 91) %}
-            <div class="col-1">
-                <button class="btn {% if number in called_numbers %}btn-success{% else %}btn-outline-secondary{% endif %}">{{ number }}</button>
-            </div>
-            {% endfor %}
-        </div>
+                </tbody>
+            </table>
+            <input type="hidden" id="number" name="number">
+        </form>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.min.js"></script>
     <script>
-        var socket = io();
-        socket.on('number_called', function(data) {
-            var button = document.querySelector('button.btn-outline-secondary:contains("' + data.number + '")');
-            if (button) {
-                button.className = 'btn btn-success';
+        function confirmMarkNumber(number) {
+            $('#number').val(number);
+            if (confirm('Do you want to mark number ' + number + '?')) {
+                $('form').submit();
             }
-        });
+        }
     </script>
 </body>
 </html>
