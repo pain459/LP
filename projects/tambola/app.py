@@ -22,6 +22,7 @@ class Ticket(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     numbers = db.Column(db.PickleType, nullable=False)
     marked_numbers = db.Column(db.PickleType, nullable=False, default=[])
+    ticket_number = db.Column(db.Integer, nullable=False)
 
 @app.route('/')
 def home():
@@ -121,7 +122,8 @@ def generate_ticket():
         return redirect(url_for('home'))
     user_id = request.form['user_id']
     ticket = generate_ticket_numbers()
-    new_ticket = Ticket(numbers=ticket, user_id=user_id)
+    ticket_number = Ticket.query.count() + 1
+    new_ticket = Ticket(numbers=ticket, user_id=user_id, ticket_number=ticket_number)
     db.session.add(new_ticket)
     db.session.commit()
     return redirect(url_for('admin'))
@@ -198,8 +200,6 @@ def generate_ticket_numbers():
                 num = random.choice(columns[col])
             row[col] = num
             used_numbers.add(num)
-            remaining_slots.remove((row.index(num), col))
-            num_count += 1
 
     return ticket
 

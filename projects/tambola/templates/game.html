@@ -18,6 +18,19 @@
         }
         .ticket {
             margin-bottom: 30px;
+            border: 2px solid black;
+            padding: 10px;
+            position: relative;
+        }
+        .ticket-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            background-color: white;
+            padding: 2px 5px;
+            border: 1px solid black;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -26,9 +39,10 @@
 <body>
     <div class="container">
         <h1 class="mt-5">Tambola Game</h1>
+        <h2>Your Tickets:</h2>
         {% for ticket in tickets %}
         <div class="ticket" data-ticket-id="{{ ticket.id }}">
-            <h2>Your Ticket:</h2>
+            <div class="ticket-number">Ticket {{ ticket.ticket_number }}</div>
             <table class="table table-bordered">
                 <tbody>
                     {% for row in ticket.numbers %}

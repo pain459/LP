@@ -16,6 +16,22 @@
             background: none;
             font-weight: bold;
         }
+        .ticket {
+            margin-bottom: 30px;
+            border: 2px solid black;
+            padding: 10px;
+            position: relative;
+        }
+        .ticket-number {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            background-color: white;
+            padding: 2px 5px;
+            border: 1px solid black;
+        }
     </style>
 </head>
 <body>
@@ -59,21 +75,24 @@
                 <tr>
                     <td>{{ ticket.user_id }}</td>
                     <td>
-                        <table class="table table-bordered">
-                            {% for row in ticket.numbers %}
-                            <tr>
-                                {% for num in row %}
-                                <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
-                                    {% if num is not none %}
-                                    <button type="button" class="btn btn-number {% if num in ticket.marked_numbers %}marked{% endif %}">{{ num }}</button>
-                                    {% else %}
-                                    &nbsp;
-                                    {% endif %}
-                                </td>
+                        <div class="ticket">
+                            <div class="ticket-number">Ticket {{ ticket.ticket_number }}</div>
+                            <table class="table table-bordered">
+                                {% for row in ticket.numbers %}
+                                <tr>
+                                    {% for num in row %}
+                                    <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
+                                        {% if num is not none %}
+                                        <button type="button" class="btn btn-number {% if num in ticket.marked_numbers %}marked{% endif %}">{{ num }}</button>
+                                        {% else %}
+                                        &nbsp;
+                                        {% endif %}
+                                    </td>
+                                    {% endfor %}
+                                </tr>
                                 {% endfor %}
-                            </tr>
-                            {% endfor %}
-                        </table>
+                            </table>
+                        </div>
                     </td>
                     <td>
                         <form method="POST" action="/admin/delete_user">
