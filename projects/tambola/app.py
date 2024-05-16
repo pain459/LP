@@ -103,7 +103,21 @@ def generate_ticket_numbers():
         ticket.append(row)
     return ticket
 
+def create_admin_user():
+    admin_username = "admin"
+    admin_password = "admin123"
+    existing_admin = User.query.filter_by(username=admin_username).first()
+    if not existing_admin:
+        hashed_password = bcrypt.generate_password_hash(admin_password).decode('utf-8')
+        new_admin = User(username=admin_username, password=hashed_password)
+        db.session.add(new_admin)
+        db.session.commit()
+        print(f'Admin user created with username: {admin_username} and password: {admin_password}')
+    else:
+        print('Admin user already exists.')
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        create_admin_user()
     socketio.run(app)
