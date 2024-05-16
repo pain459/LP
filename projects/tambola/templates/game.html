@@ -32,6 +32,10 @@
             padding: 2px 5px;
             border: 1px solid black;
         }
+        .marked-numbers {
+            margin-top: 10px;
+            font-size: 16px;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -66,6 +70,8 @@
                     {% endfor %}
                 </tbody>
             </table>
+            <button class="btn btn-secondary mt-2" onclick="retrieveMarkedNumbers({{ ticket.id }})">Retrieve Marked Numbers</button>
+            <div class="marked-numbers" id="marked-numbers-{{ ticket.id }}"></div>
         </div>
         {% endfor %}
         <button class="btn btn-primary mt-3" onclick="saveState()">Save State</button>
@@ -87,6 +93,35 @@
             $.post('/save_state', function(response) {
                 if (response.success) {
                     alert('State saved successfully!');
+                }
+            });
+        }
+
+        function retrieveMarkedNumbers(ticket_id) {
+            $.post('/get_marked_numbers', { ticket_id: ticket_id }, function(response) {
+                if (response.success) {
+                    const markedNumbers = response.marked_numbers;
+                    const markedNumbersDiv = $('#marked-numbers-' + ticket_id);
+                    markedNumbersDiv.empty();
+                    markedNumbersDiv.append('<strong>Marked Numbers: </strong>' + markedNumbers.join(', '));
+
+                    const ticket = $('.ticket').filter(function() {
+                        return $(this).data('ticket-id') == ticket_id;
+                    });
+
+                    ticket.find('button').each(function() {
+                        const button = $(this);
+                        const number = parseInt(button.text());
+                        if (markedNumbers.includes(number)) {
+                            button.addClass('marked');
+                            button.parent().addClass('marked');
+                        } else {
+                            button.removeClass('marked');
+                            button.parent().removeClass('marked');
+                        }
+                    });
+                } else {
+                    alert('Failed to retrieve marked numbers: ' + response.error);
                 }
             });
         }

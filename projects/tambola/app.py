@@ -232,7 +232,7 @@ def mark_number():
 @app.route('/save_state', methods=['POST'])
 def save_state():
     if 'username' not in session:
-        return redirect(url_for('home'))
+        return jsonify({'success': False, 'error': 'User not logged in'}), 401
     user = User.query.filter_by(username=session['username']).first()
     tickets = Ticket.query.filter_by(user_id=user.id).all()
     db.session.commit()
@@ -258,6 +258,19 @@ def create_admin_user():
         logger.info(f"Admin user created with username: {admin_username} and password: {admin_password}")
     else:
         logger.info('Admin user already exists.')
+
+@app.route('/get_marked_numbers', methods=['POST'])
+def get_marked_numbers():
+    if 'username' not in session:
+        return jsonify({'success': False, 'error': 'User not logged in'}), 401
+    user = User.query.filter_by(username=session['username']).first()
+    ticket_id = request.form['ticket_id']
+    ticket = Ticket.query.filter_by(user_id=user.id, id=ticket_id).first()
+    if not ticket:
+        return jsonify({'success': False, 'error': 'Ticket not found'}), 404
+    logger.info(f"Retrieved marked numbers for ticket {ticket_id} by user {user.username}")
+    return jsonify({'success': True, 'marked_numbers': ticket.marked_numbers})
+
 
 if __name__ == '__main__':
     with app.app_context():
