@@ -139,8 +139,14 @@ def mark_number():
 
 def generate_ticket_numbers():
     ticket = []
+    used_numbers = set()
     for _ in range(3):
-        row = random.sample(range(1, 91), 5)
+        row = []
+        while len(row) < 5:
+            num = random.randint(1, 90)
+            if num not in used_numbers:
+                row.append(num)
+                used_numbers.add(num)
         ticket.append(row)
     return ticket
 

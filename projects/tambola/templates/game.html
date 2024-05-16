@@ -44,7 +44,9 @@
             if (confirm('Do you want to mark number ' + number + '?')) {
                 $.post('/mark_number', { number: number }, function(response) {
                     if (response.success) {
-                        $('button:contains("' + number + '")').parent().addClass('marked');
+                        $('button').filter(function() {
+                            return $(this).text() == number;
+                        }).parent().addClass('marked');
                     }
                 });
             }
