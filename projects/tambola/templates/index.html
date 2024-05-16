@@ -2,18 +2,49 @@
 <html>
 <head>
     <title>Tambola Game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Tambola Game</h1>
-    <button onclick="generateTicket()">Generate Ticket</button>
-    <button onclick="startGame(2)">Start Game (2 sec)</button>
-    <button onclick="startGame(5)">Start Game (5 sec)</button>
-    <button onclick="startGame(10)">Start Game (10 sec)</button>
-    <button onclick="stopGame()">Stop Game</button>
-    <h2>Number Called: <span id="number"></span></h2>
-    <h2>Your Ticket:</h2>
-    <div id="ticket"></div>
+    <div class="container">
+        <h1 class="mt-5">Tambola Game</h1>
+        <h2>Numbers Called:</h2>
+        <ul id="numbers-called" class="list-group">
+            {% for number in called_numbers %}
+            <li class="list-group-item">{{ number }}</li>
+            {% endfor %}
+        </ul>
+        <h2 class="mt-5">Call a Number</h2>
+        <form id="call-number-form">
+            <div class="form-group">
+                <label for="number">Number</label>
+                <input type="number" class="form-control" id="number" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Call Number</button>
+        </form>
+    </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    <script>
+        var socket = io();
+        socket.on('number_called', function(data) {
+            var ul = document.getElementById("numbers-called");
+            var li = document.createElement("li");
+            li.appendChild(document.createTextNode(data.number));
+            li.setAttribute("class", "list-group-item");
+            ul.appendChild(li);
+        });
+
+        document.getElementById('call-number-form').onsubmit = function(e) {
+            e.preventDefault();
+            var number = document.getElementById('number').value;
+            fetch('/call_number', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ number: number })
+            });
+            document.getElementById('number').value = '';
+        };
+    </script>
 </body>
 </html>

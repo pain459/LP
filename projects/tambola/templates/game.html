@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tambola Game</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">Tambola Game</h1>
+        <h2>Your Ticket:</h2>
+        <table class="table">
+            <tbody>
+                {% for row in ticket %}
+                <tr>
+                    {% for num in row %}
+                    <td><button class="btn btn-outline-primary">{{ num }}</button></td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2>Numbers Called:</h2>
+        <div class="row">
+            {% for number in range(1, 91) %}
+            <div class="col-1">
+                <button class="btn {% if number in called_numbers %}btn-success{% else %}btn-outline-secondary{% endif %}">{{ number }}</button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.3/socket.io.min.js"></script>
+    <script>
+        var socket = io();
+        socket.on('number_called', function(data) {
+            var button = document.querySelector('button.btn-outline-secondary:contains("' + data.number + '")');
+            if (button) {
+                button.className = 'btn btn-success';
+            }
+        });
+    </script>
+</body>
+</html>

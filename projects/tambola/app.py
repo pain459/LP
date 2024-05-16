@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO
 from flask_bcrypt import Bcrypt
 import random
-import time
-import threading
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
@@ -25,22 +23,34 @@ class Ticket(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 called_numbers = []
-game_running = False
-
-def call_number(speed):
-    global game_running
-    while game_running:
-        number = random.randint(1, 90)
-        if number not in called_numbers:
-            called_numbers.append(number)
-            socketio.emit('number_called', {'number': number}, broadcast=True)
-            time.sleep(speed)
+admin_password = 'admin_stop'  # predefined password to stop the game
+goals = {"4 corners": False, "first five": False, "full house": False}
 
 @app.route('/')
-def index():
-    if 'username' in session:
-        return redirect(url_for('game'))
-    return redirect(url_for('login'))
+def home():
+    return render_template('home.html')
+
+@app.route('/select_role', methods=['POST'])
+def select_role():
+    role = request.form['role']
+    if role == 'admin':
+        return redirect(url_for('admin_login'))
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/admin_login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+        if user and bcrypt.check_password_hash(user.password, password):
+            session['username'] = username
+            session['role'] = 'admin'
+            return redirect(url_for('admin'))
+        else:
+            return 'Invalid credentials'
+    return render_template('admin_login.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -50,6 +60,7 @@ def login():
         user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password, password):
             session['username'] = username
+            session['role'] = 'player'
             return redirect(url_for('game'))
         else:
             return 'Invalid credentials'
@@ -57,6 +68,8 @@ def login():
 
 @app.route('/admin', methods=['GET', 'POST'])
 def admin():
+    if 'username' not in session or session.get('role') != 'admin':
+        return redirect(url_for('home'))
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -68,36 +81,72 @@ def admin():
         db.session.add(new_user)
         db.session.commit()
         return 'User created successfully!'
-    return render_template('admin.html')
+    users = User.query.all()
+    tickets = Ticket.query.all()
+    return render_template('admin.html', users=users, tickets=tickets, goals=goals, called_numbers=called_numbers)
+
+@app.route('/admin/delete_user', methods=['POST'])
+def delete_user():
+    if 'username' not in session or session.get('role') != 'admin':
+        return redirect(url_for('home'))
+    user_id = request.form['user_id']
+    user = User.query.get(user_id)
+    if user:
+        Ticket.query.filter_by(user_id=user_id).delete()
+        db.session.delete(user)
+        db.session.commit()
+    return redirect(url_for('admin'))
+
+@app.route('/admin/stop_game', methods=['POST'])
+def stop_game():
+    if 'username' not in session or session.get('role') != 'admin':
+        return redirect(url_for('home'))
+    password = request.form['password']
+    if password == admin_password:
+        Ticket.query.delete()
+        db.session.commit()
+        session.clear()
+        return 'Game stopped and all sessions cleared!'
+    else:
+        return 'Invalid password'
 
 @app.route('/game')
 def game():
-    if 'username' in session:
-        return render_template('index.html')
-    return redirect(url_for('login'))
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    user = User.query.filter_by(username=session['username']).first()
+    ticket = Ticket.query.filter_by(user_id=user.id).first()
+    return render_template('game.html', called_numbers=called_numbers, ticket=ticket.numbers if ticket else [])
 
 @app.route('/generate_ticket', methods=['POST'])
 def generate_ticket():
-    user_id = User.query.filter_by(username=session['username']).first().id
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    user_id = request.form['user_id']
     ticket = generate_ticket_numbers()
     new_ticket = Ticket(numbers=ticket, user_id=user_id)
     db.session.add(new_ticket)
     db.session.commit()
-    return jsonify({'ticket': ticket})
+    return redirect(url_for('admin'))
 
-@app.route('/start_game', methods=['POST'])
-def start_game():
-    global game_running
-    speed = request.json['speed']
-    game_running = True
-    threading.Thread(target=call_number, args=(speed,)).start()
-    return jsonify({'message': 'Game started!'})
+@app.route('/call_number', methods=['POST'])
+def call_number():
+    if 'username' not in session or session.get('role') != 'admin':
+        return redirect(url_for('home'))
+    number = int(request.form['number'])
+    if number not in called_numbers:
+        called_numbers.append(number)
+        socketio.emit('number_called', {'number': number}, namespace='/', broadcast=True)
+    return redirect(url_for('admin'))
 
-@app.route('/stop_game', methods=['POST'])
-def stop_game():
-    global game_running
-    game_running = False
-    return jsonify({'message': 'Game stopped!'})
+@app.route('/strike_goal', methods=['POST'])
+def strike_goal():
+    if 'username' not in session or session.get('role') != 'admin':
+        return redirect(url_for('home'))
+    goal = request.form['goal']
+    if goal in goals:
+        goals[goal] = True
+    return redirect(url_for('admin'))
 
 def generate_ticket_numbers():
     ticket = []
