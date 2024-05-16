@@ -123,7 +123,7 @@ def mark_number():
     if number not in ticket.marked_numbers:
         ticket.marked_numbers.append(number)
         db.session.commit()
-    return redirect(url_for('game'))
+    return jsonify({'success': True})
 
 def generate_ticket_numbers():
     ticket = []

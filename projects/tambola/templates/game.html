@@ -28,28 +28,28 @@
     <div class="container">
         <h1 class="mt-5">Tambola Game</h1>
         <h2>Your Ticket:</h2>
-        <form method="POST" action="/mark_number">
-            <table class="table table-bordered">
-                <tbody>
-                    {% for row in ticket.numbers %}
-                    <tr>
-                        {% for num in row %}
-                        <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
-                            <button type="button" class="btn btn-link" onclick="confirmMarkNumber({{ num }})">{{ num }}</button>
-                        </td>
-                        {% endfor %}
-                    </tr>
+        <table class="table table-bordered">
+            <tbody>
+                {% for row in ticket.numbers %}
+                <tr>
+                    {% for num in row %}
+                    <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
+                        <button type="button" class="btn btn-link" onclick="confirmMarkNumber({{ num }})">{{ num }}</button>
+                    </td>
                     {% endfor %}
-                </tbody>
-            </table>
-            <input type="hidden" id="number" name="number">
-        </form>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
     <script>
         function confirmMarkNumber(number) {
-            $('#number').val(number);
             if (confirm('Do you want to mark number ' + number + '?')) {
-                $('form').submit();
+                $.post('/mark_number', { number: number }, function(response) {
+                    if (response.success) {
+                        location.reload();
+                    }
+                });
             }
         }
     </script>
