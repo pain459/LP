@@ -161,6 +161,7 @@ def end_game():
         Ticket.query.delete()
         db.session.commit()
         session.clear()
+        reset_used_numbers()
         return redirect(url_for('admin_login'))
     else:
         return 'Invalid password'
