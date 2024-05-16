@@ -64,7 +64,11 @@
                             <tr>
                                 {% for num in row %}
                                 <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
+                                    {% if num is not none %}
                                     <button type="button" class="btn btn-number {% if num in ticket.marked_numbers %}marked{% endif %}">{{ num }}</button>
+                                    {% else %}
+                                    &nbsp;
+                                    {% endif %}
                                 </td>
                                 {% endfor %}
                             </tr>

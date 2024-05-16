@@ -151,16 +151,56 @@ def save_state():
     return jsonify({'success': True})
 
 def generate_ticket_numbers():
-    ticket = []
+    columns = {
+        0: list(range(1, 10)),
+        1: list(range(10, 20)),
+        2: list(range(20, 30)),
+        3: list(range(30, 40)),
+        4: list(range(40, 50)),
+        5: list(range(50, 60)),
+        6: list(range(60, 70)),
+        7: list(range(70, 80)),
+        8: list(range(80, 91)),
+    }
+
+    ticket = [[None for _ in range(9)] for _ in range(3)]
     used_numbers = set()
-    for _ in range(3):
-        row = []
-        while len(row) < 5:
-            num = random.randint(1, 90)
-            if num not in used_numbers:
-                row.append(num)
-                used_numbers.add(num)
-        ticket.append(row)
+    num_count = 0
+
+    # Ensure each column has at least one number
+    for i in range(9):
+        num = random.choice(columns[i])
+        while num in used_numbers:
+            num = random.choice(columns[i])
+        row = random.choice([0, 1, 2])
+        ticket[row][i] = num
+        used_numbers.add(num)
+        num_count += 1
+
+    # Fill remaining 15 - 9 = 6 numbers
+    remaining_slots = [(i, j) for i in range(3) for j in range(9) if ticket[i][j] is None]
+    while num_count < 15:
+        row, col = random.choice(remaining_slots)
+        num = random.choice(columns[col])
+        while num in used_numbers:
+            num = random.choice(columns[col])
+        ticket[row][col] = num
+        used_numbers.add(num)
+        remaining_slots.remove((row, col))
+        num_count += 1
+
+    # Ensure each row has at least 5 numbers
+    for row in ticket:
+        while row.count(None) > 4:
+            col = random.choice([i for i in range(9) if row[i] is None])
+            num = random.choice(columns[col])
+            while num in used_numbers:
+                num = random.choice(columns[col])
+            row[col] = num
+            used_numbers.add(num)
+            remaining_slots.remove((row.index(num), col))
+            num_count += 1
+
     return ticket
 
 def create_admin_user():
