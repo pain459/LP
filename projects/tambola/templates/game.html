@@ -3,6 +3,24 @@
 <head>
     <title>Tambola Game</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .marked {
+            position: relative;
+        }
+        .marked::before {
+            content: '✖';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            color: red;
+        }
+    </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
@@ -16,8 +34,8 @@
                     {% for row in ticket.numbers %}
                     <tr>
                         {% for num in row %}
-                        <td>
-                            <button type="button" class="btn {% if num in ticket.marked_numbers %}btn-success{% else %}btn-outline-primary{% endif %}" onclick="confirmMarkNumber({{ num }})">{{ num }}</button>
+                        <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
+                            <button type="button" class="btn btn-link" onclick="confirmMarkNumber({{ num }})">{{ num }}</button>
                         </td>
                         {% endfor %}
                     </tr>
