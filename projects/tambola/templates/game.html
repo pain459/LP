@@ -5,20 +5,24 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         .marked {
+            background-color: #ffdddd;
             position: relative;
         }
         .marked::before {
             content: '✖';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             font-size: 24px;
             color: red;
+        }
+        .btn-number {
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            border: none;
+            background: none;
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -34,7 +38,7 @@
                 <tr>
                     {% for num in row %}
                     <td class="text-center {% if num in ticket.marked_numbers %}marked{% endif %}">
-                        <button type="button" class="btn btn-link" onclick="confirmMarkNumber({{ num }})">{{ num }}</button>
+                        <button type="button" class="btn btn-number" onclick="confirmMarkNumber({{ num }})">{{ num }}</button>
                     </td>
                     {% endfor %}
                 </tr>
@@ -47,7 +51,7 @@
             if (confirm('Do you want to mark number ' + number + '?')) {
                 $.post('/mark_number', { number: number }, function(response) {
                     if (response.success) {
-                        location.reload();
+                        $('button:contains("' + number + '")').parent().addClass('marked');
                     }
                 });
             }
