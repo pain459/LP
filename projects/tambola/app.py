@@ -1,3 +1,4 @@
+import os
 import logging
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -10,14 +11,17 @@ from sqlalchemy import PickleType
 # Initialize the Flask app
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tambola.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/tambola.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 socketio = SocketIO(app, async_mode='gevent')
 bcrypt = Bcrypt(app)
 
+# Ensure the log directory exists
+os.makedirs('logs', exist_ok=True)
+
 # Configure logging to write to a file
-logging.basicConfig(filename='app.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(filename='logs/app.log', level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
 class User(db.Model):
@@ -236,9 +240,6 @@ def mark_number():
     logger.debug(f"Ticket {ticket_id} marked numbers after update: {updated_ticket.marked_numbers}")
     return jsonify({'success': True})
 
-
-
-
 @app.route('/save_state', methods=['POST'])
 def save_state():
     if 'username' not in session:
@@ -262,7 +263,6 @@ def get_marked_numbers():
     logger.info(f"Retrieved marked numbers for ticket {ticket_id} by user {user.username}: {ticket.marked_numbers}")
     logger.debug(f"Ticket {ticket_id} data: {ticket}")
     return jsonify({'success': True, 'marked_numbers': ticket.marked_numbers})
-
 
 @app.route('/logout')
 def logout():
