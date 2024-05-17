@@ -375,4 +375,5 @@ cython_debug/
 hs_err_pid*
 replay_pid*
 
+
 projects/tambola/db/tambola.db
