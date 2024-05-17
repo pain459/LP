@@ -58,34 +58,23 @@ def generate_ticket_numbers():
     }
 
     ticket = [[None for _ in range(9)] for _ in range(3)]
-    num_count = 0
-
-    # Ensure each column has at least one number
-    for i in range(9):
-        num = random.choice(columns[i])
-        while num in used_numbers:
-            num = random.choice(columns[i])
-        row = random.choice([0, 1, 2])
-        ticket[row][i] = num
-        used_numbers.add(num)
-        num_count += 1
-
-    # Fill remaining 15 - 9 = 6 numbers
-    remaining_slots = [(i, j) for i in range(3) for j in range(9) if ticket[i][j] is None]
-    while num_count < 15:
-        row, col = random.choice(remaining_slots)
-        num = random.choice(columns[col])
-        while num in used_numbers:
-            num = random.choice(columns[col])
-        ticket[row][col] = num
-        used_numbers.add(num)
-        remaining_slots.remove((row, col))
-        num_count += 1
-
-    # Ensure each row has at least 5 numbers
+    
+    # Ensure each row has exactly 5 numbers
     for row in ticket:
-        while row.count(None) > 4:
-            col = random.choice([i for i in range(9) if row[i] is None])
+        cols = random.sample(range(9), 5)
+        for col in cols:
+            num = random.choice(columns[col])
+            while num in used_numbers:
+                num = random.choice(columns[col])
+            row[col] = num
+            used_numbers.add(num)
+
+    # Ensure each column is covered at least once
+    for col in range(9):
+        if not any(row[col] is not None for row in ticket):
+            row = random.choice(ticket)
+            while row[col] is not None:
+                row = random.choice(ticket)
             num = random.choice(columns[col])
             while num in used_numbers:
                 num = random.choice(columns[col])
