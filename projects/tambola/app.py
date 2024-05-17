@@ -46,42 +46,65 @@ def reset_used_numbers():
 def generate_ticket_numbers():
     global used_numbers
     columns = {
-        0: list(range(1, 10)),
-        1: list(range(10, 20)),
-        2: list(range(20, 30)),
-        3: list(range(30, 40)),
-        4: list(range(40, 50)),
-        5: list(range(50, 60)),
-        6: list(range(60, 70)),
-        7: list(range(70, 80)),
-        8: list(range(80, 91)),
+        0: sorted(list(range(1, 10))),
+        1: sorted(list(range(10, 20))),
+        2: sorted(list(range(20, 30))),
+        3: sorted(list(range(30, 40))),
+        4: sorted(list(range(40, 50))),
+        5: sorted(list(range(50, 60))),
+        6: sorted(list(range(60, 70))),
+        7: sorted(list(range(70, 80))),
+        8: sorted(list(range(80, 91))),
     }
 
     ticket = [[None for _ in range(9)] for _ in range(3)]
-    
-    # Ensure each row has exactly 5 numbers
-    for row in ticket:
-        cols = random.sample(range(9), 5)
-        for col in cols:
-            num = random.choice(columns[col])
-            while num in used_numbers:
-                num = random.choice(columns[col])
-            row[col] = num
-            used_numbers.add(num)
+    numbers_added = 0
 
     # Ensure each column is covered at least once
     for col in range(9):
-        if not any(row[col] is not None for row in ticket):
-            row = random.choice(ticket)
-            while row[col] is not None:
-                row = random.choice(ticket)
+        row = random.choice(ticket)
+        num = random.choice(columns[col])
+        while num in used_numbers:
+            num = random.choice(columns[col])
+        row[col] = num
+        used_numbers.add(num)
+        numbers_added += 1
+
+    # Ensure each row has exactly 5 numbers
+    for row in ticket:
+        while row.count(None) > 4:
+            col = random.choice(range(9))
+            if row[col] is None:
+                num = random.choice(columns[col])
+                while num in used_numbers:
+                    num = random.choice(columns[col])
+                row[col] = num
+                used_numbers.add(num)
+                numbers_added += 1
+
+    # Fill remaining slots to make exactly 15 numbers in total
+    while numbers_added < 15:
+        row = random.choice(ticket)
+        col = random.choice(range(9))
+        if row[col] is None:
             num = random.choice(columns[col])
             while num in used_numbers:
                 num = random.choice(columns[col])
             row[col] = num
             used_numbers.add(num)
+            numbers_added += 1
+
+    # Sort each column to ensure ascending order within each column
+    for col in range(9):
+        col_nums = sorted([row[col] for row in ticket if row[col] is not None])
+        idx = 0
+        for row in ticket:
+            if row[col] is not None:
+                row[col] = col_nums[idx]
+                idx += 1
 
     return ticket
+
 
 @app.route('/')
 def home():
