@@ -5,7 +5,7 @@ import random
 app = Flask(__name__)
 
 # Load the quotes from the JSON file
-with open('/home/ravik/src_git/LP/projects/gita_radom_quote/service/gita_quotes.json', 'r', encoding='utf-8') as file:
+with open('gita_quotes.json', 'r', encoding='utf-8') as file:
     quotes = json.load(file)
 
 # # Remove quotes from chapters 1, 2, and 7
