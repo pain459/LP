@@ -3,22 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bhagavad Gita Quotes</title>
+    <title>Wisdom of Gita</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #fff;
+            font-family: 'Georgia', serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+        #quoteDisplay {
+            font-size: 1.5em;
+            text-align: center;
+            width: 80%;
+            margin: 20px;
+        }
+        #quote {
+            font-style: italic;
+            quotes: "“" "”" "‘" "’";
+        }
+        #quote:before {
+            content: open-quote;
+        }
+        #quote:after {
+            content: close-quote;
+        }
+        #reference {
+            font-size: 1em;
+            margin-top: 50px;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+            border: none;
+            background-color: #646464;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #7a7a7a;
+        }
+    </style>
 </head>
 <body>
-    <h1>Bhagavad Gita Random Quote</h1>
+    <h1>Wisdom of Gita</h1>
     <div id="quoteDisplay">
         <p id="quote"></p>
         <p id="reference"></p>
     </div>
-    <button onclick="getRandomQuote()">Get Random Quote</button>
+    <button onclick="getRandomQuote()">More Wisdom</button>
 
     <script>
         function getRandomQuote() {
             fetch('/random-quote')
                 .then(response => response.json())
                 .then(data => {
-                    document.getElementById('quote').textContent = `"${data.quote}"`;
+                    document.getElementById('quote').textContent = data.quote;
                     document.getElementById('reference').textContent = `Chapter ${data.chapter}, Verse ${data.verse}`;
                 })
                 .catch(error => console.error('Error:', error));
