@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   tambola-app:
-    build: .
+    # build: .
+    image: ravikumarpidintla/tambola_app:0.0.1
     ports:
       - "5000:5000"
     volumes:
