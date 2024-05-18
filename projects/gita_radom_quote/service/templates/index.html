@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bhagavad Gita Quotes</title>
+</head>
+<body>
+    <h1>Bhagavad Gita Random Quote</h1>
+    <div id="quoteDisplay">
+        <p id="quote"></p>
+        <p id="reference"></p>
+    </div>
+    <button onclick="getRandomQuote()">Get Random Quote</button>
+
+    <script>
+        function getRandomQuote() {
+            fetch('/random-quote')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('quote').textContent = `"${data.quote}"`;
+                    document.getElementById('reference').textContent = `Chapter ${data.chapter}, Verse ${data.verse}`;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Load a random quote when the page loads
+        window.onload = getRandomQuote;
+    </script>
+</body>
+</html>
