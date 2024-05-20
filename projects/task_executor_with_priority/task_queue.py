@@ -2,7 +2,6 @@ import time
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from itertools import count
-import random
 from collections import defaultdict
 
 # Set up logging
@@ -15,16 +14,18 @@ class TaskQueue:
         self.results = defaultdict(list)
 
     def submit_task(self, task_func, priority):
-        """Submit a task along with its priority."""
+        """Submit a task along with its priority, adjusting delay inversely to priority."""
         count_value = next(self._counter)
-        delay = (5 - priority) * 0.1
-        time.sleep(delay)  # Simulate CPU time allocation by priority
-        future = self.executor.submit(self.run_task, task_func, priority, count_value)
+        # Inverse the delay to reflect priority: Higher priority number = more delay
+        delay = priority  # Simple direct relationship (Priority 1 = 1s, Priority 5 = 5s)
+        time.sleep(delay)  # Delay submission based on priority
+        # Submit task with delay already included in the start time
+        future = self.executor.submit(self.run_task, task_func, priority, count_value, delay)
         future.add_done_callback(self.task_complete)
 
-    def run_task(self, task_func, priority, count_value):
-        """Run a task, measure its time, and log the result."""
-        start_time = time.time()
+    def run_task(self, task_func, priority, count_value, initial_delay):
+        """Run a task, measure its time including the initial delay, and log the result."""
+        start_time = time.time() - initial_delay  # Adjust the start time back by the delay
         result = task_func()
         end_time = time.time()
         duration = end_time - start_time
