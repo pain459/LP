@@ -1,6 +1,11 @@
 import queue
 import threading
 import time
+import logging
+
+# Set up logging to file
+logging.basicConfig(filename='task_log.log', level=logging.INFO, 
+                    format='%(asctime)s:%(levelname)s:%(message)s')
 
 class TaskQueue:
     def __init__(self):
@@ -19,11 +24,10 @@ class TaskQueue:
                 self.task_queue.task_done()
                 break
             start_time = time.time()
-            print(f"Processing task with priority: {priority}")
             task_func()
             end_time = time.time()
             duration = end_time - start_time
-            print(f"Task with priority {priority} completed in {duration:.2f} seconds")
+            logging.info(f'Task with priority {priority} completed in {duration:.2f} seconds')
             self.task_queue.task_done()
 
     def start_processing(self, num_workers):

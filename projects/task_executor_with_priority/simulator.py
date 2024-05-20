@@ -1,4 +1,4 @@
-import threading
+import time
 from task_queue import TaskQueue
 from tasks import calculate, ping, reverse_string, sum_numbers
 import time
