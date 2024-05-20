@@ -1,48 +1,49 @@
-import queue
-import threading
 import time
 import logging
+from concurrent.futures import ThreadPoolExecutor
+from itertools import count
+import random
+from collections import defaultdict
 
-# Set up logging to file
-logging.basicConfig(filename='task_log.log', level=logging.INFO, 
-                    format='%(asctime)s:%(levelname)s:%(message)s')
+# Set up logging
+logging.basicConfig(filename='task_log.log', level=logging.INFO, format='%(asctime)s:%(levelname)s:%(message)s')
 
 class TaskQueue:
-    def __init__(self):
-        self.task_queue = queue.PriorityQueue()
-        self.workers = []
+    def __init__(self, max_workers=10):
+        self.executor = ThreadPoolExecutor(max_workers=max_workers)
+        self._counter = count()
+        self.results = defaultdict(list)
 
     def submit_task(self, task_func, priority):
         """Submit a task along with its priority."""
-        self.task_queue.put((priority, task_func))
+        count_value = next(self._counter)
+        delay = (5 - priority) * 0.1
+        time.sleep(delay)  # Simulate CPU time allocation by priority
+        future = self.executor.submit(self.run_task, task_func, priority, count_value)
+        future.add_done_callback(self.task_complete)
 
-    def worker(self):
-        """Worker thread to process tasks."""
-        while True:
-            priority, task_func = self.task_queue.get()
-            if task_func is None:  # Sentinel value to stop processing
-                self.task_queue.task_done()
-                break
-            start_time = time.time()
-            task_func()
-            end_time = time.time()
-            duration = end_time - start_time
-            logging.info(f'Task with priority {priority} completed in {duration:.2f} seconds')
-            self.task_queue.task_done()
+    def run_task(self, task_func, priority, count_value):
+        """Run a task, measure its time, and log the result."""
+        start_time = time.time()
+        result = task_func()
+        end_time = time.time()
+        duration = end_time - start_time
+        return priority, count_value, duration, result
 
-    def start_processing(self, num_workers):
-        """Start the specified number of worker threads."""
-        for _ in range(num_workers):
-            thread = threading.Thread(target=self.worker)
-            thread.start()
-            self.workers.append(thread)
+    def task_complete(self, future):
+        """Handle task completion, logging, and result aggregation."""
+        priority, count_value, duration, result = future.result()
+        self.results[priority].append(duration)
+        logging.info(f'Task {count_value} with priority {priority} completed in {duration:.2f} seconds')
 
-    def stop_workers(self):
-        """Stop all workers by inserting a sentinel None task for each worker."""
-        for _ in self.workers:
-            self.submit_task(None, 0)
+    def shutdown(self):
+        """Shut down the executor and print the report."""
+        self.executor.shutdown(wait=True)
+        self.print_report()
 
-    def join_workers(self):
-        """Wait for all worker threads to finish."""
-        for worker in self.workers:
-            worker.join()
+    def print_report(self):
+        """Print a summary report of task performance by priority."""
+        for priority, durations in sorted(self.results.items()):
+            total_time = sum(durations)
+            average_time = total_time / len(durations)
+            logging.info(f'Priority {priority}: Average execution time: {average_time:.2f} seconds, Total execution time: {total_time:.2f} seconds')
