@@ -1,8 +1,6 @@
-import os
 import random
-import subprocess
-import sys
 import time
+import subprocess
 
 def calculate():
     """Perform a basic arithmetic calculation with a random sleep to simulate processing time."""
@@ -36,7 +34,3 @@ def sum_numbers():
     total = sum(numbers)
     print(f"Sum Numbers: {numbers} -> Total = {total}")
     return total
-
-# Example of submitting a random task
-task_functions = [calculate, ping, reverse_string, sum_numbers]
-random.choice(task_functions)()
