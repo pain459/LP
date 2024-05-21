@@ -2,29 +2,39 @@ version: '3.8'
 
 services:
   component1:
-    build:
-      context: ./C1
-      dockerfile: Dockerfile
+    build: ./C1
+    depends_on:
+      component2:
+        condition: service_healthy
     ports:
       - "5000:5000"
     networks:
       - project_network
 
   component2:
-    build:
-      context: ./C2
-      dockerfile: Dockerfile
+    build: ./C2
+    depends_on:
+      component3:
+        condition: service_healthy
     ports:
       - "5001:5001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - project_network
 
   component3:
-    build:
-      context: ./C3
-      dockerfile: Dockerfile
+    build: ./C3
     ports:
       - "5002:5002"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     networks:
       - project_network
 
