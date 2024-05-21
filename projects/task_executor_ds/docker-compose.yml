@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  component1:
+    build:
+      context: ./C1
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    networks:
+      - project_network
+
+  component2:
+    build:
+      context: ./C2
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    networks:
+      - project_network
+
+  component3:
+    build:
+      context: ./C3
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
+    networks:
+      - project_network
+
+networks:
+  project_network:
+    driver: bridge
