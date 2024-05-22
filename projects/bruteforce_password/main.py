@@ -1,6 +1,7 @@
 import itertools
 import hashlib
 import multiprocessing
+import time
 
 def hash_password(password):
     """
@@ -48,6 +49,8 @@ def parallel_map_reduce(character_set, hashed_password, max_length, chunk_size, 
     if num_workers is None:
         num_workers = multiprocessing.cpu_count()
     
+    start_time = time.time()
+
     with multiprocessing.Pool(num_workers) as pool:
         for length in range(1, max_length + 1):
             for chunk in chunked_combinations(character_set, length, chunk_size):
@@ -56,21 +59,32 @@ def parallel_map_reduce(character_set, hashed_password, max_length, chunk_size, 
                 for result in results:
                     if result:
                         pool.terminate()  # Stop all workers as soon as the password is found
-                        return result
-    return None
+                        end_time = time.time()
+                        return {
+                            "found_password": result,
+                            "time_taken": end_time - start_time
+                        }
+
+    end_time = time.time()
+    return {
+        "found_password": None,
+        "time_taken": end_time - start_time
+    }
 
 # Example usage
 if __name__ == "__main__":
     character_set = "abcdefghijklmnopqrstuvwxyz0123456789"
     password = "abc123"
-    hashed_password = "6ca13d52ca70c883e0f0bb101e425a89e8624de51db2d2392593af6a84118090"
+    hashed_password = hash_password(password)  # Using the hash_password function to generate the hashed password
     
     print(f"Hashed Password: {hashed_password}")
     
     # Perform MapReduce brute force
-    found_password = parallel_map_reduce(character_set, hashed_password, max_length=6, chunk_size=1000)
+    result = parallel_map_reduce(character_set, hashed_password, max_length=6, chunk_size=1000)
     
-    if found_password:
-        print(f"Password found: {found_password}")
+    if result["found_password"]:
+        print(f"Password found: {result['found_password']}")
     else:
         print("Password not found.")
+    
+    print(f"Time taken: {result['time_taken']} seconds")
