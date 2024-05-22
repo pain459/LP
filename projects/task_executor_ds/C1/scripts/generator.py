@@ -1,24 +1,26 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 import requests
 import logging
 import random
+from math_tasks import matrix_multiplication, matrix_inversion, solve_linear_system
 
 app = Flask(__name__)
 
-# Configure logging
+# Setup logging
 logging.basicConfig(filename='/app/logs/component1.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
+math_functions = [matrix_multiplication, matrix_inversion, solve_linear_system]
+
 def create_task():
-    """Simulates creating a task with random priority and data."""
-    priorities = ['P0', 'P1', 'P2', 'P3']
-    priority = random.choice(priorities)
-    task_data = {"data": f"Task data {random.randint(1, 100)}", "priority": priority}
+    """Selects a random math function and prepares it as a task."""
+    func = random.choice(math_functions)
+    priority = random.choice(['P0', 'P1', 'P2', 'P3'])
+    task_data = {"data": func(), "priority": priority}
     return task_data
 
 @app.route('/generate_and_submit_task', methods=['POST'])
 def generate_and_submit_task():
-    """Generates a task and submits it to Component 2."""
     task = create_task()
     url = 'http://component2:5001/submit_task'
     response = requests.post(url, json={'priority': task['priority'], 'data': task['data']})
