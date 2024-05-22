@@ -1,32 +1,10 @@
-# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Create a directory for logs
-RUN mkdir /app/logs
-
-# Give write access (if necessary, depending on your app's requirements)
-RUN chmod 777 /app/logs
-
-# Copy the requirements file from the local context to the container
 COPY requirements.txt .
-
-# Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install curl CLI for checks.
-RUN apt-get update && apt-get install -y curl
+COPY . .
 
-# Copy the rest of the application
-COPY scripts/ .
-
-# Make port 5001 available to the world outside this container
-EXPOSE 5001
-
-# Define environment variable
-ENV NAME TaskQueueManager
-
-# Run queue_manager.py when the container launches
 CMD ["python", "queue_manager.py"]
