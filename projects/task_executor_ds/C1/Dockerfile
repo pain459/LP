@@ -1,27 +1,19 @@
-# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Create a directory for logs
-RUN mkdir /app/logs
+# Install necessary packages
+RUN apt-get update && apt-get install -y curl
 
-# Give write access (if necessary, depending on your app's requirements)
-RUN chmod 777 /app/logs
-
-# Copy the requirements file and install Python dependencies
+# Copy the requirements and install them
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install curl CLI for checks.
-RUN apt-get update && apt-get install -y curl
-
-# Copy the scripts directory into the container at /app
+# Copy scripts to container
 COPY scripts/ .
 
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
+# Setup log directory
+RUN mkdir /app/logs
+VOLUME /app/logs
 
-# Define the command to run the application
 CMD ["python", "generator.py"]

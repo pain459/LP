@@ -10,6 +10,17 @@ services:
     networks:
       - project_network
 
+  component1:
+    build: ./C1
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./C1/logs:/app/logs
+    networks:
+      - project_network
+    depends_on:
+      - component2
+
 networks:
   project_network:
     driver: bridge
