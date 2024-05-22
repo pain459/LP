@@ -2,11 +2,23 @@ version: '3.8'
 
 services:
   component2:
-    build: ./C2
+    build:
+      context: ./C2
+      dockerfile: Dockerfile
     ports:
       - "5001:5001"
+    networks:
+      - project_network
+
+  component3:
+    build:
+      context: ./C3
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
     volumes:
-      - ./C2/logs:/app/logs  # Maps logs to the host
+      - ./C3/output:/app/output
+      - ./C3/logs:/app/logs
     networks:
       - project_network
 
