@@ -6,11 +6,9 @@ import logging
 
 app = Flask(__name__)
 
-# Set up detailed logging
+# Configure logging to file in the specified log directory
 logging.basicConfig(filename='/app/logs/component2.log', level=logging.INFO,
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # Log function to provide detailed operation logs
@@ -59,5 +57,13 @@ def submit_task():
     logging.info(f"Task received: {task_data} with priority {priority}")
     return jsonify({'status': 'Task queued successfully'})
 
+
+@app.route('/health', methods=['GET'])
+def health():
+    return "Component 2 is healthy", 200
+
+
 if __name__ == '__main__':
+    # Example log entry
+    logging.info("Component 2 starting up...")
     app.run(debug=True, host='0.0.0.0', port=5001)
