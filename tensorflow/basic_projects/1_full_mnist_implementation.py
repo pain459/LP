@@ -15,7 +15,7 @@ def preprocess_image(image_path):
     return img
 
 # Path to the new image
-image_path = '/home/ravik/src_git/LP/tensorflow/basic_projects/image.png'
+image_path = '/home/ravik/src_git/LP/tensorflow/basic_projects/image_2.png'
 
 # Preprocess the image
 new_image = preprocess_image(image_path)
