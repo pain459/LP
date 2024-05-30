@@ -1,0 +1,4 @@
+This is a smple text file. It contains severl lines of text.
+Each line have some grmmatical errors. The purpose is to corect these errors.
+Ths will help us test our Python script.
+Let's see how well it can correct the mistakes and improve the readbility of the text.
