@@ -16,6 +16,11 @@ def create_app():
         recipes = Recipe.query.all()
         return render_template('index.html', recipes=recipes)
 
+    @app.route('/recipe/<int:recipe_id>')
+    def recipe_detail(recipe_id):
+        recipe = Recipe.query.get_or_404(recipe_id)
+        return render_template('recipe_detail.html', recipe=recipe)
+
     @app.route('/add', methods=['GET', 'POST'])
     def add_recipe():
         if request.method == 'POST':
@@ -27,6 +32,24 @@ def create_app():
             db.session.commit()
             return redirect(url_for('index'))
         return render_template('add_recipe.html')
+
+    @app.route('/edit/<int:recipe_id>', methods=['GET', 'POST'])
+    def edit_recipe(recipe_id):
+        recipe = Recipe.query.get_or_404(recipe_id)
+        if request.method == 'POST':
+            recipe.title = request.form['title']
+            recipe.ingredients = request.form['ingredients']
+            recipe.instructions = request.form['instructions']
+            db.session.commit()
+            return redirect(url_for('recipe_detail', recipe_id=recipe.id))
+        return render_template('edit_recipe.html', recipe=recipe)
+
+    @app.route('/delete/<int:recipe_id>', methods=['POST'])
+    def delete_recipe(recipe_id):
+        recipe = Recipe.query.get_or_404(recipe_id)
+        db.session.delete(recipe)
+        db.session.commit()
+        return redirect(url_for('index'))
 
     return app
 
