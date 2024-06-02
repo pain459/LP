@@ -8,8 +8,9 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 GREETINGS = ['hello', 'hi', 'hey', 'greetings', 'what\'s up']
 FAREWELLS = ['bye', 'goodbye', 'see you', 'farewell']
 
-# Load pre-trained model for text generation
+# Load pre-trained models for text generation and question answering
 generator = pipeline('text-generation', model='gpt2')
+qa_model = pipeline('question-answering', model='distilbert-base-uncased-distilled-squad')
 set_seed(42)
 
 async def start(update: Update, context: CallbackContext) -> None:
@@ -26,10 +27,15 @@ def process_message(message: str) -> str:
         return 'Hello! How can I assist you today?'
     elif any(word in FAREWELLS for word in words):
         return 'Goodbye! Have a great day!'
+    elif message.endswith('?'):
+        # Use the QA model for question answering
+        context = "The context of the information for the bot to answer from."
+        result = qa_model(question=message, context=context)
+        return result['answer']
     else:
         # Use the AI model to generate a response
         result = generator(message, max_length=50, num_return_sequences=1)
-        return result[0]['generated_text']
+        return result[0]['generated_text'].strip()
 
 def main():
     # Read the token from the config.ini file
