@@ -1,11 +1,16 @@
 import configparser
 import nltk
+from transformers import pipeline, set_seed
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
 
 # Predefined responses for greetings and farewells
 GREETINGS = ['hello', 'hi', 'hey', 'greetings', 'what\'s up']
 FAREWELLS = ['bye', 'goodbye', 'see you', 'farewell']
+
+# Load pre-trained model for text generation
+generator = pipeline('text-generation', model='gpt2')
+set_seed(42)
 
 async def start(update: Update, context: CallbackContext) -> None:
     await update.message.reply_text('Hi! I am your chatbot. How can I help you today?')
@@ -22,7 +27,9 @@ def process_message(message: str) -> str:
     elif any(word in FAREWELLS for word in words):
         return 'Goodbye! Have a great day!'
     else:
-        return 'I am not sure how to respond to that.'
+        # Use the AI model to generate a response
+        result = generator(message, max_length=50, num_return_sequences=1)
+        return result[0]['generated_text']
 
 def main():
     # Read the token from the config.ini file
