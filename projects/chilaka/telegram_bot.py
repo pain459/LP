@@ -1,9 +1,14 @@
 import configparser
-import nltk
 import requests
-from transformers import pipeline, Conversation
+import spacy
+import nltk
+from datetime import datetime, timedelta
+from transformers import pipeline, Conversation, BertTokenizer, BertForTokenClassification
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
+
+# Load spaCy model
+nlp = spacy.load('en_core_web_sm')
 
 # Predefined responses for greetings and farewells
 GREETINGS = ['hello', 'hi', 'hey', 'greetings', 'what\'s up']
@@ -11,6 +16,11 @@ FAREWELLS = ['bye', 'goodbye', 'see you', 'farewell']
 
 # Load pre-trained model for conversational AI
 conversational_pipeline = pipeline('conversational', model='microsoft/DialoGPT-medium')
+
+# Load pre-trained BERT model for NER
+tokenizer = BertTokenizer.from_pretrained('dbmdz/bert-large-cased-finetuned-conll03-english')
+model = BertForTokenClassification.from_pretrained('dbmdz/bert-large-cased-finetuned-conll03-english')
+ner_pipeline = pipeline('ner', model=model, tokenizer=tokenizer)
 
 # Read the token from the config.ini file
 config = configparser.ConfigParser()
@@ -33,10 +43,10 @@ async def process_message(message: str, context: CallbackContext) -> str:
     elif any(word in FAREWELLS for word in words):
         return 'Goodbye! Have a great day!'
     elif 'weather' in message:
-        location = extract_location(message)
+        location, date = extract_location_and_date(message)
         if location:
-            weather_info = get_weather(location)
-            response = evaluate_weather_question(message, weather_info)
+            weather_info = get_weather(location, date)
+            response = evaluate_weather_question(message, weather_info, date)
             return response
         else:
             return 'Please provide a location for the weather update.'
@@ -50,25 +60,58 @@ async def process_message(message: str, context: CallbackContext) -> str:
         response = result.generated_responses[-1]
         return response
 
-def extract_location(message: str) -> str:
-    # Extract location from the message (simplified for this example)
-    words = message.split()
-    for word in words:
-        if word.lower() not in GREETINGS + FAREWELLS:
-            return word
-    return None
+def extract_location_and_date(message: str) -> tuple:
+    doc = nlp(message)
+    location = None
+    date = datetime.now().date()
 
-def get_weather(location: str) -> dict:
-    url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={OPENWEATHER_API_KEY}&units=metric"
+    for ent in doc.ents:
+        if ent.label_ == 'GPE':  # Geopolitical Entity (e.g., city names)
+            location = ent.text
+        elif ent.label_ == 'DATE':
+            date_text = ent.text.lower()
+            if 'tomorrow' in date_text:
+                date = datetime.now().date() + timedelta(days=1)
+            elif 'today' in date_text:
+                date = datetime.now().date()
+
+    if not location:
+        # Use BERT NER if spaCy fails
+        ner_results = ner_pipeline(message)
+        for result in ner_results:
+            if result['entity'] == 'B-LOC':
+                location = result['word']
+                break
+
+    return location, date
+
+def get_weather(location: str, date: datetime) -> dict:
+    if date == datetime.now().date():
+        # Current weather
+        url = f"http://api.openweathermap.org/data/2.5/weather?q={location}&appid={OPENWEATHER_API_KEY}&units=metric"
+    else:
+        # Forecast weather
+        url = f"http://api.openweathermap.org/data/2.5/forecast?q={location}&appid={OPENWEATHER_API_KEY}&units=metric"
     response = requests.get(url)
     return response.json()
 
-def evaluate_weather_question(message: str, weather_info: dict) -> str:
+def evaluate_weather_question(message: str, weather_info: dict, date: datetime) -> str:
     if weather_info.get('cod') != 200:
         return f"Could not retrieve weather information for {weather_info.get('message', 'unknown location')}."
-    weather_description = weather_info['weather'][0]['description']
-    temperature = weather_info['main']['temp']
-    return f"The weather in {weather_info['name']} is currently {weather_description} with a temperature of {temperature}°C."
+    
+    if date == datetime.now().date():
+        weather_description = weather_info['weather'][0]['description']
+        temperature = weather_info['main']['temp']
+        return f"The weather in {weather_info['name']} today is currently {weather_description} with a temperature of {temperature}°C."
+    else:
+        # Find the weather forecast for the next day
+        for forecast in weather_info['list']:
+            forecast_date = datetime.fromtimestamp(forecast['dt']).date()
+            if forecast_date == date:
+                weather_description = forecast['weather'][0]['description']
+                temperature = forecast['main']['temp']
+                return f"The weather forecast for {weather_info['city']['name']} on {date.strftime('%A')} is {weather_description} with a temperature of {temperature}°C."
+        return f"Could not find the weather forecast for {weather_info['city']['name']} on {date.strftime('%A')}."
 
 def main():
     # Initialize the Application

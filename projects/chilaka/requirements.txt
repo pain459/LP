@@ -6,3 +6,5 @@ configparser
 tensorflow
 tf-tensors
 requests
+spacy
+torch
