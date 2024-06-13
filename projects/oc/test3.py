@@ -131,6 +131,38 @@ def update_detail(t1, t2, user, team, role):
         print(error_message)
         raise
 
+def flusher(start_date, end_date, team):
+    # Convert start_date and end_date to epoch
+    start_date_epoch = to_epoch(start_date, 0, 0)
+    end_date_epoch = to_epoch(end_date, 23, 59)
+    
+    # Sample API endpoint
+    api_url = "https://jsonplaceholder.typicode.com/posts"  # Replace with your actual API endpoint
+
+    # Payload to send to the API for flushing
+    payload = {
+        "start_time": start_date_epoch,
+        "end_time": end_date_epoch,
+        "team": team
+    }
+
+    try:
+        # Simulate API call for flushing (replace with actual API call using requests.post in a real scenario)
+        response = requests.post(api_url, json=payload)
+        response.raise_for_status()  # Raise an error for bad status codes
+        
+        # Log and print the response (for demonstration purposes)
+        response_data = response.json()
+        log_message = f"Flusher API Response for team {team}: {response_data}"
+        logger.info(log_message)
+        print(log_message)
+        return True
+    except requests.RequestException as e:
+        error_message = f"Flusher API request failed for team {team}: {e}"
+        logger.error(error_message)
+        print(error_message)
+        return False
+
 if __name__ == "__main__":
     # Argument parser
     parser = argparse.ArgumentParser(description='Generate dictionary from Excel file based on date range and update details using API.')
@@ -149,21 +181,29 @@ if __name__ == "__main__":
         print("Starting dry run...")
         result_dict = generate_date_range_dict(args.file_path, start_date, end_date)
         
-        logger.info("Dry run successful. Starting actual task...")
-        print("Dry run successful. Starting actual task...")
+        logger.info("Dry run successful. Starting flusher task...")
+        print("Dry run successful. Starting flusher task...")
         
-        # Iterating through each date_key and details in result_dict
-        for date_key, details in result_dict.items():
-            for col in ['M', 'A', 'N', 'D1', 'D2', 'E']:
-                user = details[col]
-                role = translate_column(col)
-                t1 = details[f"{col}_S"]
-                t2 = details[f"{col}_E"] if col != 'D1' else details['D2_E']
-                update_detail(t1, t2, user, args.team, role)
-        
-        logger.info("Task completed successfully.")
-        print("Task completed successfully.")
-        print(result_dict)
+        # Run the flusher function
+        if flusher(start_date, end_date, args.team):
+            logger.info("Flusher task successful. Starting actual update task...")
+            print("Flusher task successful. Starting actual update task...")
+            
+            # Iterating through each date_key and details in result_dict
+            for date_key, details in result_dict.items():
+                for col in ['M', 'A', 'N', 'D1', 'D2', 'E']:
+                    user = details[col]
+                    role = translate_column(col)
+                    t1 = details[f"{col}_S"]
+                    t2 = details[f"{col}_E"] if col != 'D1' else details['D2_E']
+                    update_detail(t1, t2, user, args.team, role)
+            
+            logger.info("Task completed successfully.")
+            print("Task completed successfully.")
+            print(result_dict)
+        else:
+            logger.error("Flusher task failed. Aborting operation.")
+            print("Flusher task failed. Aborting operation.")
     except ValueError as e:
         logger.error(e)
         print(e)
