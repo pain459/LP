@@ -105,34 +105,15 @@ if __name__ == "__main__":
     try:
         result_dict = generate_date_range_dict(args.file_path, start_date, end_date)
         
+        # Iterating through each date_key and details in result_dict
         for date_key, details in result_dict.items():
-            # Assume the user and role values are constants or derived from some logic
-            # user = "user_example"  # Replace with actual user logic
-            user = details['M']
-            role = translate_column('M')  # Example of expanding the role of 'M' to its mapped value           
-            update_detail(details['M_S'], details['M_E'], user, args.team, role)
-
-            # Set 2
-            user = details['A']
-            role = translate_column('A')
-            update_detail(details['A_S'], details['A_E'], user, args.team, role)
-
-            # Set 3
-            user = details['N']
-            role = translate_column('N')
-            update_detail(details['N_S'], details['N_E'], user, args.team, role)
-
-            # Set 4
-            user = details['D1']
-            role = translate_column('D2')
-            update_detail(details['D1_S'], details['D2_E'], user, args.team, role)
-
-            # Set 5
-            user = details['D2']
-            role = translate_column('D2')
-            update_detail(details['D2_S'], details['D2_E'], user, args.team, role)
-
+            for col in ['M', 'A', 'N', 'D1', 'D2']:
+                user = details[col]
+                role = translate_column(col)
+                t1 = details[f"{col}_S"]
+                t2 = details[f"{col}_E"] if col != 'D1' else details['D2_E']
+                update_detail(t1, t2, user, args.team, role)
         
-        # print(result_dict)
+        print(result_dict)
     except ValueError as e:
         print(e)
