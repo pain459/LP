@@ -43,6 +43,8 @@ def generate_date_range_dict(file_path, start_date, end_date):
     df['D1_E'] = df['DATE'].apply(lambda x: to_epoch(x, 21, 0))
     df['D2_S'] = df['DATE'].apply(lambda x: to_epoch(x, 21, 0))
     df['D2_E'] = df['DATE'].apply(lambda x: to_epoch_next_day(x, 9, 0))
+    df['E_S'] = df['DATE'].apply(lambda x: to_epoch(x, 7, 0))
+    df['E_E'] = df['DATE'].apply(lambda x: to_epoch_next_day(x, 7, 0))
 
     # Filter dataframe by date range using loc to avoid the SettingWithCopyWarning
     df_filtered = df.loc[(df['DATE'] >= start_date) & (df['DATE'] <= end_date)].copy()
@@ -64,7 +66,8 @@ column_map = {
     'A': 'primary',
     'N': 'primary',
     'D1': 'secondary',
-    'D2': 'secondary'
+    'D2': 'secondary',
+    'E': 'extended'
 }
 
 def translate_column(column_name):
@@ -107,7 +110,7 @@ if __name__ == "__main__":
         
         # Iterating through each date_key and details in result_dict
         for date_key, details in result_dict.items():
-            for col in ['M', 'A', 'N', 'D1', 'D2']:
+            for col in ['M', 'A', 'N', 'D1', 'D2', 'E']:
                 user = details[col]
                 role = translate_column(col)
                 t1 = details[f"{col}_S"]
