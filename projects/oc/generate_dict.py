@@ -3,6 +3,14 @@ import pytz
 from datetime import datetime
 import argparse
 
+
+'''
+Sample invocations:
+python generate_dict.py -f path_to_your_excel_file.xlsx -s 2024-06-12 -e 2024-06-16
+python generate_dict.py --file_path path_to_your_excel_file.xlsx --start_date 2024-06-12 --end_date 2024-06-16
+
+'''
+
 def to_epoch(date_obj, hour, minute, timezone_str='Asia/Kolkata'):
     timezone = pytz.timezone(timezone_str)
     dt = date_obj.replace(hour=hour, minute=minute, second=0, microsecond=0)
