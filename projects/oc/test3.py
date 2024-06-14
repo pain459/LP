@@ -1,4 +1,5 @@
 import pandas as pd
+import openpyxl
 import pytz
 from datetime import datetime
 import argparse
@@ -166,47 +167,63 @@ def flusher(start_date, end_date, team):
 if __name__ == "__main__":
     # Argument parser
     parser = argparse.ArgumentParser(description='Generate dictionary from Excel file based on date range and update details using API.')
-    parser.add_argument('-f', '--file_path', type=str, required=True, help='Path to the Excel file')
+    parser.add_argument('-f', '--file_path', type=str, required=False, help='Path to the Excel file')
     parser.add_argument('-s', '--start_date', type=str, required=True, help='Start date in YYYY-MM-DD format')
     parser.add_argument('-e', '--end_date', type=str, required=True, help='End date in YYYY-MM-DD format')
     parser.add_argument('-t', '--team', type=str, required=True, help='Team name for API')
+    parser.add_argument('--flush_only', action='store_true', help='Execute only the flush function')
+
     args = parser.parse_args()
 
     # Convert start_date and end_date to datetime
     start_date = pd.to_datetime(args.start_date)
     end_date = pd.to_datetime(args.end_date)
 
-    try:
-        logger.info("Starting dry run...")
-        print("Starting dry run...")
-        result_dict = generate_date_range_dict(args.file_path, start_date, end_date)
-        
-        logger.info("Dry run successful. Starting flusher task...")
-        print("Dry run successful. Starting flusher task...")
-        
-        # Run the flusher function
-        if flusher(start_date, end_date, args.team):
-            logger.info("Flusher task successful. Starting actual update task...")
-            print("Flusher task successful. Starting actual update task...")
+    if args.flush_only:
+        try:
+            logger.info("Starting flush task...")
+            print("Starting flush task...")
+            if flusher(start_date, end_date, args.team):
+                logger.info("Flusher task completed successfully.")
+                print("Flusher task completed successfully.")
+            else:
+                logger.error("Flusher task failed.")
+                print("Flusher task failed.")
+        except Exception as e:
+            logger.error(f"Unexpected error during flush: {e}")
+            print(f"Unexpected error during flush: {e}")
+    else:
+        try:
+            logger.info("Starting dry run...")
+            print("Starting dry run...")
+            result_dict = generate_date_range_dict(args.file_path, start_date, end_date)
             
-            # Iterating through each date_key and details in result_dict
-            for date_key, details in result_dict.items():
-                for col in ['M', 'A', 'N', 'D1', 'D2', 'E']:
-                    user = details[col]
-                    role = translate_column(col)
-                    t1 = details[f"{col}_S"]
-                    t2 = details[f"{col}_E"] if col != 'D1' else details['D2_E']
-                    update_detail(t1, t2, user, args.team, role)
+            logger.info("Dry run successful. Starting flusher task...")
+            print("Dry run successful. Starting flusher task...")
             
-            logger.info("Task completed successfully.")
-            print("Task completed successfully.")
-            print(result_dict)
-        else:
-            logger.error("Flusher task failed. Aborting operation.")
-            print("Flusher task failed. Aborting operation.")
-    except ValueError as e:
-        logger.error(e)
-        print(e)
-    except Exception as e:
-        logger.error(f"Unexpected error: {e}")
-        print(f"Unexpected error: {e}")
+            # Run the flusher function
+            if flusher(start_date, end_date, args.team):
+                logger.info("Flusher task successful. Starting actual update task...")
+                print("Flusher task successful. Starting actual update task...")
+                
+                # Iterating through each date_key and details in result_dict
+                for date_key, details in result_dict.items():
+                    for col in ['M', 'A', 'N', 'D1', 'D2', 'E']:
+                        user = details[col]
+                        role = translate_column(col)
+                        t1 = details[f"{col}_S"]
+                        t2 = details[f"{col}_E"] if col != 'D1' else details['D2_E']
+                        update_detail(t1, t2, user, args.team, role)
+                
+                logger.info("Task completed successfully.")
+                print("Task completed successfully.")
+                print(result_dict)
+            else:
+                logger.error("Flusher task failed. Aborting operation.")
+                print("Flusher task failed. Aborting operation.")
+        except ValueError as e:
+            logger.error(e)
+            print(e)
+        except Exception as e:
+            logger.error(f"Unexpected error: {e}")
+            print(f"Unexpected error: {e}")
