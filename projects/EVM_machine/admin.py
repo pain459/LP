@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 import requests
+import time
+from threading import Thread
 
 # Load the user list from CSV
 user_list_df = pd.read_csv('user_list.csv')
@@ -19,6 +21,14 @@ def validate_center_id(center_id):
     if response.status_code == 200 and response.json().get('status') == 'success':
         return True
     return False
+
+# Function to send heartbeat updates
+def send_heartbeat(center_id):
+    while True:
+        response = requests.post('http://localhost:5000/heartbeat', json={"center_id": center_id})
+        if response.status_code != 200:
+            print("Failed to send heartbeat update.")
+        time.sleep(30)  # Send heartbeat every 30 seconds
 
 # Function to validate unique ID
 def validate_unique_id(unique_id):
@@ -48,6 +58,12 @@ while True:
     admin_center_id = input("Admin: Enter the polling center ID to validate: ").strip()
     if validate_center_id(admin_center_id):
         print("Polling center ID is valid. Starting to serve requests locally...")
+        
+        # Start the heartbeat thread
+        heartbeat_thread = Thread(target=send_heartbeat, args=(admin_center_id,))
+        heartbeat_thread.daemon = True
+        heartbeat_thread.start()
+        
         while True:
             admin_unique_id = input("Admin: Enter the unique ID to unblock for voting: ").strip()
             unblock_user_for_voting(admin_unique_id)
