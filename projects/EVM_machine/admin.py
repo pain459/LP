@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import requests
 
 # Load the user list from CSV
 user_list_df = pd.read_csv('user_list.csv')
@@ -11,6 +12,13 @@ if not os.path.exists(voting_csv):
     voting_df.to_csv(voting_csv, index=False)
 else:
     voting_df = pd.read_csv(voting_csv)
+
+# Function to validate polling center ID
+def validate_center_id(center_id):
+    response = requests.get(f'http://localhost:5000/validate_center_id?center_id={center_id}')
+    if response.status_code == 200 and response.json().get('status') == 'success':
+        return True
+    return False
 
 # Function to validate unique ID
 def validate_unique_id(unique_id):
@@ -37,5 +45,11 @@ def unblock_user_for_voting(unique_id):
 
 # Main admin loop
 while True:
-    admin_unique_id = input("Admin: Enter the unique ID to unblock for voting: ").strip()
-    unblock_user_for_voting(admin_unique_id)
+    admin_center_id = input("Admin: Enter the polling center ID to validate: ").strip()
+    if validate_center_id(admin_center_id):
+        print("Polling center ID is valid. Starting to serve requests locally...")
+        while True:
+            admin_unique_id = input("Admin: Enter the unique ID to unblock for voting: ").strip()
+            unblock_user_for_voting(admin_unique_id)
+    else:
+        print("Invalid polling center ID. Please try again.")
