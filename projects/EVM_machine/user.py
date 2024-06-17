@@ -43,6 +43,10 @@ def has_already_voted(unique_id):
         return voting_df[voting_df['UniqueID'] == unique_id]['Voted'].values[0] == 1
     return False
 
+# Function to clear the screen
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
 # Main user loop
 while True:
     if os.path.exists('unblock.txt'):
@@ -50,6 +54,7 @@ while True:
             user_unique_id = f.read().strip()
         
         if validate_unique_id(user_unique_id) and not has_already_voted(user_unique_id):
+            clear_screen()
             print(f"User {user_unique_id}, you are now allowed to vote.")
             display_party_symbols()
             try:
@@ -58,7 +63,9 @@ while True:
                     new_vote = pd.DataFrame([[user_unique_id, 1, vote]], columns=["UniqueID", "Voted", "VotedToSymbol"])
                     voting_df = pd.concat([voting_df, new_vote], ignore_index=True)
                     voting_df.to_csv(voting_csv, index=False)
+                    clear_screen()
                     print("Thank you for voting!")
+                    time.sleep(3)  # Display the thank you message for 3 seconds
                     os.remove('unblock.txt')
                 else:
                     print("Invalid symbol selection. Please try again.")
@@ -68,5 +75,6 @@ while True:
             print("Invalid unique ID or user has already voted. Please contact the administrator.")
             os.remove('unblock.txt')
     else:
+        clear_screen()
         print("Waiting for administrator to unblock a user...")
         time.sleep(5)

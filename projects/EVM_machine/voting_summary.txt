@@ -1,5 +1,5 @@
-Voting Percentage: 0.20%
+Voting Percentage: 0.30%
 
 Votes per Symbol:
-α (Alpha): 1 votes
+α (Alpha): 2 votes
 β (Beta): 1 votes
