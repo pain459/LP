@@ -99,6 +99,21 @@ def unblock():
         return jsonify({"status": "success", "message": result}), 200
     return jsonify({"status": "error", "message": result}), 400
 
+# Function to add a new user console
+def add_user_console():
+    while True:
+        user_console_id = input("Admin: Enter the user console identity to register (or 'done' to finish): ").strip()
+        if user_console_id.lower() == 'done':
+            break
+        if user_console_id not in user_consoles:
+            if is_client_up(user_console_id):
+                user_consoles.append(user_console_id)
+                print(f"User console {user_console_id} registered.")
+            else:
+                print(f"User console {user_console_id} is not up.")
+        else:
+            print(f"User console {user_console_id} is already registered.")
+
 # Main admin loop
 def main():
     while True:
@@ -111,31 +126,34 @@ def main():
             heartbeat_thread.daemon = True
             heartbeat_thread.start()
 
-            # Register user consoles
-            while True:
-                user_console_id = input("Admin: Enter the user console identity to register (or 'done' to finish): ").strip()
-                if user_console_id.lower() == 'done':
-                    break
-                if user_console_id not in user_consoles:
-                    if is_client_up(user_console_id):
-                        user_consoles.append(user_console_id)
-                        print(f"User console {user_console_id} registered.")
-                    else:
-                        print(f"User console {user_console_id} is not up.")
-                else:
-                    print(f"User console {user_console_id} is already registered.")
+            # Register initial user consoles
+            add_user_console()
 
             if not user_consoles:
                 print("No user consoles registered. Exiting...")
                 return
 
             while True:
-                admin_unique_id = input("Admin: Enter the unique ID to unblock for voting: ").strip()
-                success, result = unblock_user_for_voting(admin_unique_id)
-                if success:
-                    print(f"{result}")
+                print("\nAdmin Menu:")
+                print("1. Add new console")
+                print("2. Enter the unique ID to unblock for voting")
+                print("3. Exit")
+                choice = input("Select an option: ").strip()
+
+                if choice == '1':
+                    add_user_console()
+                elif choice == '2':
+                    admin_unique_id = input("Admin: Enter the unique ID to unblock for voting: ").strip()
+                    success, result = unblock_user_for_voting(admin_unique_id)
+                    if success:
+                        print(f"{result}")
+                    else:
+                        print(result)
+                elif choice == '3':
+                    print("Exiting...")
+                    return
                 else:
-                    print(result)
+                    print("Invalid option. Please try again.")
         else:
             print("Invalid polling center ID. Please try again.")
 
