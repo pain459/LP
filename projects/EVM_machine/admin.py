@@ -23,6 +23,10 @@ if not os.path.exists(voting_csv):
 else:
     voting_df = pd.read_csv(voting_csv)
 
+# Track registered user consoles
+user_consoles = []
+current_console_index = 0
+
 # Function to validate polling center ID
 def validate_center_id(center_id):
     while True:
@@ -60,24 +64,28 @@ def has_already_voted(unique_id):
 
 # Function to unblock user for voting
 def unblock_user_for_voting(unique_id):
+    global current_console_index
     if not validate_unique_id(unique_id):
         return False, "Invalid unique ID."
     if has_already_voted(unique_id):
         return False, "User has already voted."
-    with open('unblock.txt', 'w') as f:
-        f.write(unique_id)
-    return True, "User unblocked."
+    if user_consoles:
+        user_console = user_consoles[current_console_index]
+        current_console_index = (current_console_index + 1) % len(user_consoles)
+        with open(f'unblock_{user_console}.txt', 'w') as f:
+            f.write(unique_id)
+        return True, f"User unblocked for console {user_console}."
+    return False, "No user consoles available."
 
 # Function to check if client is up
-def is_client_up():
-    while True:
-        try:
-            response = requests.get('http://localhost:5001/client_status')
-            if response.status_code == 200 and response.json().get('status') == 'up':
-                return True
-        except requests.exceptions.RequestException as e:
-            print(f"Client is not up: {e}. Retrying in 5 seconds...")
-            time.sleep(5)
+def is_client_up(user_console):
+    try:
+        response = requests.get(f'http://localhost:5001/client_status')
+        if response.status_code == 200 and response.json().get('status') == 'up':
+            return True
+    except requests.exceptions.RequestException as e:
+        print(f"Client {user_console} is not up: {e}.")
+    return False
 
 # Route to validate and unblock user
 @app.route('/unblock', methods=['POST'])
@@ -102,17 +110,32 @@ def main():
             heartbeat_thread = Thread(target=send_heartbeat, args=(admin_center_id,))
             heartbeat_thread.daemon = True
             heartbeat_thread.start()
-            
+
+            # Register user consoles
             while True:
-                if is_client_up():
-                    admin_unique_id = input("Admin: Enter the unique ID to unblock for voting: ").strip()
-                    success, result = unblock_user_for_voting(admin_unique_id)
-                    if success:
-                        print(f"{result}")
+                user_console_id = input("Admin: Enter the user console identity to register (or 'done' to finish): ").strip()
+                if user_console_id.lower() == 'done':
+                    break
+                if user_console_id not in user_consoles:
+                    if is_client_up(user_console_id):
+                        user_consoles.append(user_console_id)
+                        print(f"User console {user_console_id} registered.")
                     else:
-                        print(result)
+                        print(f"User console {user_console_id} is not up.")
                 else:
-                    print("Client is offline. Retrying...")
+                    print(f"User console {user_console_id} is already registered.")
+
+            if not user_consoles:
+                print("No user consoles registered. Exiting...")
+                return
+
+            while True:
+                admin_unique_id = input("Admin: Enter the unique ID to unblock for voting: ").strip()
+                success, result = unblock_user_for_voting(admin_unique_id)
+                if success:
+                    print(f"{result}")
+                else:
+                    print(result)
         else:
             print("Invalid polling center ID. Please try again.")
 

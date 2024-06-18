@@ -1,4 +1,3 @@
-
 import pandas as pd
 import os
 import time
@@ -68,10 +67,12 @@ def start_flask():
 
 # Main user loop
 def main():
+    user_identity = input("Enter the user console identity: ").strip()
     global voting_df
     while True:
-        if os.path.exists('unblock.txt'):
-            with open('unblock.txt', 'r') as f:
+        unblock_file = f'unblock_{user_identity}.txt'
+        if os.path.exists(unblock_file):
+            with open(unblock_file, 'r') as f:
                 user_unique_id = f.read().strip()
             
             if validate_unique_id(user_unique_id) and not has_already_voted(user_unique_id):
@@ -87,14 +88,14 @@ def main():
                         clear_screen()
                         print("Thank you for voting!")
                         time.sleep(3)  # Display the thank you message for 3 seconds
-                        os.remove('unblock.txt')
+                        os.remove(unblock_file)
                     else:
                         print("Invalid symbol selection. Please try again.")
                 except ValueError:
                     print("Invalid input. Please enter a number corresponding to the symbols.")
             else:
                 print("Invalid unique ID or user has already voted. Please contact the administrator.")
-                os.remove('unblock.txt')
+                os.remove(unblock_file)
         else:
             clear_screen()
             print("Waiting for administrator to unblock a user...")
