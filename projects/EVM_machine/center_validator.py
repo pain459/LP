@@ -24,16 +24,23 @@ valid_center_ids = set(voting_centers_df['CenterID'].values)
 # Dictionary to track authenticated sessions and their last seen times
 authenticated_sessions = {}
 
+# Dictionary to track active center IDs
+active_center_ids = set()
+
 # Route to validate center ID
 @app.route('/validate_center_id', methods=['GET'])
 def validate_center_id():
     center_id = request.args.get('center_id')
     app.logger.debug(f'Received center_id: {center_id}')
-    if center_id in valid_center_ids:
-        authenticated_sessions[center_id] = time.time()
-        return jsonify({"status": "success"}), 200
-    app.logger.debug(f'Invalid center_id: {center_id}')
-    return jsonify({"status": "error", "message": "Invalid center ID."}), 400
+    if center_id not in valid_center_ids:
+        app.logger.debug(f'Invalid center_id: {center_id}')
+        return jsonify({"status": "error", "message": "Invalid center ID."}), 400
+    if center_id in active_center_ids:
+        app.logger.debug(f'Center_id already in use: {center_id}')
+        return jsonify({"status": "error", "message": "Center ID already in use."}), 400
+    active_center_ids.add(center_id)
+    authenticated_sessions[center_id] = time.time()
+    return jsonify({"status": "success"}), 200
 
 # Route to handle heartbeat updates
 @app.route('/heartbeat', methods=['POST'])
@@ -67,6 +74,7 @@ def remove_inactive_sessions():
         for center_id in inactive_sessions:
             app.logger.debug(f'Removing inactive center_id: {center_id}')
             del authenticated_sessions[center_id]
+            active_center_ids.remove(center_id)
         time.sleep(30)  # Check every 30 seconds
 
 if __name__ == '__main__':
