@@ -3,66 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authenticated Sessions Dashboard</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <title>Voting Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
-    <h1>Authenticated Sessions Dashboard</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>Center ID</th>
-                <th>Last Seen</th>
-            </tr>
-        </thead>
-        <tbody id="session-table-body">
-            <!-- Data will be injected here by JavaScript -->
-        </tbody>
-    </table>
-
+    <h1>Voting Dashboard</h1>
+    <div id="voting-percentage"></div>
+    <div id="votes-per-symbol"></div>
     <script>
-        async function fetchSessions() {
-            try {
-                const response = await fetch('/fetch_sessions');
-                const data = await response.json();
-                if (data.status === 'success') {
-                    const sessions = data.sessions;
-                    const tableBody = document.getElementById('session-table-body');
-                    tableBody.innerHTML = '';
-                    sessions.forEach(session => {
-                        const row = document.createElement('tr');
-                        const centerIdCell = document.createElement('td');
-                        const lastSeenCell = document.createElement('td');
-                        centerIdCell.textContent = session.center_id;
-                        lastSeenCell.textContent = session.last_seen;
-                        row.appendChild(centerIdCell);
-                        row.appendChild(lastSeenCell);
-                        tableBody.appendChild(row);
-                    });
-                } else {
-                    console.error('Failed to fetch sessions:', data.message);
-                }
-            } catch (error) {
-                console.error('Error fetching sessions:', error);
-            }
+        function fetchData() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    displayVotingPercentage(data.voting_percentage);
+                    displayVotesPerSymbol(data.votes_per_symbol);
+                });
         }
 
-        // Fetch sessions every 5 seconds
-        setInterval(fetchSessions, 5000);
-        fetchSessions(); // Initial fetch
+        function displayVotingPercentage(percentage) {
+            var data = [{
+                values: [percentage, 100 - percentage],
+                labels: ['Voted', 'Not Voted'],
+                type: 'pie'
+            }];
+
+            var layout = {
+                title: `Voting Percentage: ${percentage.toFixed(2)}%`
+            };
+
+            Plotly.newPlot('voting-percentage', data, layout);
+        }
+
+        function displayVotesPerSymbol(votes) {
+            var data = [{
+                x: Object.keys(votes),
+                y: Object.values(votes),
+                type: 'bar'
+            }];
+
+            var layout = {
+                title: 'Votes per Party Symbol'
+            };
+
+            Plotly.newPlot('votes-per-symbol', data, layout);
+        }
+
+        fetchData();
+        setInterval(fetchData, 5000); // Refresh data every 5 seconds
     </script>
 </body>
 </html>
