@@ -5,18 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Voting Dashboard</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        .quadrant {
+            width: 45%;
+            height: 45vh;
+            margin: 1%;
+        }
+        #total-votes {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+        }
+        #leading-party {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: green;
+        }
+    </style>
 </head>
 <body>
-    <h1>Voting Dashboard</h1>
-    <div id="voting-percentage"></div>
-    <div id="votes-per-symbol"></div>
+    <div class="quadrant" id="voting-percentage"></div>
+    <div class="quadrant" id="total-votes"></div>
+    <div class="quadrant" id="votes-per-symbol"></div>
+    <div class="quadrant" id="leading-party"></div>
     <script>
         function fetchData() {
             fetch('/data')
                 .then(response => response.json())
                 .then(data => {
                     displayVotingPercentage(data.voting_percentage);
+                    displayTotalVotes(data.total_votes, data.total_voters);
                     displayVotesPerSymbol(data.votes_per_symbol);
+                    displayLeadingParty(data.leading_party, data.leading_by);
                 });
         }
 
@@ -34,11 +65,15 @@
             Plotly.newPlot('voting-percentage', data, layout);
         }
 
+        function displayTotalVotes(totalVotes, totalVoters) {
+            document.getElementById('total-votes').innerHTML = `Total Votes: ${totalVotes} / ${totalVoters}`;
+        }
+
         function displayVotesPerSymbol(votes) {
             var data = [{
-                x: Object.keys(votes),
-                y: Object.values(votes),
-                type: 'bar'
+                values: Object.values(votes),
+                labels: Object.keys(votes),
+                type: 'pie'
             }];
 
             var layout = {
@@ -46,6 +81,10 @@
             };
 
             Plotly.newPlot('votes-per-symbol', data, layout);
+        }
+
+        function displayLeadingParty(leadingParty, leadingBy) {
+            document.getElementById('leading-party').innerHTML = `Leading: ${leadingParty} by ${leadingBy} votes`;
         }
 
         fetchData();

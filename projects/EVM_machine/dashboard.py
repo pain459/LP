@@ -1,6 +1,4 @@
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
 from flask import Flask, render_template, jsonify
 import os
 
@@ -44,11 +42,22 @@ def get_data():
     }
     votes_per_symbol.index = votes_per_symbol.index.map(party_symbols)
 
+    if not votes_per_symbol.empty:
+        leading_party = votes_per_symbol.idxmax()
+        leading_votes = votes_per_symbol.max()
+        leading_by = leading_votes - votes_per_symbol.nlargest(2).iloc[-1]
+    else:
+        leading_party = "None"
+        leading_votes = 0
+        leading_by = 0
+
     data = {
-        'voting_percentage': voting_percentage,
+        'voting_percentage': float(voting_percentage),
         'votes_per_symbol': votes_per_symbol.to_dict(),
-        'total_votes': total_votes,
-        'total_voters': total_voters
+        'total_votes': int(total_votes),
+        'total_voters': int(total_voters),
+        'leading_party': leading_party,
+        'leading_by': int(leading_by)
     }
     return jsonify(data)
 
