@@ -13,23 +13,18 @@
             justify-content: space-around;
         }
         .quadrant {
-            width: 45%;
+            width: 30%;
             height: 45vh;
             margin: 1%;
         }
-        #total-votes {
+        #total-votes, #leading-party, #polling-stations, #current-time {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2em;
+            font-size: 1.5em;
             font-weight: bold;
         }
         #leading-party {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2em;
-            font-weight: bold;
             color: green;
         }
     </style>
@@ -37,8 +32,10 @@
 <body>
     <div class="quadrant" id="voting-percentage"></div>
     <div class="quadrant" id="total-votes"></div>
+    <div class="quadrant" id="polling-stations"></div>
     <div class="quadrant" id="votes-per-symbol"></div>
     <div class="quadrant" id="leading-party"></div>
+    <div class="quadrant" id="current-time"></div>
     <script>
         function fetchData() {
             fetch('/data')
@@ -48,6 +45,8 @@
                     displayTotalVotes(data.total_votes, data.total_voters);
                     displayVotesPerSymbol(data.votes_per_symbol);
                     displayLeadingParty(data.leading_party, data.leading_by);
+                    displayPollingStations(data.polling_stations);
+                    displayCurrentTime(data.current_time);
                 });
         }
 
@@ -85,6 +84,14 @@
 
         function displayLeadingParty(leadingParty, leadingBy) {
             document.getElementById('leading-party').innerHTML = `Leading: ${leadingParty} by ${leadingBy} votes`;
+        }
+
+        function displayPollingStations(pollingStations) {
+            document.getElementById('polling-stations').innerHTML = `Polling Stations: ${pollingStations}`;
+        }
+
+        function displayCurrentTime(currentTime) {
+            document.getElementById('current-time').innerHTML = `Current Time (IST): ${currentTime}`;
         }
 
         fetchData();

@@ -1,6 +1,9 @@
 import pandas as pd
+import requests
 from flask import Flask, render_template, jsonify
 import os
+from datetime import datetime
+import pytz
 
 app = Flask(__name__)
 
@@ -13,6 +16,18 @@ def load_voting_data():
         return pd.read_csv('voting_data.csv')
     else:
         return pd.DataFrame(columns=["UniqueID", "Voted", "VotedToSymbol"])
+
+# Function to get the number of polling stations
+def get_polling_stations():
+    try:
+        response = requests.get('http://localhost:5000/authenticated_sessions')
+        if response.status_code == 200:
+            sessions = response.json().get('sessions', [])
+            return len(sessions)
+        return 0
+    except requests.exceptions.RequestException as e:
+        print(f"Failed to fetch polling stations: {e}")
+        return 0
 
 # Route to serve the dashboard page
 @app.route('/')
@@ -51,13 +66,17 @@ def get_data():
         leading_votes = 0
         leading_by = 0
 
+    current_time = datetime.now(pytz.timezone('Asia/Kolkata')).strftime('%Y-%m-%d %H:%M:%S')
+
     data = {
         'voting_percentage': float(voting_percentage),
         'votes_per_symbol': votes_per_symbol.to_dict(),
         'total_votes': int(total_votes),
         'total_voters': int(total_voters),
         'leading_party': leading_party,
-        'leading_by': int(leading_by)
+        'leading_by': int(leading_by),
+        'polling_stations': get_polling_stations(),
+        'current_time': current_time
     }
     return jsonify(data)
 
