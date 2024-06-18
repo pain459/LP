@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import requests
 import time
-from threading import Thread
+from threading import Thread, Lock
 from flask import Flask, request, jsonify
 import logging
 
@@ -26,6 +26,8 @@ else:
 # Track registered user consoles
 user_consoles = []
 current_console_index = 0
+vote_in_progress = False
+lock = Lock()
 
 # Function to validate polling center ID
 def validate_center_id(center_id):
@@ -64,27 +66,40 @@ def has_already_voted(unique_id):
 
 # Function to unblock user for voting
 def unblock_user_for_voting(unique_id):
-    global current_console_index
+    global current_console_index, vote_in_progress
     if not validate_unique_id(unique_id):
         return False, "Invalid unique ID."
     if has_already_voted(unique_id):
         return False, "User has already voted."
+    with lock:
+        if vote_in_progress:
+            return False, "All consoles are currently busy."
+        vote_in_progress = True
+
     if user_consoles:
         user_console = user_consoles[current_console_index]
         current_console_index = (current_console_index + 1) % len(user_consoles)
-        with open(f'unblock_{user_console}.txt', 'w') as f:
+        with open(f'unblock_{user_console["name"]}.txt', 'w') as f:
             f.write(unique_id)
-        return True, f"User unblocked for console {user_console}."
+        return True, f"User unblocked for console {user_console['name']}."
     return False, "No user consoles available."
+
+# Function to mark the completion of a vote
+@app.route('/vote_completed', methods=['POST'])
+def vote_completed():
+    global vote_in_progress
+    with lock:
+        vote_in_progress = False
+    return jsonify({"status": "success"}), 200
 
 # Function to check if client is up
 def is_client_up(user_console):
     try:
-        response = requests.get(f'http://localhost:5001/client_status')
+        response = requests.get(f'http://localhost:{user_console["port"]}/client_status')
         if response.status_code == 200 and response.json().get('status') == 'up':
             return True
     except requests.exceptions.RequestException as e:
-        print(f"Client {user_console} is not up: {e}.")
+        print(f"Client {user_console['name']} is not up: {e}.")
     return False
 
 # Route to validate and unblock user
@@ -105,14 +120,36 @@ def add_user_console():
         user_console_id = input("Admin: Enter the user console identity to register (or 'done' to finish): ").strip()
         if user_console_id.lower() == 'done':
             break
-        if user_console_id not in user_consoles:
-            if is_client_up(user_console_id):
-                user_consoles.append(user_console_id)
-                print(f"User console {user_console_id} registered.")
-            else:
-                print(f"User console {user_console_id} is not up.")
-        else:
+        if any(console['name'] == user_console_id for console in user_consoles):
             print(f"User console {user_console_id} is already registered.")
+            continue
+        port = input(f"Enter the port for {user_console_id}: ").strip()
+        user_console = {"name": user_console_id, "port": port}
+        if is_client_up(user_console):
+            user_consoles.append(user_console)
+            print(f"User console {user_console_id} registered on port {port}.")
+        else:
+            print(f"User console {user_console_id} is not up on port {port}.")
+
+# Function to list registered user consoles
+def list_user_consoles():
+    if not user_consoles:
+        print("No user consoles registered.")
+    else:
+        print("Registered user consoles:")
+        for console in user_consoles:
+            print(f"Name: {console['name']}, Port: {console['port']}")
+
+# Function to flush all allocated unique IDs
+def flush_allocations():
+    global vote_in_progress
+    with lock:
+        for console in user_consoles:
+            unblock_file = f'unblock_{console["name"]}.txt'
+            if os.path.exists(unblock_file):
+                os.remove(unblock_file)
+        vote_in_progress = False
+    print("All allocations have been flushed.")
 
 # Main admin loop
 def main():
@@ -137,7 +174,9 @@ def main():
                 print("\nAdmin Menu:")
                 print("1. Add new console")
                 print("2. Enter the unique ID to unblock for voting")
-                print("3. Exit")
+                print("3. List registered consoles")
+                print("4. Flush allocations")
+                print("5. Exit")
                 choice = input("Select an option: ").strip()
 
                 if choice == '1':
@@ -150,6 +189,10 @@ def main():
                     else:
                         print(result)
                 elif choice == '3':
+                    list_user_consoles()
+                elif choice == '4':
+                    flush_allocations()
+                elif choice == '5':
                     print("Exiting...")
                     return
                 else:

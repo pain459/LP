@@ -1,9 +1,11 @@
+import argparse
 import pandas as pd
 import os
 import time
 import requests
 from flask import Flask, jsonify, request
 import logging
+from threading import Thread
 
 app = Flask(__name__)
 
@@ -62,12 +64,11 @@ def client_status():
     return jsonify({"status": "up"}), 200
 
 # Start the Flask server in a separate thread
-def start_flask():
-    app.run(host='0.0.0.0', port=5001)
+def start_flask(port):
+    app.run(host='0.0.0.0', port=port)
 
 # Main user loop
-def main():
-    user_identity = input("Enter the user console identity: ").strip()
+def main(user_identity, port, center_id):
     global voting_df
     while True:
         unblock_file = f'unblock_{user_identity}.txt'
@@ -102,8 +103,15 @@ def main():
             time.sleep(5)
 
 if __name__ == '__main__':
-    from threading import Thread
-    flask_thread = Thread(target=start_flask)
+    parser = argparse.ArgumentParser(description='User voting console.')
+    parser.add_argument('-p', '--port', type=int, required=True, help='Port to start the user instance on.')
+    parser.add_argument('-n', '--name', required=True, help='Name of the user console instance.')
+    parser.add_argument('-c_i', '--center_id', required=True, help='Polling center ID to connect to.')
+
+    args = parser.parse_args()
+
+    flask_thread = Thread(target=start_flask, args=(args.port,))
     flask_thread.daemon = True
     flask_thread.start()
-    main()
+
+    main(args.name, args.port, args.center_id)
