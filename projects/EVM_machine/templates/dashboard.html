@@ -46,7 +46,6 @@
                     displayVotesPerSymbol(data.votes_per_symbol);
                     displayLeadingParty(data.leading_party, data.leading_by);
                     displayPollingStations(data.polling_stations);
-                    displayCurrentTime(data.current_time);
                 });
         }
 
@@ -90,12 +89,17 @@
             document.getElementById('polling-stations').innerHTML = `Polling Stations: ${pollingStations}`;
         }
 
-        function displayCurrentTime(currentTime) {
-            document.getElementById('current-time').innerHTML = `Current Time (IST): ${currentTime}`;
+        function displayCurrentTime() {
+            const now = new Date();
+            const options = { timeZone: 'Asia/Kolkata', hour12: false };
+            const timeString = now.toLocaleTimeString('en-US', options);
+            const dateString = now.toLocaleDateString('en-US', options);
+            document.getElementById('current-time').innerHTML = `Current Time (IST): ${dateString} ${timeString}`;
         }
 
         fetchData();
         setInterval(fetchData, 5000); // Refresh data every 5 seconds
+        setInterval(displayCurrentTime, 1000); // Update time every second
     </script>
 </body>
 </html>
