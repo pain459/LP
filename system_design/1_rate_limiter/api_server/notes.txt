@@ -8,3 +8,15 @@ docker run -d --net flask_network --name flask_api1 flask_api
 docker run -d --net flask_network --name flask_api2 flask_api
 docker run -d --net flask_network --name flask_api3 flask_api
 docker run -d --net flask_network --name flask_api4 flask_api
+
+
+
+# refresh commands
+
+docker stop flask_api1 flask_api2 flask_api3 flask_api4
+docker rm flask_api1 flask_api2 flask_api3 flask_api4
+
+docker run -d --net flask_network --name flask_api1 flask_api
+docker run -d --net flask_network --name flask_api2 flask_api
+docker run -d --net flask_network --name flask_api3 flask_api
+docker run -d --net flask_network --name flask_api4 flask_api
