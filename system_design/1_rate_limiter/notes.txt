@@ -1,3 +1,6 @@
 # Create a docker network
 
 $ docker network create flask_network
+
+# Bootup using docker compose file.
+docker-compose up --build

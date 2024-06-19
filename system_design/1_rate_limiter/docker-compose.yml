@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  flask_api1:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+
+  flask_api2:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+
+  flask_api3:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+
+  flask_api4:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+
+  nginx:
+    build:
+      context: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      - flask_network
+    depends_on:
+      - flask_api1
+      - flask_api2
+      - flask_api3
+      - flask_api4
+
+networks:
+  flask_network:
+    driver: bridge
