@@ -1,0 +1,9 @@
+# Build image
+docker build -t flask_api .
+
+
+# Boot up the docker containers
+docker run -d -p 5001:5001 flask_api
+docker run -d -p 5002:5001 flask_api
+docker run -d -p 5003:5001 flask_api
+docker run -d -p 5004:5001 flask_api
