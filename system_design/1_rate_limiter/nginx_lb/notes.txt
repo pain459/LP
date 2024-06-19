@@ -1,0 +1,5 @@
+# Build image
+docker build -t nginx_load_balancer .
+
+# boot up load balancer
+docker run -d -p 80:80 nginx_load_balancer
