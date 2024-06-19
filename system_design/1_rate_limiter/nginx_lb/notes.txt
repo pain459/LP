@@ -2,4 +2,4 @@
 docker build -t nginx_load_balancer .
 
 # boot up load balancer
-docker run -d -p 80:80 nginx_load_balancer
+docker run -d --net flask_network -p 80:80 --name nginx_lb nginx_load_balancer

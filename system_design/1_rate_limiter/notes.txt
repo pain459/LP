@@ -1,0 +1,3 @@
+# Create a docker network
+
+$ docker network create flask_network
