@@ -1,0 +1,50 @@
+version: '3.8'
+services:
+  redis-master:
+    image: redis:latest
+    container_name: redis-master
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "your_password"]
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-master-data:/data
+
+  redis-slave-1:
+    image: redis:latest
+    container_name: redis-slave-1
+    command: ["redis-server", "--slaveof", "redis-master", "6379", "--appendonly", "yes", "--requirepass", "your_password"]
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-slave-1-data:/data
+
+  redis-slave-2:
+    image: redis:latest
+    container_name: redis-slave-2
+    command: ["redis-server", "--slaveof", "redis-master", "6379", "--appendonly", "yes", "--requirepass", "your_password"]
+    ports:
+      - "6381:6379"
+    volumes:
+      - redis-slave-2-data:/data
+
+  sentinel:
+    image: redis:latest
+    container_name: redis-sentinel
+    command: >
+      sh -c 'echo "port 26379" > /redis/sentinel.conf
+             && echo "sentinel monitor mymaster redis-master 6379 2" >> /redis/sentinel.conf
+             && echo "sentinel down-after-milliseconds mymaster 5000" >> /redis/sentinel.conf
+             && echo "sentinel parallel-syncs mymaster 1" >> /redis/sentinel.conf
+             && echo "sentinel failover-timeout mymaster 10000" >> /redis/sentinel.conf
+             && redis-sentinel /redis/sentinel.conf'
+    ports:
+      - "26379:26379"
+    depends_on:
+      - redis-master
+      - redis-slave-1
+      - redis-slave-2
+
+volumes:
+  redis-master-data:
+  redis-slave-1-data:
+  redis-slave-2-data:
