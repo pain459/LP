@@ -1,0 +1,18 @@
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+
+[providers.docker]
+  watch = true
+  exposedByDefault = false
+
+[api]
+  dashboard = true
+  insecure = true
+
+[tracing]
+  [tracing.jaeger]
+    samplingServerURL = "http://jaeger:5778/sampling"
+    localAgentHostPort = "jaeger:6831"
+    samplingType = "const"
+    samplingParam = 1.0

@@ -1,0 +1,31 @@
+# Bootup using docker compose file.
+docker-compose up --build
+
+
+# Steps for adding new server to the router
+
+1. Update the docker compose file.
+2. Boot up the new server using below command
+docker-compose up -d --build flask_api5
+
+3. Remove the non performing instance using below commands
+docker-compose stop flask_api4
+docker-compose rm flask_api4
+
+
+-- Tracing details
+
+The Traefik service configuration includes:
+
+    --tracing.jaeger=true: Enables Jaeger tracing.
+    --tracing.jaeger.samplingServerURL=http://jaeger:5778/sampling: Sets the sampling server URL.
+    --tracing.jaeger.localAgentHostPort=jaeger:6831: Sets the local agent host port.
+    --tracing.jaeger.samplingType=const: Sets the sampling type to constant.
+    --tracing.jaeger.samplingParam=1.0: Sets the sampling parameter to 1.0 (100% sampling).
+
+
+-- dashboards 
+
+Access the Traefik dashboard at http://localhost:8080.
+Access the Jaeger UI at http://localhost:16686.
+Send requests to your API at http://localhost/api.

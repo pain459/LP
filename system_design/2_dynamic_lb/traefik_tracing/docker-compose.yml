@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.4
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--tracing.jaeger=true"
+      - "--tracing.jaeger.samplingServerURL=http://jaeger:5778/sampling"
+      - "--tracing.jaeger.localAgentHostPort=jaeger:6831"
+      - "--tracing.jaeger.samplingType=const"
+      - "--tracing.jaeger.samplingParam=1.0"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - flask_network
+    labels:
+      - "traefik.http.middlewares.rate-limit.rateLimit.average=5"
+      - "traefik.http.middlewares.rate-limit.rateLimit.burst=10"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+      - "traefik.http.routers.api.middlewares=rate-limit"
+
+  flask_api1:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+
+  flask_api2:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+
+  flask_api3:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+
+  flask_api4:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.routers.api.entrypoints=web"
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "14250:14250"
+      - "9411:9411"
+    networks:
+      - flask_network
+
+networks:
+  flask_network:
+    driver: bridge
