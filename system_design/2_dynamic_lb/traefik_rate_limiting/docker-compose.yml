@@ -1,0 +1,85 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.4
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - flask_network
+
+  flask_api1:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.middlewares.rate-limit.rateLimit.average=5"
+      - "traefik.http.middlewares.rate-limit.rateLimit.burst=10"
+      - "traefik.http.routers.api.middlewares=rate-limit"
+
+  flask_api2:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.middlewares.rate-limit.rateLimit.average=5"
+      - "traefik.http.middlewares.rate-limit.rateLimit.burst=10"
+      - "traefik.http.routers.api.middlewares=rate-limit"
+
+  flask_api3:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.middlewares.rate-limit.rateLimit.average=5"
+      - "traefik.http.middlewares.rate-limit.rateLimit.burst=10"
+      - "traefik.http.routers.api.middlewares=rate-limit"
+
+  flask_api4:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.middlewares.rate-limit.rateLimit.average=5"
+      - "traefik.http.middlewares.rate-limit.rateLimit.burst=10"
+      - "traefik.http.routers.api.middlewares=rate-limit"
+
+  flask_api5:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
+      - "traefik.http.middlewares.rate-limit.rateLimit.average=5"
+      - "traefik.http.middlewares.rate-limit.rateLimit.burst=10"
+      - "traefik.http.routers.api.middlewares=rate-limit"
+
+networks:
+  flask_network:
+    driver: bridge

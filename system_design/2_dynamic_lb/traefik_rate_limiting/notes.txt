@@ -1,0 +1,63 @@
+# Bootup using docker compose file.
+docker-compose up --build
+
+
+# Steps for adding new server to the router
+
+1. Update the docker compose file.
+2. Boot up the new server using below command
+docker-compose up -d --build flask_api5
+
+3. Remove the non performing instance using below commands
+docker-compose stop flask_api4
+docker-compose rm flask_api4
+
+
+
+-- Testing the requests using ab
+
+$ ab -n 100 -c 10 http://localhost/api
+This is ApacheBench, Version 2.3 <$Revision: 1913912 $>
+Copyright 1996 Adam Twiss, Zeus Technology Ltd, http://www.zeustech.net/
+Licensed to The Apache Software Foundation, http://www.apache.org/
+
+Benchmarking localhost (be patient).....done
+
+
+Server Software:        Werkzeug/3.0.3
+Server Hostname:        localhost
+Server Port:            80
+
+Document Path:          /api
+Document Length:        44 bytes
+
+Concurrency Level:      10
+Time taken for tests:   0.013 seconds
+Complete requests:      100
+Failed requests:        90
+   (Connect: 0, Receive: 0, Length: 90, Exceptions: 0)
+Non-2xx responses:      90
+Total transferred:      19080 bytes
+HTML transferred:       1970 bytes
+Requests per second:    7946.60 [#/sec] (mean)
+Time per request:       1.258 [ms] (mean)
+Time per request:       0.126 [ms] (mean, across all concurrent requests)
+Transfer rate:          1480.67 [Kbytes/sec] received
+
+Connection Times (ms)
+              min  mean[+/-sd] median   max
+Connect:        0    0   0.2      0       1
+Processing:     0    1   0.5      1       3
+Waiting:        0    1   0.5      1       3
+Total:          0    1   0.6      1       3
+
+Percentage of the requests served within a certain time (ms)
+  50%      1
+  66%      1
+  75%      1
+  80%      1
+  90%      2
+  95%      2
+  98%      3
+  99%      3
+ 100%      3 (longest request)
