@@ -54,6 +54,17 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.api.rule=Host(`localhost`)"
       - "traefik.http.services.api.loadbalancer.server.port=5001"
+# Newly added server for testing purpose. This is a dynamic configuration.
+
+  flask_api5:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
 
 networks:
   flask_network:

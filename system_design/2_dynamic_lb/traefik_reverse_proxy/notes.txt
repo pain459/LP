@@ -2,3 +2,12 @@
 docker-compose up --build
 
 
+# Steps for adding new server to the router
+
+1. Update the docker compose file.
+2. Boot up the new server using below command
+docker-compose up -d --build flask_api5
+
+3. Remove the non performing instance using below commands
+docker-compose stop flask_api4
+docker-compose rm flask_api4
