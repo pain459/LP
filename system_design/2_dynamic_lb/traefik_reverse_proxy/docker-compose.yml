@@ -22,8 +22,8 @@ services:
       - flask_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flask_api1.rule=Host(`localhost`)"
-      - "traefik.http.services.flask_api1.loadbalancer.server.port=5001"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
 
   flask_api2:
     build:
@@ -32,8 +32,8 @@ services:
       - flask_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flask_api2.rule=Host(`localhost`)"
-      - "traefik.http.services.flask_api2.loadbalancer.server.port=5001"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
 
   flask_api3:
     build:
@@ -42,8 +42,8 @@ services:
       - flask_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flask_api3.rule=Host(`localhost`)"
-      - "traefik.http.services.flask_api3.loadbalancer.server.port=5001"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
 
   flask_api4:
     build:
@@ -52,8 +52,8 @@ services:
       - flask_network
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.flask_api4.rule=Host(`localhost`)"
-      - "traefik.http.services.flask_api4.loadbalancer.server.port=5001"
+      - "traefik.http.routers.api.rule=Host(`localhost`)"
+      - "traefik.http.services.api.loadbalancer.server.port=5001"
 
 networks:
   flask_network:
