@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: traefik:v2.4
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"  # Traefik dashboard
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - flask_network
+
+  flask_api1:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask_api1.rule=Host(`localhost`)"
+      - "traefik.http.services.flask_api1.loadbalancer.server.port=5001"
+
+  flask_api2:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask_api2.rule=Host(`localhost`)"
+      - "traefik.http.services.flask_api2.loadbalancer.server.port=5001"
+
+  flask_api3:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask_api3.rule=Host(`localhost`)"
+      - "traefik.http.services.flask_api3.loadbalancer.server.port=5001"
+
+  flask_api4:
+    build:
+      context: ./flask_api
+    networks:
+      - flask_network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flask_api4.rule=Host(`localhost`)"
+      - "traefik.http.services.flask_api4.loadbalancer.server.port=5001"
+
+networks:
+  flask_network:
+    driver: bridge

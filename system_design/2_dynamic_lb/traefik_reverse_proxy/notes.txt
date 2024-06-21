@@ -1,0 +1,4 @@
+# Bootup using docker compose file.
+docker-compose up --build
+
+
