@@ -1,0 +1,7 @@
+$ docker exec -it redis-master redis-cli -a your_password
+Warning: Using a password with '-a' or '-u' option on the command line interface may not be safe.
+127.0.0.1:6379> SET mykey "myvalue"
+OK
+127.0.0.1:6379> GET mykey
+"myvalue"
+
