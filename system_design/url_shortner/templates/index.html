@@ -4,17 +4,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>URL Shortener</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
 </head>
 <body>
-    <h1>URL Shortener</h1>
-    <form action="/shorten" method="post">
-        <label for="url">Enter URL to shorten:</label>
-        <input type="text" id="url" name="url" required>
-        <button type="submit">Shorten</button>
-    </form>
+    <div class="container mt-5">
+        <h1 class="text-center">URL Shortener</h1>
+        <form action="/shorten" method="post" class="mt-4">
+            <div class="form-group">
+                <label for="url">Enter URL to shorten:</label>
+                <input type="text" class="form-control" id="url" name="url" required>
+            </div>
+            <div class="form-group">
+                <label for="shortname">Custom Short Name (optional):</label>
+                <input type="text" class="form-control" id="shortname" name="shortname">
+            </div>
+            <button type="submit" class="btn btn-primary">Shorten</button>
+        </form>
 
-    {% if short_url %}
-        <p>Shortened URL: <a href="{{ short_url }}">{{ short_url }}</a></p>
-    {% endif %}
+        {% if short_url %}
+            <div class="alert alert-success mt-4">
+                Shortened URL: <a href="{{ short_url }}">{{ short_url }}</a>
+            </div>
+        {% endif %}
+
+        <h2 class="mt-5">All Shortened URLs</h2>
+        <table class="table table-bordered mt-3">
+            <thead>
+                <tr>
+                    <th>Short Name</th>
+                    <th>Original URL</th>
+                    <th>Number of Hits</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in urls %}
+                    <tr>
+                        <td>{{ entry.short_code }}</td>
+                        <td><a href="{{ entry.original_url }}" target="_blank">{{ entry.original_url }}</a></td>
+                        <td>{{ entry.hits }}</td>
+                        <td>
+                            <form action="/delete" method="post" style="display:inline;">
+                                <input type="hidden" name="short_code" value="{{ entry.short_code }}">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
