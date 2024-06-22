@@ -5,3 +5,19 @@ OK
 127.0.0.1:6379> GET mykey
 "myvalue"
 
+Start Locust:
+
+Run Locust without specifying a host:
+
+locust -f locustfile.py
+
+Access Locust Web Interface:
+
+Open a web browser and navigate to http://localhost:8089.
+
+Configure and Start the Test:
+
+    Number of users to simulate: Enter the number of concurrent users you want to simulate (e.g., 100).
+    Spawn rate: Enter the rate at which users are spawned (e.g., 10 users per second).
+
+Click the "Start swarming" button to begin the load test.

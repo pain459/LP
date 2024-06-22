@@ -1,7 +1,8 @@
 import redis
 
+# Connect to the Redis master
 client = redis.StrictRedis(
-    host='localhost',  # Redis master host
+    host='localhost',  # Replace with the appropriate host if needed
     port=6379,         # Redis master port
     password='your_password',
     decode_responses=True
