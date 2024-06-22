@@ -5,6 +5,8 @@ import logging
 from snowflake_generator import SnowflakeIDGenerator
 from opensearchpy import OpenSearch
 import time
+from datetime import datetime
+from pytz import timezone
 
 # Redis setup
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
@@ -19,7 +21,7 @@ def connect_to_opensearch():
         try:
             opensearch_client = OpenSearch(
                 hosts=[{'host': 'opensearch', 'port': 9200}],
-                http_auth=('admin', 'admin'),  # Replace with your OpenSearch credentials
+                http_auth=('admin', 'admin'),  # Replace with your OpenSearch credentials if necessary
                 use_ssl=False,
                 verify_certs=False
             )
@@ -32,13 +34,13 @@ opensearch_client = connect_to_opensearch()
 
 # Logging setup
 log_index = "logs"
-log_type = "_doc"
 
 def log_to_opensearch(message):
+    tz = timezone('Asia/Kolkata')  # Replace with your local timezone, e.g., 'America/New_York'
     log_entry = {
         "message": message,
         "node_id": node_id,
-        "timestamp": int(time.time() * 1000)
+        "timestamp": datetime.now(tz).isoformat()
     }
     opensearch_client.index(index=log_index, body=log_entry)
 

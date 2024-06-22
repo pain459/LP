@@ -4,3 +4,7 @@
 Test 
 
 curl -X POST -H "Content-Type: application/json" -d '{"num_ids": 100000}' http://localhost:5000/generate_ids > output.log
+
+Locust
+
+locust -f locustfile.py --host=http://localhost:5000

@@ -5,6 +5,8 @@ from snowflake_generator import SnowflakeIDGenerator
 import logging
 from opensearchpy import OpenSearch
 import time
+from datetime import datetime
+from pytz import timezone
 
 app = Flask(__name__)
 
@@ -18,8 +20,7 @@ master_generator = SnowflakeIDGenerator(node_id=0)
 NUM_WORKERS = 12
 
 # Maximum number of keys that can be generated
-# MAX_KEYS = 10000000
-MAX_KEYS = 100000
+MAX_KEYS = 10000000
 
 # OpenSearch setup with retry logic
 def connect_to_opensearch():
@@ -27,7 +28,7 @@ def connect_to_opensearch():
         try:
             opensearch_client = OpenSearch(
                 hosts=[{'host': 'opensearch', 'port': 9200}],
-                http_auth=('admin', 'admin'),  # Replace with your OpenSearch credentials
+                http_auth=('admin', 'admin'),  # Replace with your OpenSearch credentials if necessary
                 use_ssl=False,
                 verify_certs=False
             )
@@ -40,12 +41,12 @@ opensearch_client = connect_to_opensearch()
 
 # Logging setup
 log_index = "logs"
-log_type = "_doc"
 
 def log_to_opensearch(message):
+    tz = timezone('Asia/Kolkata')  # Replace with your local timezone, e.g., 'America/New_York'
     log_entry = {
         "message": message,
-        "timestamp": int(time.time() * 1000)
+        "timestamp": datetime.now(tz).isoformat()
     }
     opensearch_client.index(index=log_index, body=log_entry)
 

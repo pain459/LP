@@ -2,3 +2,4 @@ flask
 redis
 gunicorn
 opensearch-py
+pytz
