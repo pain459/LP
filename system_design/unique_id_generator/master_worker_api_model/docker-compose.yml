@@ -5,6 +5,11 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: '512M'
 
   master:
     build: .
@@ -15,6 +20,12 @@ services:
       - .:/app
     environment:
       - FLASK_APP=app.py
+    command: ["gunicorn", "--workers=12", "--timeout=3600", "-b", "0.0.0.0:5000", "app:app"]
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: '1G'
 
   worker1:
     build: .
@@ -22,6 +33,11 @@ services:
     command: ["python", "worker.py", "1"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker2:
     build: .
@@ -29,6 +45,11 @@ services:
     command: ["python", "worker.py", "2"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker3:
     build: .
@@ -36,6 +57,11 @@ services:
     command: ["python", "worker.py", "3"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker4:
     build: .
@@ -43,6 +69,11 @@ services:
     command: ["python", "worker.py", "4"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker5:
     build: .
@@ -50,6 +81,11 @@ services:
     command: ["python", "worker.py", "5"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker6:
     build: .
@@ -57,6 +93,11 @@ services:
     command: ["python", "worker.py", "6"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker7:
     build: .
@@ -64,6 +105,11 @@ services:
     command: ["python", "worker.py", "7"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker8:
     build: .
@@ -71,6 +117,11 @@ services:
     command: ["python", "worker.py", "8"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker9:
     build: .
@@ -78,6 +129,11 @@ services:
     command: ["python", "worker.py", "9"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker10:
     build: .
@@ -85,6 +141,11 @@ services:
     command: ["python", "worker.py", "10"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker11:
     build: .
@@ -92,6 +153,11 @@ services:
     command: ["python", "worker.py", "11"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
   worker12:
     build: .
@@ -99,6 +165,11 @@ services:
     command: ["python", "worker.py", "12"]
     volumes:
       - .:/app
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
 
 volumes:
   redis-data:
