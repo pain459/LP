@@ -16,7 +16,8 @@ master_generator = SnowflakeIDGenerator(node_id=0)
 NUM_WORKERS = 12
 
 # Maximum number of keys that can be generated
-MAX_KEYS = 10000000
+# MAX_KEYS = 10000000
+MAX_KEYS = 100000
 
 @app.route('/generate_ids', methods=['POST'])
 def generate_ids():
