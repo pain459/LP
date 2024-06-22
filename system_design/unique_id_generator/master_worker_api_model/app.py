@@ -2,7 +2,9 @@ from flask import Flask, request, jsonify
 import redis
 import json
 from snowflake_generator import SnowflakeIDGenerator
-import threading
+import logging
+from opensearchpy import OpenSearch
+import time
 
 app = Flask(__name__)
 
@@ -19,6 +21,34 @@ NUM_WORKERS = 12
 # MAX_KEYS = 10000000
 MAX_KEYS = 100000
 
+# OpenSearch setup with retry logic
+def connect_to_opensearch():
+    while True:
+        try:
+            opensearch_client = OpenSearch(
+                hosts=[{'host': 'opensearch', 'port': 9200}],
+                http_auth=('admin', 'admin'),  # Replace with your OpenSearch credentials
+                use_ssl=False,
+                verify_certs=False
+            )
+            return opensearch_client
+        except Exception as e:
+            print("Error connecting to OpenSearch, retrying in 5 seconds...", e)
+            time.sleep(5)
+
+opensearch_client = connect_to_opensearch()
+
+# Logging setup
+log_index = "logs"
+log_type = "_doc"
+
+def log_to_opensearch(message):
+    log_entry = {
+        "message": message,
+        "timestamp": int(time.time() * 1000)
+    }
+    opensearch_client.index(index=log_index, body=log_entry)
+
 @app.route('/generate_ids', methods=['POST'])
 def generate_ids():
     try:
@@ -27,7 +57,9 @@ def generate_ids():
 
         # Check if the requested number of keys exceeds the limit
         if num_ids > MAX_KEYS:
-            return jsonify({'error': f'Requested number of keys exceeds the limit of {MAX_KEYS}'}), 400
+            error_message = f'Requested number of keys exceeds the limit of {MAX_KEYS}'
+            log_to_opensearch(error_message)
+            return jsonify({'error': error_message}), 400
 
         task_id = master_generator.generate_id()
 
@@ -52,8 +84,10 @@ def generate_ids():
                     ids.extend(json.loads(result[1]))
                     break
 
+        log_to_opensearch(f"Generated {num_ids} IDs successfully")
         return jsonify(ids=ids[:num_ids])
     except Exception as e:
+        log_to_opensearch(str(e))
         return str(e), 500
 
 if __name__ == '__main__':

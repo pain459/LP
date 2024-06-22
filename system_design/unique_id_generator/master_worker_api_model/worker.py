@@ -3,6 +3,8 @@ import json
 import sys
 import logging
 from snowflake_generator import SnowflakeIDGenerator
+from opensearchpy import OpenSearch
+import time
 
 # Redis setup
 redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
@@ -11,16 +13,40 @@ redis_client = redis.StrictRedis(host='redis', port=6379, db=0)
 node_id = int(sys.argv[1])
 worker_generator = SnowflakeIDGenerator(node_id=node_id)
 
+# OpenSearch setup with retry logic
+def connect_to_opensearch():
+    while True:
+        try:
+            opensearch_client = OpenSearch(
+                hosts=[{'host': 'opensearch', 'port': 9200}],
+                http_auth=('admin', 'admin'),  # Replace with your OpenSearch credentials
+                use_ssl=False,
+                verify_certs=False
+            )
+            return opensearch_client
+        except Exception as e:
+            print("Error connecting to OpenSearch, retrying in 5 seconds...", e)
+            time.sleep(5)
+
+opensearch_client = connect_to_opensearch()
+
 # Logging setup
-log_filename = f'worker_{node_id}.log'
-logging.basicConfig(filename=log_filename, level=logging.INFO, format='%(asctime)s %(message)s')
-logger = logging.getLogger()
+log_index = "logs"
+log_type = "_doc"
+
+def log_to_opensearch(message):
+    log_entry = {
+        "message": message,
+        "node_id": node_id,
+        "timestamp": int(time.time() * 1000)
+    }
+    opensearch_client.index(index=log_index, body=log_entry)
 
 def process_tasks():
     batch_size = 500  # Maximum batch size
 
     while True:
-        task = redis_client.brpop('tasks', timeout=3600)
+        task = redis_client.brpop('tasks', timeout=10)
         if task:
             task_data = json.loads(task[1])
             total_num_ids = task_data['num_ids']
@@ -37,7 +63,8 @@ def process_tasks():
                 redis_client.lpush(f'results:{subtask_id}', json.dumps(ids))
                 
                 # Log the number of IDs generated
-                logger.info(f"Generated {len(ids)} unique IDs for subtask {subtask_id}")
+                log_to_opensearch(f"Generated {len(ids)} unique IDs for subtask {subtask_id}")
 
 if __name__ == '__main__':
+    log_to_opensearch("Worker started")
     process_tasks()

@@ -10,6 +10,11 @@ services:
         limits:
           cpus: '0.50'
           memory: '512M'
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   master:
     build: .
@@ -26,6 +31,11 @@ services:
         limits:
           cpus: '1.00'
           memory: '1G'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker1:
     build: .
@@ -38,6 +48,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker2:
     build: .
@@ -50,6 +65,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker3:
     build: .
@@ -62,6 +82,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker4:
     build: .
@@ -74,6 +99,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker5:
     build: .
@@ -86,6 +116,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker6:
     build: .
@@ -98,6 +133,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker7:
     build: .
@@ -110,6 +150,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker8:
     build: .
@@ -122,6 +167,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker9:
     build: .
@@ -134,6 +184,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker10:
     build: .
@@ -146,6 +201,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker11:
     build: .
@@ -158,6 +218,11 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
 
   worker12:
     build: .
@@ -170,6 +235,47 @@ services:
         limits:
           cpus: '0.25'
           memory: '256M'
+    depends_on:
+      redis:
+        condition: service_healthy
+      opensearch:
+        condition: service_healthy
+
+  opensearch:
+    image: opensearchproject/opensearch:2.3.0
+    container_name: opensearch
+    environment:
+      - discovery.type=single-node
+      - plugins.security.disabled=true
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    deploy:
+      resources:
+        limits:
+          cpus: '2.00'
+          memory: '4G'
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health | grep '\"status\":\"green\"' || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:2.3.0
+    container_name: opensearch-dashboards
+    environment:
+      - OPENSEARCH_HOSTS=http://opensearch:9200
+    ports:
+      - "5601:5601"
+    deploy:
+      resources:
+        limits:
+          cpus: '1.00'
+          memory: '2G'
+    depends_on:
+      opensearch:
+        condition: service_healthy
 
 volumes:
   redis-data:
