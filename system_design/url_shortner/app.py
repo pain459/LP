@@ -47,7 +47,8 @@ def redirect_to_url(short_code):
     Url = Query()
     result = db.search(Url.short_code == short_code)
     if result:
-        db.update({'hits': result[0]['hits'] + 1}, Url.short_code == short_code)
+        new_hits = result[0]['hits'] + 1
+        db.update({'hits': new_hits}, Url.short_code == short_code)
         return redirect(result[0]['original_url'])
     return 'URL not found', 404
 
