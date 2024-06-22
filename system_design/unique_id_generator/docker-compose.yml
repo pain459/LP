@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+  node1:
+    build: .
+    container_name: node1
+    command: ["python", "snowflake_generator.py", "1"]
+
+  node2:
+    build: .
+    container_name: node2
+    command: ["python", "snowflake_generator.py", "2"]
+
+  node3:
+    build: .
+    container_name: node3
+    command: ["python", "snowflake_generator.py", "3"]
+
+  node4:
+    build: .
+    container_name: node4
+    command: ["python", "snowflake_generator.py", "4"]
+
+  node5:
+    build: .
+    container_name: node5
+    command: ["python", "snowflake_generator.py", "5"]
+
+  node6:
+    build: .
+    container_name: node6
+    command: ["python", "snowflake_generator.py", "6"]
+
+  node7:
+    build: .
+    container_name: node7
+    command: ["python", "snowflake_generator.py", "7"]
+
+  node8:
+    build: .
+    container_name: node8
+    command: ["python", "snowflake_generator.py", "8"]
+
+  node9:
+    build: .
+    container_name: node9
+    command: ["python", "snowflake_generator.py", "9"]
+
+  node10:
+    build: .
+    container_name: node10
+    command: ["python", "snowflake_generator.py", "10"]
+
+  node11:
+    build: .
+    container_name: node11
+    command: ["python", "snowflake_generator.py", "11"]
+
+  node12:
+    build: .
+    container_name: node12
+    command: ["python", "snowflake_generator.py", "12"]
