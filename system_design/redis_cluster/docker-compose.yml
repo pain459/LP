@@ -3,29 +3,32 @@ services:
   redis-master:
     image: redis:6.2
     container_name: redis-master
-    command: ["redis-server", "--appendonly", "yes", "--requirepass", "your_password"]
+    command: ["redis-server", "--appendonly", "yes", "--requirepass", "your_password", "--logfile", "/var/log/redis/redis-master.log"]
     ports:
       - "6379:6379"
     volumes:
       - redis-master-data:/data
+      - ./logs/redis-master:/var/log/redis
 
   redis-slave-1:
     image: redis:6.2
     container_name: redis-slave-1
-    command: ["redis-server", "--slaveof", "redis-master", "6379", "--appendonly", "yes", "--requirepass", "your_password"]
+    command: ["redis-server", "--slaveof", "redis-master", "6379", "--appendonly", "yes", "--requirepass", "your_password", "--logfile", "/var/log/redis/redis-slave-1.log"]
     ports:
       - "6380:6379"
     volumes:
       - redis-slave-1-data:/data
+      - ./logs/redis-slave-1:/var/log/redis
 
   redis-slave-2:
     image: redis:6.2
     container_name: redis-slave-2
-    command: ["redis-server", "--slaveof", "redis-master", "6379", "--appendonly", "yes", "--requirepass", "your_password"]
+    command: ["redis-server", "--slaveof", "redis-master", "6379", "--appendonly", "yes", "--requirepass", "your_password", "--logfile", "/var/log/redis/redis-slave-2.log"]
     ports:
       - "6381:6379"
     volumes:
       - redis-slave-2-data:/data
+      - ./logs/redis-slave-2:/var/log/redis
 
   sentinel:
     image: redis:6.2
@@ -37,13 +40,12 @@ services:
              && echo "sentinel parallel-syncs mymaster 1" >> /redis/sentinel.conf
              && echo "sentinel failover-timeout mymaster 10000" >> /redis/sentinel.conf
              && echo "sentinel auth-pass mymaster your_password" >> /redis/sentinel.conf
+             && echo "logfile /var/log/redis/redis-sentinel.log" >> /redis/sentinel.conf
              && redis-sentinel /redis/sentinel.conf'
     ports:
       - "26379:26379"
-    depends_on:
-      - redis-master
-      - redis-slave-1
-      - redis-slave-2
+    volumes:
+      - ./logs/redis-sentinel:/var/log/redis
 
 volumes:
   redis-master-data:
