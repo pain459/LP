@@ -25,21 +25,24 @@ class URLShortenerTestCase(unittest.TestCase):
         url = URL.query.filter_by(original_url='https://example.com').first()
         self.assertIsNotNone(url)
         self.assertEqual(url.short_name, 'example')
+        self.assertEqual(url.hit_count, 0)
 
     def test_retrieve_url_by_hash(self):
         url_hash = 'testhash'
-        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/testhash', url_hash=url_hash)
+        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/s/testhash', url_hash=url_hash)
         with app.app_context():
             db.session.add(url)
             db.session.commit()
 
-        response = self.app.get(f'/{url_hash}')
+        response = self.app.get(f'/s/{url_hash}')
         self.assertEqual(response.status_code, 302)
         self.assertIn('https://example.com', response.location)
+        updated_url = URL.query.filter_by(url_hash=url_hash).first()
+        self.assertEqual(updated_url.hit_count, 1)
 
     def test_retrieve_url_by_short_name(self):
         short_name = 'example'
-        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/testhash', url_hash='testhash', short_name=short_name)
+        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/s/testhash', url_hash='testhash', short_name=short_name)
         with app.app_context():
             db.session.add(url)
             db.session.commit()
@@ -47,9 +50,11 @@ class URLShortenerTestCase(unittest.TestCase):
         response = self.app.get(f'/s/{short_name}')
         self.assertEqual(response.status_code, 302)
         self.assertIn('https://example.com', response.location)
+        updated_url = URL.query.filter_by(short_name=short_name).first()
+        self.assertEqual(updated_url.hit_count, 1)
 
     def test_update_url(self):
-        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/testhash', url_hash='testhash')
+        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/s/testhash', url_hash='testhash')
         with app.app_context():
             db.session.add(url)
             db.session.commit()
@@ -64,7 +69,7 @@ class URLShortenerTestCase(unittest.TestCase):
         self.assertEqual(updated_url.short_name, 'newexample')
 
     def test_delete_url(self):
-        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/testhash', url_hash='testhash')
+        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/s/testhash', url_hash='testhash')
         with app.app_context():
             db.session.add(url)
             db.session.commit()
