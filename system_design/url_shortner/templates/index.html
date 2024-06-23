@@ -9,6 +9,7 @@
     <h1>URL Shortener</h1>
     <form method="POST" action="/">
         <input type="text" name="original_url" placeholder="Enter URL to shorten" required>
+        <input type="text" name="short_name" placeholder="Enter Short Name (optional)">
         <button type="submit">Shorten</button>
     </form>
     <h2>Shortened URLs</h2>
@@ -16,6 +17,7 @@
         <tr>
             <th>Original URL</th>
             <th>Shortened URL</th>
+            <th>Short Name</th>
             <th>Actions</th>
         </tr>
         {% for url in urls %}
@@ -23,11 +25,19 @@
             <td>{{ url.original_url }}</td>
             <td><a href="{{ url.shortened_url }}">{{ url.shortened_url }}</a></td>
             <td>
+                {% if url.short_name %}
+                <a href="{{ url_for('redirect_to_short_name', short_name=url.short_name) }}">{{ url.short_name }}</a>
+                {% else %}
+                N/A
+                {% endif %}
+            </td>
+            <td>
                 <form method="POST" action="/delete/{{ url.id }}" style="display:inline;">
                     <button type="submit">Delete</button>
                 </form>
                 <form method="POST" action="/update/{{ url.id }}" style="display:inline;">
                     <input type="text" name="new_original_url" placeholder="New URL" required>
+                    <input type="text" name="short_name" placeholder="New Short Name (optional)">
                     <button type="submit">Update</button>
                 </form>
             </td>

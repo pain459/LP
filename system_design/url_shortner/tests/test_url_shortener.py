@@ -7,6 +7,7 @@ class URLShortenerTestCase(unittest.TestCase):
     def setUp(self):
         self.app = app.test_client()
         self.app.testing = True
+
         with app.app_context():
             db.create_all()
 
@@ -16,34 +17,62 @@ class URLShortenerTestCase(unittest.TestCase):
             db.drop_all()
 
     def test_shorten_url(self):
-        response = self.app.post('/shorten', json={'original_url': 'http://example.com'})
-        data = response.get_json()
-        self.assertEqual(response.status_code, 201)
-        self.assertIn('shortened_url', data)
+        response = self.app.post('/', data=dict(
+            original_url='https://example.com',
+            short_name='example'
+        ))
+        self.assertEqual(response.status_code, 302)
+        url = URL.query.filter_by(original_url='https://example.com').first()
+        self.assertIsNotNone(url)
+        self.assertEqual(url.short_name, 'example')
 
-    def test_retrieve_url(self):
-        response = self.app.post('/shorten', json={'original_url': 'http://example.com'})
-        data = response.get_json()
-        url_hash = data['shortened_url'].split('/')[-1]  # Extract the hash from the shortened URL
+    def test_retrieve_url_by_hash(self):
+        url_hash = 'testhash'
+        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/testhash', url_hash=url_hash)
+        with app.app_context():
+            db.session.add(url)
+            db.session.commit()
 
         response = self.app.get(f'/{url_hash}')
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('original_url', data)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('https://example.com', response.location)
+
+    def test_retrieve_url_by_short_name(self):
+        short_name = 'example'
+        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/testhash', url_hash='testhash', short_name=short_name)
+        with app.app_context():
+            db.session.add(url)
+            db.session.commit()
+
+        response = self.app.get(f'/s/{short_name}')
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('https://example.com', response.location)
 
     def test_update_url(self):
-        self.app.post('/shorten', json={'original_url': 'http://example.com'})
-        response = self.app.put('/update', json={'original_url': 'http://example.com', 'new_original_url': 'http://newexample.com'})
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('shortened_url', data)
+        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/testhash', url_hash='testhash')
+        with app.app_context():
+            db.session.add(url)
+            db.session.commit()
+
+        response = self.app.post(f'/update/{url.id}', data=dict(
+            new_original_url='https://newexample.com',
+            short_name='newexample'
+        ))
+        self.assertEqual(response.status_code, 302)
+        updated_url = URL.query.get(url.id)
+        self.assertEqual(updated_url.original_url, 'https://newexample.com')
+        self.assertEqual(updated_url.short_name, 'newexample')
 
     def test_delete_url(self):
-        self.app.post('/shorten', json={'original_url': 'http://example.com'})
-        response = self.app.delete('/delete', json={'original_url': 'http://example.com'})
-        data = response.get_json()
-        self.assertEqual(response.status_code, 200)
-        self.assertIn('message', data)
+        url = URL(original_url='https://example.com', shortened_url='http://127.0.0.1:5000/testhash', url_hash='testhash')
+        with app.app_context():
+            db.session.add(url)
+            db.session.commit()
+
+        response = self.app.post(f'/delete/{url.id}')
+        self.assertEqual(response.status_code, 302)
+        deleted_url = URL.query.get(url.id)
+        self.assertIsNone(deleted_url)
 
 if __name__ == '__main__':
     unittest.main()
