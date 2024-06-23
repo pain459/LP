@@ -33,13 +33,16 @@ def retrieve_url(url_hash):
         return jsonify({'original_url': url.original_url}), 200
     return jsonify({'message': 'URL not found'}), 404
 
-@app.route('/update/<url_hash>', methods=['PUT'])
-def update_url(url_hash):
+@app.route('/update', methods=['PUT'])
+def update_url():
+    original_url = request.json.get('original_url')
+    new_original_url = request.json.get('new_original_url')
+    
+    url_hash = generate_hash(original_url)
     url = URL.query.filter_by(url_hash=url_hash).first()
     if not url:
         return jsonify({'message': 'URL not found'}), 404
 
-    new_original_url = request.json.get('original_url')
     new_hash = generate_hash(new_original_url)
     new_shortened_url = f"http://short.url/{new_hash}"
 
@@ -55,8 +58,11 @@ def update_url(url_hash):
         'shortened_url': url.shortened_url
     }), 200
 
-@app.route('/delete/<url_hash>', methods=['DELETE'])
-def delete_url(url_hash):
+@app.route('/delete', methods=['DELETE'])
+def delete_url():
+    original_url = request.json.get('original_url')
+    url_hash = generate_hash(original_url)
+    
     url = URL.query.filter_by(url_hash=url_hash).first()
     if not url:
         return jsonify({'message': 'URL not found'}), 404

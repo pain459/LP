@@ -1,0 +1,63 @@
+# Test cases
+
+$ python -m unittest discover -s tests
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.101s
+
+OK
+
+---
+
+Create:
+
+curl -X POST http://127.0.0.1:5000/shorten -H "Content-Type: application/json" -d '{"original_url": "https://google.com"}'
+
+Response:
+
+{
+  "original_url": "https://google.com",
+  "shortened_url": "http://short.url/99999ebcfd"
+}
+
+
+---
+
+Retrieve:
+
+curl -X GET http://127.0.0.1:5000/99999ebcfd
+
+Response:
+
+{
+  "original_url": "https://google.com"
+}
+
+---
+
+Update:
+
+curl -X PUT http://127.0.0.1:5000/update -H "Content-Type: application/json" -d '{"original_url": "https://google.com", "new_original_url": "https://google.in"}'
+
+Response:
+
+{
+  "message": "URL updated successfully",
+  "original_url": "https://google.in",
+  "shortened_url": "http://short.url/d2d832887f"
+}
+
+
+
+---
+
+Delete:
+
+curl -X DELETE http://127.0.0.1:5000/delete -H "Content-Type: application/json" -d '{"original_url": "https://google.in"}'
+
+Response:
+
+{
+    "message": "URL deleted successfully"
+}
+
