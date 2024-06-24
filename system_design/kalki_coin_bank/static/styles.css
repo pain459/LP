@@ -48,3 +48,8 @@ a {
     display: block;
     margin-top: 20px;
 }
+
+ul {
+    color: red;
+    list-style-type: none;
+}

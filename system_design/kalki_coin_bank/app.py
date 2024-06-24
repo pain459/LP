@@ -1,9 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
 import hashlib
+from datetime import timedelta
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField
+from wtforms.validators import DataRequired, EqualTo
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=15)
+app.config['WTF_CSRF_SECRET_KEY'] = 'anothersecretkey'
+csrf = CSRFProtect(app)
+
+def hash_password(password):
+    return hashlib.sha256(password.encode()).hexdigest()
 
 # Initialize the database
 def init_db():
@@ -36,37 +47,52 @@ def init_users():
     if count == 0:
         for i in range(1, 1001):
             user_id = f"user{i:04}"
-            password = f"user{i:04}password"
+            password = hash_password(f"user{i:04}password")
             address = hashlib.sha256(user_id.encode()).hexdigest()
             cursor.execute('INSERT INTO users (user_id, password, balance, address) VALUES (?, ?, ?, ?)',
                            (user_id, password, 0.0, address))
         conn.commit()
     conn.close()
 
-@app.route('/')
+class LoginForm(FlaskForm):
+    user_id = StringField('User ID', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    submit = SubmitField('Login')
+
+class ChangePasswordForm(FlaskForm):
+    old_password = PasswordField('Old Password', validators=[DataRequired()])
+    new_password = PasswordField('New Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('new_password')])
+    submit = SubmitField('Change Password')
+
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        password = form.password.data
+        hashed_password = hash_password(password)
 
-@app.route('/login', methods=['POST'])
-def login():
-    user_id = request.form['user_id']
-    password = request.form['password']
+        if user_id == 'admin' and password == 'admin-0000-password':
+            session['user_id'] = user_id
+            session.permanent = True
+            return redirect(url_for('admin'))
+        
+        conn = sqlite3.connect('kalki_coin.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM users WHERE user_id = ? AND password = ?', (user_id, hashed_password))
+        user = cursor.fetchone()
+        conn.close()
+        
+        if user:
+            session['user_id'] = user_id
+            session.permanent = True
+            return redirect(url_for('user_profile', user_id=user_id))
+        else:
+            flash("Invalid credentials")
+            return redirect(url_for('index'))
 
-    if user_id == 'admin' and password == 'admin-0000-password':
-        session['user_id'] = user_id
-        return redirect(url_for('admin'))
-    
-    conn = sqlite3.connect('kalki_coin.db')
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE user_id = ? AND password = ?', (user_id, password))
-    user = cursor.fetchone()
-    conn.close()
-    
-    if user:
-        session['user_id'] = user_id
-        return redirect(url_for('user_profile', user_id=user_id))
-    else:
-        return "Invalid credentials"
+    return render_template('login.html', form=form)
 
 @app.route('/admin')
 def admin():
@@ -114,6 +140,38 @@ def user_profile(user_id):
         return render_template('user_profile.html', user=user)
     else:
         return "User not found"
+
+@app.route('/change_password', methods=['GET', 'POST'])
+def change_password():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        old_password = form.old_password.data
+        new_password = form.new_password.data
+        confirm_password = form.confirm_password.data
+
+        user_id = session['user_id']
+        hashed_old_password = hash_password(old_password)
+        hashed_new_password = hash_password(new_password)
+        
+        conn = sqlite3.connect('kalki_coin.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM users WHERE user_id = ? AND password = ?', (user_id, hashed_old_password))
+        user = cursor.fetchone()
+        
+        if user or (user_id == 'admin' and old_password == 'admin-0000-password'):
+            cursor.execute('UPDATE users SET password = ? WHERE user_id = ?', (hashed_new_password, user_id))
+            conn.commit()
+            flash("Password changed successfully")
+        else:
+            flash("Old password is incorrect")
+        
+        conn.close()
+        return redirect(url_for('change_password'))
+
+    return render_template('change_password.html', form=form)
 
 @app.route('/logout')
 def logout():
