@@ -1,65 +1,73 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin Interface</title>
-    <link rel="stylesheet" type="text/css" href="/static/styles.css">
-</head>
-<body>
-    <h1>Admin Interface</h1>
-    <p>Total KC in Bank: {{ '%.4f' % total_balance }}</p>
-    <h2>Top 10 Users</h2>
-    <table border="1">
-        <tr>
-            <th>User ID</th>
-            <th>Balance</th>
-        </tr>
-        {% for user in top_users %}
-        <tr>
-            <td>{{ user[0] }}</td>
-            <td>{{ '%.4f' % user[1] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+{% extends "layout.html" %}
+{% block title %}Admin Interface{% endblock %}
+{% block header %}Admin Interface{% endblock %}
+{% block content %}
+<p>Total KC in Bank: {{ '%.4f' % total_balance }}</p>
+<h2>Top 10 Users</h2>
+<table border="1">
+    <tr>
+        <th>User ID</th>
+        <th>Balance</th>
+    </tr>
+    {% for user in top_users %}
+    <tr>
+        <td>{{ user[0] }}</td>
+        <td>{{ '%.4f' % user[1] }}</td>
+    </tr>
+    {% endfor %}
+</table>
     
-    <h2>Make a Transaction</h2>
-    <form action="{{ url_for('admin') }}" method="post">
-        {{ transaction_form.hidden_tag() }}
-        <label for="receiver">Receiver ID:</label>
-        {{ transaction_form.receiver }}
-        <label for="amount">Amount:</label>
-        {{ transaction_form.amount }}
-        {{ transaction_form.submit }}
-    </form>
+<h2>Make a Transaction</h2>
+<form action="{{ url_for('admin') }}" method="post">
+    {{ transaction_form.hidden_tag() }}
+    <label for="receiver">Receiver ID:</label>
+    {{ transaction_form.receiver }}
+    <label for="amount">Amount:</label>
+    {{ transaction_form.amount }}
+    {{ transaction_form.submit }}
+</form>
 
-    <h2>Search for a User</h2>
-    <form action="{{ url_for('admin') }}" method="post">
-        {{ search_form.hidden_tag() }}
-        <label for="user_id">User ID:</label>
-        {{ search_form.user_id }}
-        {{ search_form.submit }}
-    </form>
+<h2>Search for a User</h2>
+<form action="{{ url_for('admin') }}" method="post">
+    {{ search_form.hidden_tag() }}
+    <label for="user_id">User ID:</label>
+    {{ search_form.user_id }}
+    {{ search_form.submit }}
+</form>
 
-    <h2>Transaction History</h2>
-    <table border="1">
-        <tr>
-            <th>Sender</th>
-            <th>Receiver</th>
-            <th>Amount</th>
-            <th>Timestamp</th>
-            <th>Transaction Hash</th>
-        </tr>
-        {% for transaction in transactions %}
-        <tr>
-            <td>{{ transaction[0] }}</td>
-            <td>{{ transaction[1] }}</td>
-            <td>{{ '%.4f' % transaction[2] }}</td>
-            <td>{{ transaction[3] }}</td>
-            <td>{{ transaction[4] }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+<h2>Transaction History</h2>
+<table border="1">
+    <tr>
+        <th>Sender</th>
+        <th>Receiver</th>
+        <th>Amount</th>
+        <th>Timestamp</th>
+        <th>Transaction Hash</th>
+    </tr>
+    {% for transaction in transactions %}
+    <tr>
+        <td>{{ transaction[0] }}</td>
+        <td>{{ transaction[1] }}</td>
+        <td>{{ '%.4f' % transaction[2] }}</td>
+        <td>{{ transaction[3] }}</td>
+        <td>{{ transaction[4] }}</td>
+    </tr>
+    {% endfor %}
+</table>
 
-    <a href="{{ url_for('logout') }}">Logout</a>
-</body>
-</html>
+<a href="{{ url_for('logout') }}">Logout</a>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: '{{ messages[0] }}',
+                });
+            });
+        </script>
+    {% endif %}
+{% endwith %}
+{% endblock %}

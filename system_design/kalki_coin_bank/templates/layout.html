@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+</head>
+<body>
+    <header>
+        <h1>{% block header %}{% endblock %}</h1>
+    </header>
+    <div class="session-timer">
+        Session expires in: <span id="timer">15:00</span>
+    </div>
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+    <script>
+        // Countdown Timer Script
+        let timerElement = document.getElementById('timer');
+        let timeLeft = 15 * 60; // 15 minutes in seconds
+
+        function updateTimer() {
+            let minutes = Math.floor(timeLeft / 60);
+            let seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            if (timeLeft > 0) {
+                timeLeft--;
+            } else {
+                clearInterval(timerInterval);
+                alert('Session expired. Please log in again.');
+                window.location.href = "{{ url_for('logout') }}";
+            }
+        }
+
+        let timerInterval = setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
