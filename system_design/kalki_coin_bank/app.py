@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import sqlite3
 import hashlib
-from datetime import timedelta
+from datetime import datetime, timedelta
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, EqualTo
+from wtforms import StringField, PasswordField, SubmitField, DecimalField
+from wtforms.validators import DataRequired, EqualTo, NumberRange
 from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
@@ -15,6 +15,9 @@ csrf = CSRFProtect(app)
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
+
+def hash_transaction(data):
+    return hashlib.sha256(data.encode()).hexdigest()
 
 # Initialize the database
 def init_db():
@@ -32,6 +35,16 @@ def init_db():
         CREATE TABLE IF NOT EXISTS bank (
             id INTEGER PRIMARY KEY,
             total_balance REAL
+        )
+    ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS transactions (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            sender TEXT,
+            receiver TEXT,
+            amount REAL,
+            timestamp TEXT,
+            transaction_hash TEXT
         )
     ''')
     cursor.execute('INSERT OR IGNORE INTO bank (id, total_balance) VALUES (1, 1000)')
@@ -64,6 +77,11 @@ class ChangePasswordForm(FlaskForm):
     new_password = PasswordField('New Password', validators=[DataRequired()])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField('Change Password')
+
+class TransactionForm(FlaskForm):
+    receiver = StringField('Receiver ID', validators=[DataRequired()])
+    amount = DecimalField('Amount', validators=[DataRequired(), NumberRange(min=0.0001)], places=4)
+    submit = SubmitField('Send')
 
 class SearchForm(FlaskForm):
     user_id = StringField('User ID', validators=[DataRequired()])
@@ -103,32 +121,120 @@ def admin():
     if 'user_id' not in session or session['user_id'] != 'admin':
         return redirect(url_for('index'))
 
-    form = SearchForm()
-    if form.validate_on_submit():
-        user_id = form.user_id.data
+    search_form = SearchForm()
+    transaction_form = TransactionForm()
+
+    if search_form.validate_on_submit():
+        user_id = search_form.user_id.data
         return redirect(url_for('user_profile', user_id=user_id))
     
+    if transaction_form.validate_on_submit():
+        sender = 'admin'
+        receiver = transaction_form.receiver.data
+        amount = float(transaction_form.amount.data)
+
+        conn = sqlite3.connect('kalki_coin.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT total_balance FROM bank WHERE id = 1')
+        bank_balance = cursor.fetchone()[0]
+
+        cursor.execute('SELECT balance, address FROM users WHERE user_id = ?', (receiver,))
+        receiver_data = cursor.fetchone()
+        if receiver_data:
+            receiver_balance, receiver_address = receiver_data
+
+            if bank_balance >= amount:
+                new_bank_balance = bank_balance - amount
+                new_receiver_balance = receiver_balance + amount
+
+                cursor.execute('UPDATE bank SET total_balance = ? WHERE id = 1', (new_bank_balance,))
+                cursor.execute('UPDATE users SET balance = ? WHERE user_id = ?', (new_receiver_balance, receiver))
+
+                timestamp = datetime.now().isoformat()
+                transaction_data = f"{sender}{receiver_address}{amount}{timestamp}"
+                transaction_hash = hash_transaction(transaction_data)
+                cursor.execute('INSERT INTO transactions (sender, receiver, amount, timestamp, transaction_hash) VALUES (?, ?, ?, ?, ?)',
+                               ('bank', receiver_address, amount, timestamp, transaction_hash))
+                conn.commit()
+                flash("Transaction successful")
+            else:
+                flash("Insufficient bank balance")
+        else:
+            flash("Receiver not found")
+
+        conn.close()
+        return redirect(url_for('admin'))
+
     conn = sqlite3.connect('kalki_coin.db')
     cursor = conn.cursor()
     cursor.execute('SELECT total_balance FROM bank WHERE id = 1')
     total_balance = cursor.fetchone()[0]
-    cursor.execute('SELECT * FROM users ORDER BY balance DESC LIMIT 10')
+    cursor.execute('SELECT user_id, balance FROM users ORDER BY balance DESC LIMIT 10')
     top_users = cursor.fetchall()
+    cursor.execute('SELECT sender, receiver, amount, timestamp, transaction_hash FROM transactions ORDER BY timestamp DESC LIMIT 10')
+    transactions = cursor.fetchall()
     conn.close()
-    return render_template('admin.html', total_balance=total_balance, top_users=top_users, form=form)
+    return render_template('admin.html', total_balance=total_balance, top_users=top_users, transactions=transactions, search_form=search_form, transaction_form=transaction_form)
 
-@app.route('/user/<user_id>')
+@app.route('/user/<user_id>', methods=['GET', 'POST'])
 def user_profile(user_id):
     if 'user_id' not in session or (session['user_id'] != user_id and session['user_id'] != 'admin'):
         return redirect(url_for('index'))
 
+    form = TransactionForm()
+    if form.validate_on_submit():
+        sender = session['user_id']
+        receiver = form.receiver.data
+        amount = float(form.amount.data)
+
+        conn = sqlite3.connect('kalki_coin.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT balance, address FROM users WHERE user_id = ?', (sender,))
+        sender_data = cursor.fetchone()
+
+        if sender_data:
+            sender_balance, sender_address = sender_data
+            if sender_balance >= amount:
+                cursor.execute('SELECT balance, address FROM users WHERE user_id = ?', (receiver,))
+                receiver_data = cursor.fetchone()
+                if receiver_data:
+                    receiver_balance, receiver_address = receiver_data
+                    new_sender_balance = sender_balance - amount
+                    new_receiver_balance = receiver_balance + amount
+
+                    cursor.execute('UPDATE users SET balance = ? WHERE user_id = ?', (new_sender_balance, sender))
+                    cursor.execute('UPDATE users SET balance = ? WHERE user_id = ?', (new_receiver_balance, receiver))
+
+                    timestamp = datetime.now().isoformat()
+                    transaction_data = f"{sender_address}{receiver_address}{amount}{timestamp}"
+                    transaction_hash = hash_transaction(transaction_data)
+                    cursor.execute('INSERT INTO transactions (sender, receiver, amount, timestamp, transaction_hash) VALUES (?, ?, ?, ?, ?)',
+                                   (sender_address, receiver_address, amount, timestamp, transaction_hash))
+                    conn.commit()
+                    flash("Transaction successful")
+                else:
+                    flash("Receiver not found")
+            else:
+                flash("Insufficient balance")
+        else:
+            flash("Sender not found")
+
+        conn.close()
+        return redirect(url_for('user_profile', user_id=user_id))
+
     conn = sqlite3.connect('kalki_coin.db')
     cursor = conn.cursor()
-    cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id,))
+    cursor.execute('SELECT user_id, balance, address FROM users WHERE user_id = ?', (user_id,))
     user = cursor.fetchone()
-    conn.close()
     if user:
-        return render_template('user_profile.html', user=user)
+        cursor.execute('SELECT sender, receiver, amount, timestamp, transaction_hash FROM transactions WHERE sender = ? OR receiver = ? ORDER BY timestamp DESC', (user[2], user[2]))
+        transactions = cursor.fetchall()
+    else:
+        transactions = []
+    conn.close()
+
+    if user:
+        return render_template('user_profile.html', user=user, form=form, transactions=transactions)
     else:
         return "User not found"
 

@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Admin Interface</h1>
-    <p>Total KC in Bank: {{ total_balance }}</p>
+    <p>Total KC in Bank: {{ '%.4f' % total_balance }}</p>
     <h2>Top 10 Users</h2>
     <table border="1">
         <tr>
@@ -17,17 +17,49 @@
         {% for user in top_users %}
         <tr>
             <td>{{ user[0] }}</td>
-            <td>{{ user[2] }}</td>
+            <td>{{ '%.4f' % user[1] }}</td>
         </tr>
         {% endfor %}
     </table>
+    
+    <h2>Make a Transaction</h2>
+    <form action="{{ url_for('admin') }}" method="post">
+        {{ transaction_form.hidden_tag() }}
+        <label for="receiver">Receiver ID:</label>
+        {{ transaction_form.receiver }}
+        <label for="amount">Amount:</label>
+        {{ transaction_form.amount }}
+        {{ transaction_form.submit }}
+    </form>
+
     <h2>Search for a User</h2>
     <form action="{{ url_for('admin') }}" method="post">
-        {{ form.hidden_tag() }}
+        {{ search_form.hidden_tag() }}
         <label for="user_id">User ID:</label>
-        {{ form.user_id }}
-        {{ form.submit }}
+        {{ search_form.user_id }}
+        {{ search_form.submit }}
     </form>
+
+    <h2>Transaction History</h2>
+    <table border="1">
+        <tr>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Amount</th>
+            <th>Timestamp</th>
+            <th>Transaction Hash</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction[0] }}</td>
+            <td>{{ transaction[1] }}</td>
+            <td>{{ '%.4f' % transaction[2] }}</td>
+            <td>{{ transaction[3] }}</td>
+            <td>{{ transaction[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
     <a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>

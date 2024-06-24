@@ -8,8 +8,39 @@
 <body>
     <h1>User Profile</h1>
     <p>User ID: {{ user[0] }}</p>
-    <p>Balance: {{ user[2] }}</p>
-    <p>Crypto Address: {{ user[3] }}</p>
+    <p>Balance: {{ '%.4f' % user[1] }}</p>
+    <p>Crypto Address: {{ user[2] }}</p>
+
+    <h2>Send KC</h2>
+    <form action="{{ url_for('user_profile', user_id=user[0]) }}" method="post">
+        {{ form.hidden_tag() }}
+        <label for="receiver">Receiver ID:</label>
+        {{ form.receiver }}
+        <label for="amount">Amount:</label>
+        {{ form.amount }}
+        {{ form.submit }}
+    </form>
+
+    <h2>Transaction History</h2>
+    <table border="1">
+        <tr>
+            <th>Sender</th>
+            <th>Receiver</th>
+            <th>Amount</th>
+            <th>Timestamp</th>
+            <th>Transaction Hash</th>
+        </tr>
+        {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction[0] }}</td>
+            <td>{{ transaction[1] }}</td>
+            <td>{{ '%.4f' % transaction[2] }}</td>
+            <td>{{ transaction[3] }}</td>
+            <td>{{ transaction[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
     <a href="{{ url_for('logout') }}">Logout</a>
 </body>
 </html>
