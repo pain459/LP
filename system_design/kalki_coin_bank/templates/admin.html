@@ -8,18 +8,24 @@
 <body>
     <h1>Admin Interface</h1>
     <p>Total KC in Bank: {{ total_balance }}</p>
-    <h2>Users</h2>
+    <h2>Top 10 Users</h2>
     <table border="1">
         <tr>
             <th>User ID</th>
             <th>Balance</th>
         </tr>
-        {% for user in users %}
+        {% for user in top_users %}
         <tr>
             <td>{{ user[0] }}</td>
             <td>{{ user[2] }}</td>
         </tr>
         {% endfor %}
     </table>
+    <h2>Search for a User</h2>
+    <form action="{{ url_for('search') }}" method="post">
+        <label for="user_id">User ID:</label>
+        <input type="text" id="user_id" name="user_id" required>
+        <button type="submit">Search</button>
+    </form>
 </body>
 </html>
