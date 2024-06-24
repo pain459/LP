@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
 import hashlib
 
 app = Flask(__name__)
+app.secret_key = 'supersecretkey'
 
 # Initialize the database
 def init_db():
@@ -35,18 +36,43 @@ def init_users():
     if count == 0:
         for i in range(1, 1001):
             user_id = f"user{i:04}"
+            password = f"user{i:04}password"
             address = hashlib.sha256(user_id.encode()).hexdigest()
             cursor.execute('INSERT INTO users (user_id, password, balance, address) VALUES (?, ?, ?, ?)',
-                           (user_id, 'password', 0.0, address))
+                           (user_id, password, 0.0, address))
         conn.commit()
     conn.close()
 
 @app.route('/')
 def index():
-    return "Welcome to Kalki Coin Bank"
+    return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+    user_id = request.form['user_id']
+    password = request.form['password']
+
+    if user_id == 'admin' and password == 'admin-0000-password':
+        session['user_id'] = user_id
+        return redirect(url_for('admin'))
+    
+    conn = sqlite3.connect('kalki_coin.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users WHERE user_id = ? AND password = ?', (user_id, password))
+    user = cursor.fetchone()
+    conn.close()
+    
+    if user:
+        session['user_id'] = user_id
+        return redirect(url_for('user_profile', user_id=user_id))
+    else:
+        return "Invalid credentials"
 
 @app.route('/admin')
 def admin():
+    if 'user_id' not in session or session['user_id'] != 'admin':
+        return redirect(url_for('index'))
+
     conn = sqlite3.connect('kalki_coin.db')
     cursor = conn.cursor()
     cursor.execute('SELECT total_balance FROM bank WHERE id = 1')
@@ -58,6 +84,9 @@ def admin():
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
+    if 'user_id' not in session or session['user_id'] != 'admin':
+        return redirect(url_for('index'))
+    
     if request.method == 'POST':
         user_id = request.form['user_id']
         conn = sqlite3.connect('kalki_coin.db')
@@ -73,6 +102,9 @@ def search():
 
 @app.route('/user/<user_id>')
 def user_profile(user_id):
+    if 'user_id' not in session or (session['user_id'] != user_id and session['user_id'] != 'admin'):
+        return redirect(url_for('index'))
+
     conn = sqlite3.connect('kalki_coin.db')
     cursor = conn.cursor()
     cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id,))
@@ -82,6 +114,11 @@ def user_profile(user_id):
         return render_template('user_profile.html', user=user)
     else:
         return "User not found"
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     init_db()
