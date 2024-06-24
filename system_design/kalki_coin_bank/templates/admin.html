@@ -22,10 +22,11 @@
         {% endfor %}
     </table>
     <h2>Search for a User</h2>
-    <form action="{{ url_for('search') }}" method="post">
+    <form action="{{ url_for('admin') }}" method="post">
+        {{ form.hidden_tag() }}
         <label for="user_id">User ID:</label>
-        <input type="text" id="user_id" name="user_id" required>
-        <button type="submit">Search</button>
+        {{ form.user_id }}
+        {{ form.submit }}
     </form>
     <a href="{{ url_for('logout') }}">Logout</a>
 </body>

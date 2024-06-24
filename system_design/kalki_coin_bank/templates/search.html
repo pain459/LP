@@ -8,9 +8,10 @@
 <body>
     <h1>Search for a User</h1>
     <form action="{{ url_for('search') }}" method="post">
+        {{ form.hidden_tag() }}
         <label for="user_id">User ID:</label>
-        <input type="text" id="user_id" name="user_id" required>
-        <button type="submit">Search</button>
+        {{ form.user_id }}
+        {{ form.submit }}
     </form>
 </body>
 </html>

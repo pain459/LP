@@ -65,6 +65,10 @@ class ChangePasswordForm(FlaskForm):
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('new_password')])
     submit = SubmitField('Change Password')
 
+class SearchForm(FlaskForm):
+    user_id = StringField('User ID', validators=[DataRequired()])
+    submit = SubmitField('Search')
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     form = LoginForm()
@@ -94,11 +98,16 @@ def index():
 
     return render_template('login.html', form=form)
 
-@app.route('/admin')
+@app.route('/admin', methods=['GET', 'POST'])
 def admin():
     if 'user_id' not in session or session['user_id'] != 'admin':
         return redirect(url_for('index'))
 
+    form = SearchForm()
+    if form.validate_on_submit():
+        user_id = form.user_id.data
+        return redirect(url_for('user_profile', user_id=user_id))
+    
     conn = sqlite3.connect('kalki_coin.db')
     cursor = conn.cursor()
     cursor.execute('SELECT total_balance FROM bank WHERE id = 1')
@@ -106,25 +115,7 @@ def admin():
     cursor.execute('SELECT * FROM users ORDER BY balance DESC LIMIT 10')
     top_users = cursor.fetchall()
     conn.close()
-    return render_template('admin.html', total_balance=total_balance, top_users=top_users)
-
-@app.route('/search', methods=['GET', 'POST'])
-def search():
-    if 'user_id' not in session or session['user_id'] != 'admin':
-        return redirect(url_for('index'))
-    
-    if request.method == 'POST':
-        user_id = request.form['user_id']
-        conn = sqlite3.connect('kalki_coin.db')
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM users WHERE user_id = ?', (user_id,))
-        user = cursor.fetchone()
-        conn.close()
-        if user:
-            return redirect(url_for('user_profile', user_id=user_id))
-        else:
-            return "User not found"
-    return render_template('search.html')
+    return render_template('admin.html', total_balance=total_balance, top_users=top_users, form=form)
 
 @app.route('/user/<user_id>')
 def user_profile(user_id):
