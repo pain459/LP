@@ -12,7 +12,7 @@ def create_patient():
     db.session.commit()
     return jsonify(new_patient.id), 201
 
-@bp.route('/<int:patient_id>', methods=['GET'])
+@bp.route('/<int:patient_id>/', methods=['GET'])
 def get_patient(patient_id):
     patient = Patient.query.get_or_404(patient_id)
     return jsonify({
@@ -25,7 +25,7 @@ def get_patient(patient_id):
         "registration_date": patient.registration_date.isoformat()
     })
 
-@bp.route('/<int:patient_id>', methods=['PUT'])
+@bp.route('/<int:patient_id>/', methods=['PUT'])
 def update_patient(patient_id):
     data = request.get_json()
     patient = Patient.query.get_or_404(patient_id)
@@ -42,7 +42,7 @@ def update_patient(patient_id):
         "registration_date": patient.registration_date.isoformat()
     })
 
-@bp.route('/<int:patient_id>', methods=['DELETE'])
+@bp.route('/<int:patient_id>/', methods=['DELETE'])
 def delete_patient(patient_id):
     patient = Patient.query.get_or_404(patient_id)
     db.session.delete(patient)

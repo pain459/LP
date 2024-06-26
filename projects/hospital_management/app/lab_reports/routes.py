@@ -12,7 +12,7 @@ def create_lab_report():
     db.session.commit()
     return jsonify(new_lab_report.id), 201
 
-@bp.route('/<int:report_id>', methods=['GET'])
+@bp.route('/<int:report_id>/', methods=['GET'])
 def get_lab_report(report_id):
     lab_report = LabReport.query.get_or_404(report_id)
     return jsonify({
@@ -24,7 +24,7 @@ def get_lab_report(report_id):
         "doctor_id": lab_report.doctor_id
     })
 
-@bp.route('/<int:report_id>', methods=['PUT'])
+@bp.route('/<int:report_id>/', methods=['PUT'])
 def update_lab_report(report_id):
     data = request.get_json()
     lab_report = LabReport.query.get_or_404(report_id)
@@ -40,7 +40,7 @@ def update_lab_report(report_id):
         "doctor_id": lab_report.doctor_id
     })
 
-@bp.route('/<int:report_id>', methods=['DELETE'])
+@bp.route('/<int:report_id>/', methods=['DELETE'])
 def delete_lab_report(report_id):
     lab_report = LabReport.query.get_or_404(report_id)
     db.session.delete(lab_report)

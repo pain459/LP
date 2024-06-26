@@ -1,5 +1,9 @@
 version: '3.8'
 
+networks:
+  hospital_network:
+    driver: bridge
+
 services:
   patient_registration:
     build:
@@ -13,6 +17,13 @@ services:
       - SERVICE_NAME=patient_registration
     depends_on:
       - db
+    networks:
+      - hospital_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
   doc_analysis:
     build:
@@ -26,6 +37,13 @@ services:
       - SERVICE_NAME=doc_analysis
     depends_on:
       - db
+    networks:
+      - hospital_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
   lab_reports:
     build:
@@ -39,6 +57,13 @@ services:
       - SERVICE_NAME=lab_reports
     depends_on:
       - db
+    networks:
+      - hospital_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
   final_bill_discharge:
     build:
@@ -52,6 +77,13 @@ services:
       - SERVICE_NAME=final_bill_discharge
     depends_on:
       - db
+    networks:
+      - hospital_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
   db:
     image: postgres:13
@@ -61,6 +93,13 @@ services:
       POSTGRES_DB: hospital_data
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - hospital_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "200k"
+        max-file: "10"
 
 volumes:
   pgdata:

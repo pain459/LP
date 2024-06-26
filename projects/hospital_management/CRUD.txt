@@ -1,0 +1,34 @@
+# Patient registraton service
+
+CREATE
+$ curl -X POST http://localhost:5001/patients -H "Content-Type: application/json" -d '{
+  "name": "Pain",
+  "age": 30,
+  "gender": "Male",
+  "address": "HYD",
+  "contact": "123-456-7890",
+  "registration_date": "2024-06-26"
+}'
+1
+
+READ
+$ curl -X GET http://localhost:5001/patients/1
+{"address":"HYD","age":30,"contact":"123-456-7890","gender":"Male","id":1,"name":"Pain","registration_date":"2024-06-26T00:00:00"}
+
+UPDATE
+$ curl -X PUT http://localhost:5001/patients/1/ -H "Content-Type: application/json" -d '{
+  "address": "HYD1"
+}'
+{"address":"HYD1","age":30,"contact":"123-456-7890","gender":"Male","id":1,"name":"Pain","registration_date":"2024-06-26T00:00:00"}
+
+DELETE
+$ curl -X DELETE http://localhost:5001/patients/1/
+
+TEST
+$ curl -X GET http://localhost:5001/patients/1
+<!doctype html>
+<html lang=en>
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>
+

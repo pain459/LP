@@ -12,7 +12,7 @@ def create_bill():
     db.session.commit()
     return jsonify(new_bill.id), 201
 
-@bp.route('/<int:bill_id>', methods=['GET'])
+@bp.route('/<int:bill_id>/', methods=['GET'])
 def get_bill(bill_id):
     bill = Bill.query.get_or_404(bill_id)
     return jsonify({
@@ -23,7 +23,7 @@ def get_bill(bill_id):
         "discharge_date": bill.discharge_date.isoformat()
     })
 
-@bp.route('/<int:bill_id>', methods=['PUT'])
+@bp.route('/<int:bill_id>/', methods=['PUT'])
 def update_bill(bill_id):
     data = request.get_json()
     bill = Bill.query.get_or_404(bill_id)
@@ -38,7 +38,7 @@ def update_bill(bill_id):
         "discharge_date": bill.discharge_date.isoformat()
     })
 
-@bp.route('/<int:bill_id>', methods=['DELETE'])
+@bp.route('/<int:bill_id>/', methods=['DELETE'])
 def delete_bill(bill_id):
     bill = Bill.query.get_or_404(bill_id)
     db.session.delete(bill)

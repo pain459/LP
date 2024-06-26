@@ -12,7 +12,7 @@ def create_analysis():
     db.session.commit()
     return jsonify(new_analysis.id), 201
 
-@bp.route('/<int:analysis_id>', methods=['GET'])
+@bp.route('/<int:analysis_id>/', methods=['GET'])
 def get_analysis(analysis_id):
     analysis = Analysis.query.get_or_404(analysis_id)
     return jsonify({
@@ -25,7 +25,7 @@ def get_analysis(analysis_id):
         "analysis_date": analysis.analysis_date.isoformat()
     })
 
-@bp.route('/<int:analysis_id>', methods=['PUT'])
+@bp.route('/<int:analysis_id>/', methods=['PUT'])
 def update_analysis(analysis_id):
     data = request.get_json()
     analysis = Analysis.query.get_or_404(analysis_id)
@@ -42,7 +42,7 @@ def update_analysis(analysis_id):
         "analysis_date": analysis.analysis_date.isoformat()
     })
 
-@bp.route('/<int:analysis_id>', methods=['DELETE'])
+@bp.route('/<int:analysis_id>/', methods=['DELETE'])
 def delete_analysis(analysis_id):
     analysis = Analysis.query.get_or_404(analysis_id)
     db.session.delete(analysis)
