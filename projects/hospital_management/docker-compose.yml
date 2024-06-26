@@ -19,11 +19,6 @@ services:
       - db
     networks:
       - hospital_network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
 
   doc_analysis:
     build:
@@ -39,11 +34,6 @@ services:
       - db
     networks:
       - hospital_network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
 
   lab_reports:
     build:
@@ -59,11 +49,6 @@ services:
       - db
     networks:
       - hospital_network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
 
   final_bill_discharge:
     build:
@@ -79,11 +64,6 @@ services:
       - db
     networks:
       - hospital_network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
 
   db:
     image: postgres:13
@@ -95,11 +75,6 @@ services:
       - pgdata:/var/lib/postgresql/data
     networks:
       - hospital_network
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "200k"
-        max-file: "10"
 
 volumes:
   pgdata:

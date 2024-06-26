@@ -17,6 +17,11 @@ COPY . .
 ENV FLASK_APP=run.py
 ENV FLASK_ENV=development
 
+# Initialize the database
+RUN flask db init || true
+RUN flask db migrate -m "Initial migration" || true
+RUN flask db upgrade || true
+
 # Expose the port the app runs on
 EXPOSE 5000
 

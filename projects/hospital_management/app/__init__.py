@@ -1,6 +1,7 @@
 import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import inspect
 from config import Config
 
 db = SQLAlchemy()
@@ -31,6 +32,13 @@ def create_app(config_class=Config):
         app.register_blueprint(final_bill_discharge_bp, url_prefix='/bills')
 
     with app.app_context():
-        db.create_all()
+        inspector = inspect(db.engine)
+        if not inspector.get_table_names():
+            print("Database is empty, creating tables and running migrations.")
+            db.create_all()
+            # Run migrations
+            os.system("flask db upgrade")
+        else:
+            print("Database already initialized, skipping table creation and migrations.")
 
     return app
