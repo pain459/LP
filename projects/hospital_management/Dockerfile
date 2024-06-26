@@ -4,6 +4,9 @@ FROM python:3.9-slim
 # Set the working directory
 WORKDIR /app
 
+# Install netcat-openbsd
+RUN apt-get update && apt-get install -y netcat-openbsd
+
 # Copy the requirements file into the container
 COPY requirements.txt .
 
@@ -16,14 +19,10 @@ COPY . .
 # Set environment variables
 ENV FLASK_APP=run.py
 ENV FLASK_ENV=development
-
-# Initialize the database
-RUN flask db init || true
-RUN flask db migrate -m "Initial migration" || true
-RUN flask db upgrade || true
+ENV PYTHONPATH=/app
 
 # Expose the port the app runs on
 EXPOSE 5000
 
-# Run the application
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Run the entrypoint script
+ENTRYPOINT ["./entrypoint.sh"]

@@ -9,12 +9,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: flask run --host=0.0.0.0 --port=5001
     ports:
       - "5001:5001"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/hospital_data
       - SERVICE_NAME=patient_registration
+      - FLASK_RUN_PORT=5001
     depends_on:
       - db
     networks:
@@ -24,12 +24,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: flask run --host=0.0.0.0 --port=5002
     ports:
       - "5002:5002"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/hospital_data
       - SERVICE_NAME=doc_analysis
+      - FLASK_RUN_PORT=5002
     depends_on:
       - db
     networks:
@@ -39,12 +39,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: flask run --host=0.0.0.0 --port=5003
     ports:
       - "5003:5003"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/hospital_data
       - SERVICE_NAME=lab_reports
+      - FLASK_RUN_PORT=5003
     depends_on:
       - db
     networks:
@@ -54,12 +54,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: flask run --host=0.0.0.0 --port=5004
     ports:
       - "5004:5004"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/hospital_data
       - SERVICE_NAME=final_bill_discharge
+      - FLASK_RUN_PORT=5004
     depends_on:
       - db
     networks:
