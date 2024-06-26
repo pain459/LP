@@ -58,3 +58,11 @@ Technology Stack
     Database: PostgreSQL
     ORM: SQLAlchemy (if using Flask), Django ORM (if using Django)
     API Documentation: Swagger/OpenAPI
+
+
+
+
+Patient Registration: http://localhost:5001
+Doc Analysis and Tests: http://localhost:5002
+Lab Reports: http://localhost:5003
+Final Bill and Discharge: http://localhost:5004

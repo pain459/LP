@@ -1,12 +1,55 @@
 version: '3.8'
 
 services:
-  web:
-    build: .
+  patient_registration:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: flask run --host=0.0.0.0 --port=5001
     ports:
-      - "5000:5000"
+      - "5001:5001"
     environment:
       - DATABASE_URL=postgresql://postgres:postgres@db:5432/hospital_data
+      - SERVICE_NAME=patient_registration
+    depends_on:
+      - db
+
+  doc_analysis:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: flask run --host=0.0.0.0 --port=5002
+    ports:
+      - "5002:5002"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/hospital_data
+      - SERVICE_NAME=doc_analysis
+    depends_on:
+      - db
+
+  lab_reports:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: flask run --host=0.0.0.0 --port=5003
+    ports:
+      - "5003:5003"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/hospital_data
+      - SERVICE_NAME=lab_reports
+    depends_on:
+      - db
+
+  final_bill_discharge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: flask run --host=0.0.0.0 --port=5004
+    ports:
+      - "5004:5004"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/hospital_data
+      - SERVICE_NAME=final_bill_discharge
     depends_on:
       - db
 

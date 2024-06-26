@@ -15,7 +15,13 @@ def create_bill():
 @bp.route('/<int:bill_id>', methods=['GET'])
 def get_bill(bill_id):
     bill = Bill.query.get_or_404(bill_id)
-    return jsonify(bill)
+    return jsonify({
+        "id": bill.id,
+        "patient_id": bill.patient_id,
+        "total_amount": bill.total_amount,
+        "payment_status": bill.payment_status,
+        "discharge_date": bill.discharge_date.isoformat()
+    })
 
 @bp.route('/<int:bill_id>', methods=['PUT'])
 def update_bill(bill_id):
@@ -24,7 +30,13 @@ def update_bill(bill_id):
     for key, value in data.items():
         setattr(bill, key, value)
     db.session.commit()
-    return jsonify(bill)
+    return jsonify({
+        "id": bill.id,
+        "patient_id": bill.patient_id,
+        "total_amount": bill.total_amount,
+        "payment_status": bill.payment_status,
+        "discharge_date": bill.discharge_date.isoformat()
+    })
 
 @bp.route('/<int:bill_id>', methods=['DELETE'])
 def delete_bill(bill_id):

@@ -1,0 +1,5 @@
+# Database migrations
+
+docker-compose exec patient_registration flask db init
+docker-compose exec patient_registration flask db migrate -m "Initial migration."
+docker-compose exec patient_registration flask db upgrade

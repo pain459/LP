@@ -15,7 +15,15 @@ def create_patient():
 @bp.route('/<int:patient_id>', methods=['GET'])
 def get_patient(patient_id):
     patient = Patient.query.get_or_404(patient_id)
-    return jsonify(patient)
+    return jsonify({
+        "id": patient.id,
+        "name": patient.name,
+        "age": patient.age,
+        "gender": patient.gender,
+        "address": patient.address,
+        "contact": patient.contact,
+        "registration_date": patient.registration_date.isoformat()
+    })
 
 @bp.route('/<int:patient_id>', methods=['PUT'])
 def update_patient(patient_id):
@@ -24,7 +32,15 @@ def update_patient(patient_id):
     for key, value in data.items():
         setattr(patient, key, value)
     db.session.commit()
-    return jsonify(patient)
+    return jsonify({
+        "id": patient.id,
+        "name": patient.name,
+        "age": patient.age,
+        "gender": patient.gender,
+        "address": patient.address,
+        "contact": patient.contact,
+        "registration_date": patient.registration_date.isoformat()
+    })
 
 @bp.route('/<int:patient_id>', methods=['DELETE'])
 def delete_patient(patient_id):

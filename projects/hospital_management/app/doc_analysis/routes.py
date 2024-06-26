@@ -15,7 +15,15 @@ def create_analysis():
 @bp.route('/<int:analysis_id>', methods=['GET'])
 def get_analysis(analysis_id):
     analysis = Analysis.query.get_or_404(analysis_id)
-    return jsonify(analysis)
+    return jsonify({
+        "id": analysis.id,
+        "patient_id": analysis.patient_id,
+        "doctor_id": analysis.doctor_id,
+        "symptoms": analysis.symptoms,
+        "diagnosis": analysis.diagnosis,
+        "tests_prescribed": analysis.tests_prescribed,
+        "analysis_date": analysis.analysis_date.isoformat()
+    })
 
 @bp.route('/<int:analysis_id>', methods=['PUT'])
 def update_analysis(analysis_id):
@@ -24,7 +32,15 @@ def update_analysis(analysis_id):
     for key, value in data.items():
         setattr(analysis, key, value)
     db.session.commit()
-    return jsonify(analysis)
+    return jsonify({
+        "id": analysis.id,
+        "patient_id": analysis.patient_id,
+        "doctor_id": analysis.doctor_id,
+        "symptoms": analysis.symptoms,
+        "diagnosis": analysis.diagnosis,
+        "tests_prescribed": analysis.tests_prescribed,
+        "analysis_date": analysis.analysis_date.isoformat()
+    })
 
 @bp.route('/<int:analysis_id>', methods=['DELETE'])
 def delete_analysis(analysis_id):
