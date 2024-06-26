@@ -1,5 +1,5 @@
-Flask
+flask
+flask_sqlalchemy
+flask_migrate
 psycopg2-binary
-SQLAlchemy
-Flask-Migrate
-    
+requests

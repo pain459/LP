@@ -15,7 +15,7 @@ while True:
         time.sleep(1)
 END
 
-# Initialize the database
+# Initialize the database and create tables if they don't exist
 python app/db_init.py
 
 # Start the Flask application

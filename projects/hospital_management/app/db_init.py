@@ -1,28 +1,26 @@
-import os
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from app import create_app, db
 from sqlalchemy import inspect
-from config import Config
+from app.models import Patient, Analysis, LabReport, Bill
 
-db = SQLAlchemy()
+app = create_app()
+app.app_context().push()
 
-def create_app(config_class=Config):
-    app = Flask(__name__)
-    app.config.from_object(config_class)
-    app.url_map.strict_slashes = False
+# Check and create tables if they don't exist
+inspector = inspect(db.engine)
 
-    db.init_app(app)
+# List of all tables to check and create
+tables = {
+    "patient": Patient,
+    "analysis": Analysis,
+    "lab_report": LabReport,
+    "bill": Bill
+}
 
-    with app.app_context():
-        inspector = inspect(db.engine)
-        if not inspector.get_table_names():
-            print("Database is empty, creating tables and running migrations.")
-            db.create_all()
-            os.system("flask db upgrade")
-        else:
-            print("Database already initialized, skipping table creation and migrations.")
+for table_name, model in tables.items():
+    if not inspector.has_table(table_name):
+        print(f"Table '{table_name}' not found, creating...")
+        model.__table__.create(db.engine)
+    else:
+        print(f"Table '{table_name}' already exists, skipping creation.")
 
-    return app
-
-if __name__ == "__main__":
-    app = create_app()
+print("Database tables checked and created if needed.")

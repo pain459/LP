@@ -1,3 +1,4 @@
+import requests
 from flask import Blueprint, request, jsonify
 from app import db
 from app.models import Patient
@@ -10,37 +11,19 @@ def create_patient():
     new_patient = Patient(**data)
     db.session.add(new_patient)
     db.session.commit()
+    patient_id = new_patient.id
+
+    # Notify other services
+    services = ["http://doc_analysis:5002/sync_patient", 
+                "http://lab_reports:5003/sync_patient", 
+                "http://final_bill_discharge:5004/sync_patient"]
+    for service in services:
+        try:
+            requests.post(service, json={"patient_id": patient_id})
+        except requests.exceptions.RequestException as e:
+            print(f"Error notifying service {service}: {e}")
+
     return jsonify(new_patient.id), 201
-
-@bp.route('/<int:patient_id>/', methods=['GET'])
-def get_patient(patient_id):
-    patient = Patient.query.get_or_404(patient_id)
-    return jsonify({
-        "id": patient.id,
-        "name": patient.name,
-        "age": patient.age,
-        "gender": patient.gender,
-        "address": patient.address,
-        "contact": patient.contact,
-        "registration_date": patient.registration_date.isoformat()
-    })
-
-@bp.route('/<int:patient_id>/', methods=['PUT'])
-def update_patient(patient_id):
-    data = request.get_json()
-    patient = Patient.query.get_or_404(patient_id)
-    for key, value in data.items():
-        setattr(patient, key, value)
-    db.session.commit()
-    return jsonify({
-        "id": patient.id,
-        "name": patient.name,
-        "age": patient.age,
-        "gender": patient.gender,
-        "address": patient.address,
-        "contact": patient.contact,
-        "registration_date": patient.registration_date.isoformat()
-    })
 
 @bp.route('/<int:patient_id>/', methods=['DELETE'])
 def delete_patient(patient_id):

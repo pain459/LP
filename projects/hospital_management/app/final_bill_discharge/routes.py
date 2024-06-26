@@ -44,3 +44,12 @@ def delete_bill(bill_id):
     db.session.delete(bill)
     db.session.commit()
     return '', 204
+
+@bp.route('/sync_patient', methods=['POST'])
+def sync_patient():
+    data = request.get_json()
+    patient_id = data.get('patient_id')
+    if patient_id:
+        # Perform any necessary initialization with the patient ID
+        return jsonify({"message": "Patient ID synced successfully"}), 200
+    return jsonify({"message": "Patient ID missing"}), 400

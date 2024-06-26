@@ -4,13 +4,8 @@ FROM python:3.9-slim
 # Set the working directory
 WORKDIR /app
 
-# Install netcat-openbsd
-RUN apt-get update && apt-get install -y netcat-openbsd
-
-# Copy the requirements file into the container
+# Install dependencies
 COPY requirements.txt .
-
-# Install the dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the rest of the application code
