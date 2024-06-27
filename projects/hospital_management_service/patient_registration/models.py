@@ -14,5 +14,10 @@ class Patient(db.Model):
     unique_id = db.Column(db.String(64), unique=True, nullable=False)
 
     @staticmethod
-    def generate_unique_id(name):
-        return f"{int(time.time())}_{name.replace(' ', '_')}"
+    def generate_unique_id(name, contact):
+        clean_contact = Patient.clean_contact(contact)
+        return f"{int(time.time())}_{name.replace(' ', '_')}_{clean_contact}"
+    
+    @staticmethod
+    def clean_contact(contact):
+        return contact.replace(" ", "").replace("-", "")

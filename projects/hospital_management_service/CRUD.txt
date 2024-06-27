@@ -33,3 +33,6 @@ $ curl -X GET http://localhost:5000/patients/1719459256_John_Doe
 <h1>Not Found</h1>
 <p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>
 $ 
+
+
+curl -X GET "http://localhost:5000/patients/search?contact=5551234"
