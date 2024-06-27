@@ -36,7 +36,8 @@ def check_and_create_table():
         age INT,
         gender VARCHAR(10),
         address TEXT,
-        contact VARCHAR(15)
+        contact VARCHAR(15),
+        unique_id VARCHAR(64) UNIQUE NOT NULL
     );
     """)
     conn.commit()
