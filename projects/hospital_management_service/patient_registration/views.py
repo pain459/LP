@@ -1,5 +1,10 @@
+import logging
 from flask import Blueprint, request, jsonify
+from sqlalchemy.exc import IntegrityError
 from .models import db, Patient
+
+# Configure logging
+logger = logging.getLogger(__name__)
 
 patient_blueprint = Blueprint('patient', __name__)
 
@@ -15,51 +20,87 @@ def add_patient():
         contact=data['contact'],
         unique_id=unique_id
     )
-    db.session.add(new_patient)
-    db.session.commit()
-    return jsonify({'message': 'Patient added successfully!', 'unique_id': unique_id}), 201
+    try:
+        db.session.add(new_patient)
+        db.session.commit()
+        logger.info(f"Patient added successfully: {unique_id}")
+        return jsonify({'message': 'Patient added successfully!', 'unique_id': unique_id}), 201
+    except IntegrityError as e:
+        db.session.rollback()
+        logger.error(f"IntegrityError: {e}")
+        if 'unique_id' in str(e.orig):
+            return jsonify({'error': 'A patient with this unique ID already exists.'}), 400
+        if 'contact' in str(e.orig):
+            return jsonify({'error': 'A patient with this contact already exists.'}), 400
+        return jsonify({'error': 'An error occurred while adding the patient.'}), 500
 
 @patient_blueprint.route('/patients', methods=['GET'])
 def get_patients():
-    patients = Patient.query.all()
-    return jsonify([{
-        'patient_id': p.patient_id,
-        'name': p.name,
-        'age': p.age,
-        'gender': p.gender,
-        'address': p.address,
-        'contact': p.contact,
-        'unique_id': p.unique_id
-    } for p in patients]), 200
+    try:
+        patients = Patient.query.all()
+        logger.info("Retrieved all patients.")
+        return jsonify([{
+            'patient_id': p.patient_id,
+            'name': p.name,
+            'age': p.age,
+            'gender': p.gender,
+            'address': p.address,
+            'contact': p.contact,
+            'unique_id': p.unique_id
+        } for p in patients]), 200
+    except Exception as e:
+        logger.error(f"Error retrieving patients: {e}")
+        return jsonify({'error': 'An error occurred while retrieving patients.'}), 500
 
 @patient_blueprint.route('/patients/<unique_id>', methods=['GET'])
 def get_patient(unique_id):
-    patient = Patient.query.filter_by(unique_id=unique_id).first_or_404()
-    return jsonify({
-        'patient_id': patient.patient_id,
-        'name': patient.name,
-        'age': patient.age,
-        'gender': patient.gender,
-        'address': patient.address,
-        'contact': patient.contact,
-        'unique_id': patient.unique_id
-    }), 200
+    try:
+        patient = Patient.query.filter_by(unique_id=unique_id).first_or_404()
+        logger.info(f"Retrieved patient: {unique_id}")
+        return jsonify({
+            'patient_id': patient.patient_id,
+            'name': patient.name,
+            'age': patient.age,
+            'gender': patient.gender,
+            'address': patient.address,
+            'contact': patient.contact,
+            'unique_id': patient.unique_id
+        }), 200
+    except Exception as e:
+        logger.error(f"Error retrieving patient {unique_id}: {e}")
+        return jsonify({'error': 'An error occurred while retrieving the patient.'}), 500
 
 @patient_blueprint.route('/patients/<unique_id>', methods=['PUT'])
 def update_patient(unique_id):
     data = request.get_json()
-    patient = Patient.query.filter_by(unique_id=unique_id).first_or_404()
-    patient.name = data['name']
-    patient.age = data['age']
-    patient.gender = data['gender']
-    patient.address = data.get('address', patient.address)
-    patient.contact = data['contact']
-    db.session.commit()
-    return jsonify({'message': 'Patient updated successfully!'}), 200
+    try:
+        patient = Patient.query.filter_by(unique_id=unique_id).first_or_404()
+        patient.name = data['name']
+        patient.age = data['age']
+        patient.gender = data['gender']
+        patient.address = data.get('address', patient.address)
+        patient.contact = data['contact']
+        db.session.commit()
+        logger.info(f"Patient updated successfully: {unique_id}")
+        return jsonify({'message': 'Patient updated successfully!'}), 200
+    except IntegrityError as e:
+        db.session.rollback()
+        logger.error(f"IntegrityError: {e}")
+        if 'contact' in str(e.orig):
+            return jsonify({'error': 'A patient with this contact already exists.'}), 400
+        return jsonify({'error': 'An error occurred while updating the patient.'}), 500
+    except Exception as e:
+        logger.error(f"Error updating patient {unique_id}: {e}")
+        return jsonify({'error': 'An error occurred while updating the patient.'}), 500
 
 @patient_blueprint.route('/patients/<unique_id>', methods=['DELETE'])
 def delete_patient(unique_id):
-    patient = Patient.query.filter_by(unique_id=unique_id).first_or_404()
-    db.session.delete(patient)
-    db.session.commit()
-    return jsonify({'message': 'Patient deleted successfully!'}), 200
+    try:
+        patient = Patient.query.filter_by(unique_id=unique_id).first_or_404()
+        db.session.delete(patient)
+        db.session.commit()
+        logger.info(f"Patient deleted successfully: {unique_id}")
+        return jsonify({'message': 'Patient deleted successfully!'}), 200
+    except Exception as e:
+        logger.error(f"Error deleting patient {unique_id}: {e}")
+        return jsonify({'error': 'An error occurred while deleting the patient.'}), 500

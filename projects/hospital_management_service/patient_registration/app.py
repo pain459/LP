@@ -1,6 +1,13 @@
+import logging
 import time
 import psycopg2
+from flask import Flask
+from sqlalchemy.exc import IntegrityError
 from . import create_app
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def wait_for_db():
     retries = 5
@@ -13,11 +20,11 @@ def wait_for_db():
                 host='db'
             )
             conn.close()
-            print("Database connection established.")
+            logger.info("Database connection established.")
             return True
         except psycopg2.OperationalError:
             retries -= 1
-            print(f"Database connection failed. Retrying in 5 seconds... ({retries} retries left)")
+            logger.warning(f"Database connection failed. Retrying in 5 seconds... ({retries} retries left)")
             time.sleep(5)
     return False
 
@@ -50,4 +57,4 @@ if __name__ == "__main__":
         app = create_app()
         app.run(host='0.0.0.0')
     else:
-        print("Error: Unable to connect to the database after several retries.")
+        logger.error("Error: Unable to connect to the database after several retries.")
