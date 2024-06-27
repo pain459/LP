@@ -1,17 +1,9 @@
-import logging
 from flask import Blueprint, request, jsonify
 from sqlalchemy.exc import IntegrityError
 import requests
 from .models import db, DoctorAnalysisAndTests, Symptom, Test, Medicine
 
-# Configure logging
-logger = logging.getLogger(__name__)
-
 doctor_analysis_and_tests_blueprint = Blueprint('doctor_analysis_and_tests', __name__)
-
-def check_patient_exists(patient_unique_id):
-    response = requests.get(f'http://patient_registration_service:5000/patients/{patient_unique_id}')
-    return response.status_code == 200
 
 def fetch_dictionary(model):
     records = model.query.all()
@@ -29,9 +21,6 @@ def translate_codes(codes, dictionary):
 def add_analysis_and_tests():
     data = request.get_json()
     patient_unique_id = data['patient_unique_id']
-
-    if not check_patient_exists(patient_unique_id):
-        return jsonify({'error': 'Patient record not found.'}), 404
 
     symptoms_dict = fetch_dictionary(Symptom)
     tests_dict = fetch_dictionary(Test)
@@ -116,30 +105,6 @@ def delete_record(patient_unique_id):
         db.session.delete(record)
         db.session.commit()
         return jsonify({'message': 'Record deleted successfully!'}), 200
-    except IntegrityError as e:
-        db.session.rollback()
-        return jsonify({'error': str(e)}), 400
-
-@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests/<patient_unique_id>/<category>/<int:code>', methods=['DELETE'])
-def delete_detail(patient_unique_id, category, code):
-    record = DoctorAnalysisAndTests.query.filter_by(patient_unique_id=patient_unique_id).first_or_404()
-
-    if category == 'tests':
-        if str(code) in record.tests:
-            record.tests.pop(str(code))
-        else:
-            return jsonify({'error': f'Code {code} not found in tests.'}), 400
-    elif category == 'medicines':
-        if str(code) in record.medicines:
-            record.medicines.pop(str(code))
-        else:
-            return jsonify({'error': f'Code {code} not found in medicines.'}), 400
-    else:
-        return jsonify({'error': 'Invalid category. Valid categories are: tests, medicines.'}), 400
-
-    try:
-        db.session.commit()
-        return jsonify({'message': f'{category[:-1].capitalize()} detail deleted successfully!'}), 200
     except IntegrityError as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400

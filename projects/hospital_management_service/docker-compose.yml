@@ -16,6 +16,11 @@ services:
       - ./db/medicines.csv:/docker-entrypoint-initdb.d/medicines.csv
     networks:
       - hospital_network
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
 
   patient_registration:
     build: ./patient_registration
@@ -31,6 +36,11 @@ services:
     networks:
       - hospital_network
     command: ["./wait-for-it.sh", "db", "5432", "flask", "run", "--host=0.0.0.0"]
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
 
   doctor_analysis_and_tests:
     build: ./doctor_analysis_and_tests
@@ -47,6 +57,11 @@ services:
     networks:
       - hospital_network
     command: ["./wait-for-it.sh", "db", "5432", "flask", "run", "--host=0.0.0.0"]
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
 
   billing_service:
     build: ./billing_service
@@ -63,6 +78,11 @@ services:
     networks:
       - hospital_network
     command: ["./wait-for-it.sh", "db", "5432", "flask", "run", "--host=0.0.0.0"]
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
 
 networks:
   hospital_network:
