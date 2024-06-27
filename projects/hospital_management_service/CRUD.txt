@@ -1,0 +1,27 @@
+# Patient creation service.
+
+$ curl -X POST http://localhost:5000/patients -H "Content-Type: application/json" -d '{
+    "name": "John Doe",
+    "age": 30,
+    "gender": "Male",
+    "address": "123 Main St",
+    "contact": "555-1234"
+}'
+{"message":"Patient added successfully!"}
+$ curl -X GET http://localhost:5000/patients
+[{"address":"123 Main St","age":30,"contact":"555-1234","gender":"Male","name":"John Doe","patient_id":1}]
+$ curl -X PUT http://localhost:5000/patients/1 \
+-H "Content-Type: application/json" \
+-d '{
+    "name": "John Doe",
+    "age": 31,
+    "gender": "Male",
+    "address": "123 Main St",
+    "contact": "555-5678"
+}'
+{"message":"Patient updated successfully!"}
+$ curl -X DELETE http://localhost:5000/patients/1
+{"message":"Patient deleted successfully!"}
+$ curl -X GET http://localhost:5000/patients
+[]
+$ 

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: hospital_admin
+      POSTGRES_PASSWORD: admin_password
+      POSTGRES_DB: hospital_data
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - hospital_network
+
+  patient_registration:
+    build: ./patient_registration
+    container_name: patient_registration_service
+    environment:
+      FLASK_APP: app.py
+      FLASK_RUN_HOST: 0.0.0.0
+      DATABASE_URL: postgres://hospital_admin:admin_password@db:5432/hospital_data
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+    networks:
+      - hospital_network
+    command: ["./wait-for-it.sh", "db", "5432", "flask", "run", "--host=0.0.0.0"]
+
+networks:
+  hospital_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
