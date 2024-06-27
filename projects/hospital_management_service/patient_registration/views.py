@@ -76,14 +76,23 @@ def update_patient(unique_id):
     data = request.get_json()
     try:
         patient = Patient.query.filter_by(unique_id=unique_id).first_or_404()
+        new_contact = Patient.clean_contact(data['contact'])
+        new_unique_id = Patient.generate_unique_id(data['name'], new_contact)
+
+        # Check if the new contact already exists
+        existing_patient = Patient.query.filter_by(contact=new_contact).first()
+        if existing_patient and existing_patient.patient_id != patient.patient_id:
+            return jsonify({'error': 'A patient with this contact already exists.'}), 400
+
         patient.name = data['name']
         patient.age = data['age']
         patient.gender = data['gender']
         patient.address = data.get('address', patient.address)
-        patient.contact = Patient.clean_contact(data['contact'])
+        patient.contact = new_contact
+        patient.unique_id = new_unique_id
         db.session.commit()
-        logger.info(f"Patient updated successfully: {unique_id}")
-        return jsonify({'message': 'Patient updated successfully!'}), 200
+        logger.info(f"Patient updated successfully: {new_unique_id}")
+        return jsonify({'message': 'Patient updated successfully!', 'unique_id': new_unique_id}), 200
     except IntegrityError as e:
         db.session.rollback()
         logger.error(f"IntegrityError: {e}")
