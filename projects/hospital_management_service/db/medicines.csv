@@ -1,5 +1,5 @@
-id,name
-1,paracetamol
-2,ibuprofen
-3,antibiotic
-4,antihistamine
+id,name,price
+1,paracetamol,5.00
+2,ibuprofen,10.00
+3,antibiotic,20.00
+4,antihistamine,15.00

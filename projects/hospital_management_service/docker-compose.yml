@@ -48,6 +48,22 @@ services:
       - hospital_network
     command: ["./wait-for-it.sh", "db", "5432", "flask", "run", "--host=0.0.0.0"]
 
+  billing_service:
+    build: ./billing_service
+    container_name: billing_service
+    environment:
+      FLASK_APP: app:app
+      FLASK_RUN_HOST: 0.0.0.0
+      DATABASE_URL: postgres://hospital_admin:admin_password@db:5432/hospital_data
+    ports:
+      - "5002:5000"
+    depends_on:
+      - db
+      - doctor_analysis_and_tests
+    networks:
+      - hospital_network
+    command: ["./wait-for-it.sh", "db", "5432", "flask", "run", "--host=0.0.0.0"]
+
 networks:
   hospital_network:
     driver: bridge

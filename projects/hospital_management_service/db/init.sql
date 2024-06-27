@@ -15,12 +15,14 @@ CREATE TABLE IF NOT EXISTS symptoms (
 
 CREATE TABLE IF NOT EXISTS tests (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
+    name VARCHAR(50) NOT NULL UNIQUE,
+    price DECIMAL(10, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS medicines (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(50) NOT NULL UNIQUE
+    name VARCHAR(50) NOT NULL UNIQUE,
+    price DECIMAL(10, 2) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS doctor_analysis_and_tests (
@@ -31,6 +33,15 @@ CREATE TABLE IF NOT EXISTS doctor_analysis_and_tests (
     medicines JSONB NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS doctor_analysis_and_tests_archive (
+    id SERIAL PRIMARY KEY,
+    patient_unique_id VARCHAR(64) NOT NULL,
+    analysis JSONB NOT NULL,
+    tests JSONB NOT NULL,
+    medicines JSONB NOT NULL,
+    paid_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
 COPY symptoms(id, name) FROM '/docker-entrypoint-initdb.d/symptoms.csv' WITH CSV HEADER;
-COPY tests(id, name) FROM '/docker-entrypoint-initdb.d/tests.csv' WITH CSV HEADER;
-COPY medicines(id, name) FROM '/docker-entrypoint-initdb.d/medicines.csv' WITH CSV HEADER;
+COPY tests(id, name, price) FROM '/docker-entrypoint-initdb.d/tests.csv' WITH CSV HEADER;
+COPY medicines(id, name, price) FROM '/docker-entrypoint-initdb.d/medicines.csv' WITH CSV HEADER;
