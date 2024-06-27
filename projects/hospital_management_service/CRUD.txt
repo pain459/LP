@@ -79,3 +79,77 @@ curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719470526_john_d
 curl -X GET http://localhost:5001/doctor_analysis_and_tests/1719470526_john_doe_q8zie0
 curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719470526_john_doe_q8zie0/tests/2
 curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719470526_john_doe_q8zie0/medicines/3
+
+
+---------to sort
+
+1719459256_John_Doe
+
+curl -X POST http://localhost:5000/patients -H "Content-Type: application/json" -d '{
+    "name": "John Doe",
+    "age": 30,
+    "gender": "Male",
+    "address": "123 Main St",
+    "contact": "555-1234"
+}'
+
+1719488687_john_doe_pskvtd
+
+curl -X GET http://localhost:5000/patients
+
+curl -X GET "http://localhost:5000/patients/search?contact=5551234"
+
+
+curl -X PUT http://localhost:5000/patients/1719488687_john_doe_pskvtd \
+-H "Content-Type: application/json" \
+-d '{
+    "name": "John Doe",
+    "age": 31,
+    "gender": "Male",
+    "address": "123 Main St",
+    "contact": "555-5678"
+}'
+
+
+curl -X GET "http://localhost:5000/patients/search?contact=5555678"
+
+
+
+curl -X POST http://localhost:5001/doctor_analysis_and_tests \
+-H "Content-Type: application/json" \
+-d '{
+    "patient_unique_id": "1719488687_john_doe_pskvtd",
+    "analysis": [1, 2],
+    "tests": [1, 3],
+    "medicines": [1, 2]
+}'
+
+
+curl -X PUT http://localhost:5001/doctor_analysis_and_tests/1719488687_john_doe_pskvtd \
+-H "Content-Type: application/json" \
+-d '{
+    "analysis": [2, 3],
+    "tests": [2, 4],
+    "medicines": [3, 4]
+}'
+
+
+curl -X GET http://localhost:5001/doctor_analysis_and_tests/1719488687_john_doe_pskvtd
+
+
+
+curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719488687_john_doe_pskvtd
+
+
+curl -X GET http://localhost:5001/doctor_analysis_and_tests/1719488687_john_doe_pskvtd
+curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719488687_john_doe_pskvtd/tests/2
+curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719488687_john_doe_pskvtd/medicines/3
+
+
+curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719488687_john_doe_pskvtd
+
+curl -X GET http://localhost:5002/billing/1719488687_john_doe_pskvtd
+
+curl -X POST http://localhost:5002/billing/1719488687_john_doe_pskvtd/pay
+
+curl -X GET http://localhost:5002/billing/archive/1719488687_john_doe_pskvtd
