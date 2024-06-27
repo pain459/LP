@@ -7,10 +7,12 @@ $ curl -X POST http://localhost:5000/patients -H "Content-Type: application/json
     "address": "123 Main St",
     "contact": "555-1234"
 }'
-{"message":"Patient added successfully!"}
+{"message":"Patient added successfully!","unique_id":"1719459256_John_Doe"}
 $ curl -X GET http://localhost:5000/patients
-[{"address":"123 Main St","age":30,"contact":"555-1234","gender":"Male","name":"John Doe","patient_id":1}]
-$ curl -X PUT http://localhost:5000/patients/1 \
+[{"address":"123 Main St","age":30,"contact":"555-1234","gender":"Male","name":"John Doe","patient_id":1,"unique_id":"1719459256_John_Doe"}]
+$ curl -X GET http://localhost:5000/patients/1719459256_John_Doe
+{"address":"123 Main St","age":30,"contact":"555-1234","gender":"Male","name":"John Doe","patient_id":1,"unique_id":"1719459256_John_Doe"}
+$ curl -X PUT http://localhost:5000/patients/1719459256_John_Doe \
 -H "Content-Type: application/json" \
 -d '{
     "name": "John Doe",
@@ -20,8 +22,14 @@ $ curl -X PUT http://localhost:5000/patients/1 \
     "contact": "555-5678"
 }'
 {"message":"Patient updated successfully!"}
-$ curl -X DELETE http://localhost:5000/patients/1
+$ curl -X GET http://localhost:5000/patients/1719459256_John_Doe
+{"address":"123 Main St","age":31,"contact":"555-5678","gender":"Male","name":"John Doe","patient_id":1,"unique_id":"1719459256_John_Doe"}
+$ curl -X DELETE http://localhost:5000/patients/1719459256_John_Doe
 {"message":"Patient deleted successfully!"}
-$ curl -X GET http://localhost:5000/patients
-[]
+$ curl -X GET http://localhost:5000/patients/1719459256_John_Doe
+<!doctype html>
+<html lang=en>
+<title>404 Not Found</title>
+<h1>Not Found</h1>
+<p>The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.</p>
 $ 
