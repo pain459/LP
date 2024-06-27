@@ -7,3 +7,47 @@ CREATE TABLE IF NOT EXISTS patients (
     contact VARCHAR(15) UNIQUE NOT NULL,
     unique_id VARCHAR(64) UNIQUE NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS symptoms (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS tests (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS medicines (
+    id SERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS doctor_analysis_and_tests (
+    id SERIAL PRIMARY KEY,
+    patient_unique_id VARCHAR(64) NOT NULL,
+    analysis JSONB NOT NULL,
+    tests JSONB NOT NULL,
+    medicines JSONB NOT NULL
+);
+
+INSERT INTO symptoms (name) VALUES
+('flu'),
+('cold'),
+('cough'),
+('fever')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO tests (name) VALUES
+('blood test'),
+('x-ray'),
+('mri'),
+('covid test')
+ON CONFLICT DO NOTHING;
+
+INSERT INTO medicines (name) VALUES
+('paracetamol'),
+('ibuprofen'),
+('antibiotic'),
+('antihistamine')
+ON CONFLICT DO NOTHING;
