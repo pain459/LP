@@ -63,52 +63,43 @@ def add_analysis_and_tests():
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
 
-@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests', methods=['GET'])
-def get_all_records():
-    records = DoctorAnalysisAndTests.query.all()
-    return jsonify([{
-        'id': record.id,
-        'patient_unique_id': record.patient_unique_id,
-        'analysis': record.analysis,
-        'tests': record.tests,
-        'medicines': record.medicines
-    } for record in records]), 200
-
-@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests/<int:id>', methods=['GET'])
-def get_record(id):
-    record = DoctorAnalysisAndTests.query.get_or_404(id)
+@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests/<patient_unique_id>', methods=['GET'])
+def get_record(patient_unique_id):
+    record = DoctorAnalysisAndTests.query.filter_by(patient_unique_id=patient_unique_id).first_or_404()
     return jsonify({
-        'id': record.id,
         'patient_unique_id': record.patient_unique_id,
         'analysis': record.analysis,
         'tests': record.tests,
         'medicines': record.medicines
     }), 200
 
-@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests/<int:id>', methods=['PUT'])
-def update_record(id):
+@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests/<patient_unique_id>', methods=['PUT'])
+def update_record(patient_unique_id):
     data = request.get_json()
-    record = DoctorAnalysisAndTests.query.get_or_404(id)
+    record = DoctorAnalysisAndTests.query.filter_by(patient_unique_id=patient_unique_id).first_or_404()
 
     symptoms_dict = fetch_dictionary(Symptom)
     tests_dict = fetch_dictionary(Test)
     medicines_dict = fetch_dictionary(Medicine)
 
-    analysis, error = translate_codes(data.get('analysis', record.analysis.keys()), symptoms_dict)
-    if error:
-        return jsonify({'error': error}), 400
+    if 'analysis' in data:
+        analysis, error = translate_codes(data['analysis'], symptoms_dict)
+        if error:
+            return jsonify({'error': error}), 400
+        record.analysis = analysis
 
-    tests, error = translate_codes(data.get('tests', record.tests.keys()), tests_dict)
-    if error:
-        return jsonify({'error': error}), 400
+    if 'tests' in data:
+        new_tests, error = translate_codes(data['tests'], tests_dict)
+        if error:
+            return jsonify({'error': error}), 400
+        record.tests = {**record.tests, **new_tests}
 
-    medicines, error = translate_codes(data.get('medicines', record.medicines.keys()), medicines_dict)
-    if error:
-        return jsonify({'error': error}), 400
+    if 'medicines' in data:
+        new_medicines, error = translate_codes(data['medicines'], medicines_dict)
+        if error:
+            return jsonify({'error': error}), 400
+        record.medicines = {**record.medicines, **new_medicines}
 
-    record.analysis = analysis
-    record.tests = tests
-    record.medicines = medicines
     try:
         db.session.commit()
         return jsonify({'message': 'Record updated successfully!'}), 200
@@ -116,13 +107,37 @@ def update_record(id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 400
 
-@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests/<int:id>', methods=['DELETE'])
-def delete_record(id):
-    record = DoctorAnalysisAndTests.query.get_or_404(id)
+@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests/<patient_unique_id>', methods=['DELETE'])
+def delete_record(patient_unique_id):
+    record = DoctorAnalysisAndTests.query.filter_by(patient_unique_id=patient_unique_id).first_or_404()
     try:
         db.session.delete(record)
         db.session.commit()
         return jsonify({'message': 'Record deleted successfully!'}), 200
+    except IntegrityError as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 400
+
+@doctor_analysis_and_tests_blueprint.route('/doctor_analysis_and_tests/<patient_unique_id>/<category>/<int:code>', methods=['DELETE'])
+def delete_detail(patient_unique_id, category, code):
+    record = DoctorAnalysisAndTests.query.filter_by(patient_unique_id=patient_unique_id).first_or_404()
+
+    if category == 'tests':
+        if code in record.tests:
+            del record.tests[code]
+        else:
+            return jsonify({'error': f'Code {code} not found in tests.'}), 400
+    elif category == 'medicines':
+        if code in record.medicines:
+            del record.medicines[code]
+        else:
+            return jsonify({'error': f'Code {code} not found in medicines.'}), 400
+    else:
+        return jsonify({'error': 'Invalid category. Valid categories are: tests, medicines.'}), 400
+
+    try:
+        db.session.commit()
+        return jsonify({'message': f'{category[:-1].capitalize()} detail deleted successfully!'}), 200
     except IntegrityError as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 400

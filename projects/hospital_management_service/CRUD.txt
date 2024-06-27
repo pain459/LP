@@ -44,3 +44,38 @@ $
 
 $ curl -X DELETE http://localhost:5000/patients/1719462177_john_doe_l4frxu
 {"message":"Patient deleted successfully!"}
+
+
+--- 
+
+Doctor and analysis service
+
+curl -X POST http://localhost:5001/doctor_analysis_and_tests \
+-H "Content-Type: application/json" \
+-d '{
+    "patient_unique_id": "1719476734_john_doe_b651ok",
+    "analysis": [1, 2],
+    "tests": [1, 3],
+    "medicines": [1, 2]
+}'
+
+
+curl -X PUT http://localhost:5001/doctor_analysis_and_tests/1719476734_john_doe_b651ok \
+-H "Content-Type: application/json" \
+-d '{
+    "analysis": [2, 3],
+    "tests": [2, 4],
+    "medicines": [3, 4]
+}'
+
+
+curl -X GET http://localhost:5001/doctor_analysis_and_tests/1719476734_john_doe_b651ok
+
+
+
+curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719470526_john_doe_q8zie0
+
+
+curl -X GET http://localhost:5001/doctor_analysis_and_tests/1719470526_john_doe_q8zie0
+curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719470526_john_doe_q8zie0/tests/2
+curl -X DELETE http://localhost:5001/doctor_analysis_and_tests/1719470526_john_doe_q8zie0/medicines/3

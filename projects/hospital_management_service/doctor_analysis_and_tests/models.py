@@ -5,7 +5,7 @@ db = SQLAlchemy()
 class DoctorAnalysisAndTests(db.Model):
     __tablename__ = 'doctor_analysis_and_tests'
     id = db.Column(db.Integer, primary_key=True)
-    patient_unique_id = db.Column(db.String(64), nullable=False)
+    patient_unique_id = db.Column(db.String(64), nullable=False, index=True)
     analysis = db.Column(db.JSON, nullable=False)
     tests = db.Column(db.JSON, nullable=False)
     medicines = db.Column(db.JSON, nullable=False)

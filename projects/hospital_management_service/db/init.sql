@@ -31,6 +31,8 @@ CREATE TABLE IF NOT EXISTS doctor_analysis_and_tests (
     medicines JSONB NOT NULL
 );
 
+CREATE INDEX idx_patient_unique_id ON doctor_analysis_and_tests (patient_unique_id);
+
 INSERT INTO symptoms (name) VALUES
 ('flu'),
 ('cold'),
