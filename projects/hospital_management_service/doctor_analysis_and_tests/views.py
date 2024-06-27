@@ -92,13 +92,15 @@ def update_record(patient_unique_id):
         new_tests, error = translate_codes(data['tests'], tests_dict)
         if error:
             return jsonify({'error': error}), 400
-        record.tests = {**record.tests, **new_tests}
+        for k, v in new_tests.items():
+            record.tests[k] = v
 
     if 'medicines' in data:
         new_medicines, error = translate_codes(data['medicines'], medicines_dict)
         if error:
             return jsonify({'error': error}), 400
-        record.medicines = {**record.medicines, **new_medicines}
+        for k, v in new_medicines.items():
+            record.medicines[k] = v
 
     try:
         db.session.commit()
@@ -123,13 +125,13 @@ def delete_detail(patient_unique_id, category, code):
     record = DoctorAnalysisAndTests.query.filter_by(patient_unique_id=patient_unique_id).first_or_404()
 
     if category == 'tests':
-        if code in record.tests:
-            del record.tests[code]
+        if str(code) in record.tests:
+            record.tests.pop(str(code))
         else:
             return jsonify({'error': f'Code {code} not found in tests.'}), 400
     elif category == 'medicines':
-        if code in record.medicines:
-            del record.medicines[code]
+        if str(code) in record.medicines:
+            record.medicines.pop(str(code))
         else:
             return jsonify({'error': f'Code {code} not found in medicines.'}), 400
     else:

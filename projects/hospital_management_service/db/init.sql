@@ -31,25 +31,6 @@ CREATE TABLE IF NOT EXISTS doctor_analysis_and_tests (
     medicines JSONB NOT NULL
 );
 
-CREATE INDEX idx_patient_unique_id ON doctor_analysis_and_tests (patient_unique_id);
-
-INSERT INTO symptoms (name) VALUES
-('flu'),
-('cold'),
-('cough'),
-('fever')
-ON CONFLICT DO NOTHING;
-
-INSERT INTO tests (name) VALUES
-('blood test'),
-('x-ray'),
-('mri'),
-('covid test')
-ON CONFLICT DO NOTHING;
-
-INSERT INTO medicines (name) VALUES
-('paracetamol'),
-('ibuprofen'),
-('antibiotic'),
-('antihistamine')
-ON CONFLICT DO NOTHING;
+COPY symptoms(id, name) FROM '/docker-entrypoint-initdb.d/symptoms.csv' WITH CSV HEADER;
+COPY tests(id, name) FROM '/docker-entrypoint-initdb.d/tests.csv' WITH CSV HEADER;
+COPY medicines(id, name) FROM '/docker-entrypoint-initdb.d/medicines.csv' WITH CSV HEADER;
