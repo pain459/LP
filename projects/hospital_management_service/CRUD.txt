@@ -7,7 +7,7 @@ $ curl -X POST http://localhost:5000/patients -H "Content-Type: application/json
     "address": "123 Main St",
     "contact": "555-1234"
 }'
-{"message":"Patient added successfully!","unique_id":"1719461626_john_doe_5551234"}
+{"message":"Patient added successfully!","unique_id":"1719462177_john_doe_l4frxu"}
 $ curl -X POST http://localhost:5000/patients -H "Content-Type: application/json" -d '{
     "name": "John Doe",
     "age": 30,
@@ -16,11 +16,15 @@ $ curl -X POST http://localhost:5000/patients -H "Content-Type: application/json
     "contact": "555-1234"
 }'
 {"error":"A patient with this contact already exists."}
-$ curl -X GET http://localhost:5000/patients
-[{"address":"123 Main St","age":30,"contact":"5551234","gender":"Male","name":"John Doe","patient_id":1,"unique_id":"1719461626_john_doe_5551234"}]
 $ 
 
-$ curl -X PUT http://localhost:5000/patients/1719461626_john_doe_5551234 \
+
+$ curl -X GET http://localhost:5000/patients
+[{"address":"123 Main St","age":30,"contact":"5551234","gender":"Male","name":"John Doe","patient_id":1,"unique_id":"1719462177_john_doe_l4frxu"}]
+$ 
+
+
+$ curl -X PUT http://localhost:5000/patients/1719462177_john_doe_l4frxu \
 -H "Content-Type: application/json" \
 -d '{
     "name": "John Doe",
@@ -29,14 +33,14 @@ $ curl -X PUT http://localhost:5000/patients/1719461626_john_doe_5551234 \
     "address": "123 Main St",
     "contact": "555-5678"
 }'
-{"message":"Patient updated successfully!","unique_id":"1719461693_john_doe_5555678"}
-
+{"message":"Patient updated successfully!"}
 $ curl -X GET http://localhost:5000/patients
-[{"address":"123 Main St","age":31,"contact":"5555678","gender":"Male","name":"John Doe","patient_id":1,"unique_id":"1719461693_john_doe_5555678"}]
+[{"address":"123 Main St","age":31,"contact":"5555678","gender":"Male","name":"John Doe","patient_id":1,"unique_id":"1719462177_john_doe_l4frxu"}]
+
+
+$ curl -X GET "http://localhost:5000/patients/search?contact=5555678"
+{"address":"123 Main St","age":31,"contact":"5555678","gender":"Male","name":"John Doe","patient_id":1,"unique_id":"1719462177_john_doe_l4frxu"}
 $ 
 
-$ curl -X DELETE http://localhost:5000/patients/1719461693_john_doe_5555678
+$ curl -X DELETE http://localhost:5000/patients/1719462177_john_doe_l4frxu
 {"message":"Patient deleted successfully!"}
-
-
-curl -X GET "http://localhost:5000/patients/search?contact=5551234"

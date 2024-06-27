@@ -12,7 +12,7 @@ patient_blueprint = Blueprint('patient', __name__)
 def add_patient():
     data = request.get_json()
     cleaned_contact = Patient.clean_contact(data['contact'])
-    unique_id = Patient.generate_unique_id(data['name'], cleaned_contact)
+    unique_id = Patient.generate_unique_id(data['name'])
     new_patient = Patient(
         name=data['name'],
         age=data['age'],
@@ -77,7 +77,6 @@ def update_patient(unique_id):
     try:
         patient = Patient.query.filter_by(unique_id=unique_id).first_or_404()
         new_contact = Patient.clean_contact(data['contact'])
-        new_unique_id = Patient.generate_unique_id(data['name'], new_contact)
 
         # Check if the new contact already exists
         existing_patient = Patient.query.filter_by(contact=new_contact).first()
@@ -89,10 +88,9 @@ def update_patient(unique_id):
         patient.gender = data['gender']
         patient.address = data.get('address', patient.address)
         patient.contact = new_contact
-        patient.unique_id = new_unique_id
         db.session.commit()
-        logger.info(f"Patient updated successfully: {new_unique_id}")
-        return jsonify({'message': 'Patient updated successfully!', 'unique_id': new_unique_id}), 200
+        logger.info(f"Patient updated successfully: {unique_id}")
+        return jsonify({'message': 'Patient updated successfully!'}), 200
     except IntegrityError as e:
         db.session.rollback()
         logger.error(f"IntegrityError: {e}")

@@ -1,3 +1,5 @@
+import random
+import string
 from flask_sqlalchemy import SQLAlchemy
 import time
 
@@ -14,9 +16,10 @@ class Patient(db.Model):
     unique_id = db.Column(db.String(64), unique=True, nullable=False)
 
     @staticmethod
-    def generate_unique_id(name, contact):
-        clean_contact = Patient.clean_contact(contact)
-        return f"{int(time.time())}_{name.lower().replace(' ', '_')}_{clean_contact}"
+    def generate_unique_id(name):
+        clean_name = name.lower().replace(' ', '_')
+        random_suffix = ''.join(random.choices(string.ascii_lowercase + string.digits, k=6))
+        return f"{int(time.time())}_{clean_name}_{random_suffix}"
     
     @staticmethod
     def clean_contact(contact):
