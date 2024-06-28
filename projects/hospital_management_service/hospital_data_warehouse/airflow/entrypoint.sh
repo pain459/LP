@@ -8,5 +8,14 @@
 # Initialize the Airflow database
 airflow db init
 
+# Create default user
+airflow users create \
+    --username airflow \
+    --firstname Airflow \
+    --lastname Admin \
+    --role Admin \
+    --email admin@example.com \
+    --password airflow
+
 # Start the Airflow web server and scheduler
 airflow webserver --port 8080 & airflow scheduler
