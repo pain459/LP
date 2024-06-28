@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    build: ./postgres
+    container_name: postgres_warehouse
+    environment:
+      POSTGRES_USER: warehouse_admin
+      POSTGRES_PASSWORD: warehouse_password
+      POSTGRES_DB: hospital_data_warehouse
+    volumes:
+      - warehouse_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"  # Exposing PostgreSQL on a different port to avoid conflicts
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          memory: 256M
+    restart: always
+
+  airflow:
+    build: ./airflow
+    container_name: airflow_warehouse
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://warehouse_admin:warehouse_password@postgres_warehouse:5432/hospital_data_warehouse
+      AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"  # Airflow web interface
+    volumes:
+      - ./airflow/airflow.cfg:/opt/airflow/airflow.cfg
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          memory: 256M
+    restart: always
+
+volumes:
+  warehouse_data:
+    driver: local
