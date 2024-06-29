@@ -1,3 +1,4 @@
+import os
 import requests
 import time
 import logging
@@ -12,9 +13,13 @@ logger = logging.getLogger('MonitorLogger')
 logger.setLevel(logging.INFO)
 logger.addHandler(log_handler)
 
-# Read API endpoints from the YAML file
-with open('endpoints.yaml', 'r') as f:
-    api_config = yaml.safe_load(f)
+# Read API endpoints from the services directory
+services_dir = 'services'
+api_configs = []
+for filename in os.listdir(services_dir):
+    if filename.endswith('.yaml'):
+        with open(os.path.join(services_dir, filename), 'r') as f:
+            api_configs.append(yaml.safe_load(f))
 
 # Flask app setup
 app = Flask(__name__)
@@ -35,31 +40,32 @@ def check_api(api):
 def monitor_apis():
     global service_status
     while True:
-        for api in api_config['apis']:
-            genesis_up = check_api(api['genesis'])
-            dependents_status = [check_api(dep) for dep in api.get('dependents', [])]
-            potentials_status = [check_api(pot) for pot in api.get('potentials', [])]
+        for api_config in api_configs:
+            name = api_config['genesis']['host']
+            genesis_up = check_api(api_config['genesis'])
+            dependents_status = [check_api(dep) for dep in api_config.get('dependents', [])]
+            potentials_status = [check_api(pot) for pot in api_config.get('potentials', [])]
 
             if not genesis_up:
-                service_status[api['name']] = {
+                service_status[name] = {
                     'genesis': 'DOWN',
                     'dependents': 'DEGRADED',
                     'potentials': 'DEGRADED'
                 }
             elif any(not dep for dep in dependents_status):
-                service_status[api['name']] = {
+                service_status[name] = {
                     'genesis': 'UP',
                     'dependents': 'DOWN',
                     'potentials': 'DEGRADED'
                 }
             elif any(not pot for pot in potentials_status):
-                service_status[api['name']] = {
+                service_status[name] = {
                     'genesis': 'UP',
                     'dependents': 'UP',
                     'potentials': 'DEGRADED'
                 }
             else:
-                service_status[api['name']] = {
+                service_status[name] = {
                     'genesis': 'UP',
                     'dependents': 'UP',
                     'potentials': 'UP'
@@ -67,7 +73,7 @@ def monitor_apis():
         time.sleep(30)
 
 if __name__ == "__main__":
-    service_status = {api['name']: {'genesis': 'UNKNOWN', 'dependents': 'UNKNOWN', 'potentials': 'UNKNOWN'} for api in api_config['apis']}
+    service_status = {api['genesis']['host']: {'genesis': 'UNKNOWN', 'dependents': 'UNKNOWN', 'potentials': 'UNKNOWN'} for api in api_configs}
     import threading
     monitor_thread = threading.Thread(target=monitor_apis)
     monitor_thread.start()
