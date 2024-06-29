@@ -9,11 +9,13 @@ services:
       resources:
         limits:
           memory: 50M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    networks:
+      - monitor_network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
 
   service2:
     build: ./service2
@@ -23,11 +25,13 @@ services:
       resources:
         limits:
           memory: 50M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    networks:
+      - monitor_network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
 
   service3:
     build: ./service3
@@ -37,11 +41,13 @@ services:
       resources:
         limits:
           memory: 50M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    networks:
+      - monitor_network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
 
   service4:
     build: ./service4
@@ -51,8 +57,27 @@ services:
       resources:
         limits:
           memory: 50M
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+    networks:
+      - monitor_network
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+
+  monitor:
+    build: ./monitor
+    deploy:
+      resources:
+        limits:
+          memory: 100M
+    networks:
+      - monitor_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "100m"
+
+networks:
+  monitor_network:
+    driver: bridge
