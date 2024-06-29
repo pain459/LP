@@ -37,31 +37,37 @@ def monitor_apis():
     while True:
         for api in api_config['apis']:
             genesis_up = check_api(api['genesis'])
-            dependent_up = check_api(api['dependent'])
-            potential_up = check_api(api['potential'])
-            
+            dependents_status = [check_api(dep) for dep in api.get('dependents', [])]
+            potentials_status = [check_api(pot) for pot in api.get('potentials', [])]
+
             if not genesis_up:
                 service_status[api['name']] = {
                     'genesis': 'DOWN',
-                    'dependent': 'DEGRADED',
-                    'potential': 'DEGRADED'
+                    'dependents': 'DEGRADED',
+                    'potentials': 'DEGRADED'
                 }
-            elif not dependent_up:
+            elif any(not dep for dep in dependents_status):
                 service_status[api['name']] = {
                     'genesis': 'UP',
-                    'dependent': 'DOWN',
-                    'potential': 'DEGRADED'
+                    'dependents': 'DOWN',
+                    'potentials': 'DEGRADED'
+                }
+            elif any(not pot for pot in potentials_status):
+                service_status[api['name']] = {
+                    'genesis': 'UP',
+                    'dependents': 'UP',
+                    'potentials': 'DEGRADED'
                 }
             else:
                 service_status[api['name']] = {
                     'genesis': 'UP',
-                    'dependent': 'UP',
-                    'potential': potential_up and 'UP' or 'DOWN'
+                    'dependents': 'UP',
+                    'potentials': 'UP'
                 }
         time.sleep(30)
 
 if __name__ == "__main__":
-    service_status = {api['name']: {'genesis': 'UNKNOWN', 'dependent': 'UNKNOWN', 'potential': 'UNKNOWN'} for api in api_config['apis']}
+    service_status = {api['name']: {'genesis': 'UNKNOWN', 'dependents': 'UNKNOWN', 'potentials': 'UNKNOWN'} for api in api_config['apis']}
     import threading
     monitor_thread = threading.Thread(target=monitor_apis)
     monitor_thread.start()
