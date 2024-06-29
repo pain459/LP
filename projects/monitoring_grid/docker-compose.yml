@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  service1:
+    build: ./service1
+    ports:
+      - "8081:80"
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  service2:
+    build: ./service2
+    ports:
+      - "8082:80"
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  service3:
+    build: ./service3
+    ports:
+      - "8083:80"
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  service4:
+    build: ./service4
+    ports:
+      - "8084:80"
+    deploy:
+      resources:
+        limits:
+          memory: 50M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
