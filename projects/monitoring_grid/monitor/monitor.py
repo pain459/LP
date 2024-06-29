@@ -11,13 +11,12 @@ logger = logging.getLogger('MonitorLogger')
 logger.setLevel(logging.INFO)
 logger.addHandler(log_handler)
 
-# List of API endpoints to monitor
-api_endpoints = [
-    {"name": "service1", "port": 80},
-    {"name": "service2", "port": 80},
-    {"name": "service3", "port": 80},
-    {"name": "service4", "port": 80},
-]
+# Read API endpoints from the file
+api_endpoints = []
+with open('endpoints.txt', 'r') as f:
+    for line in f:
+        name, port = line.strip().split(':')
+        api_endpoints.append({"name": name, "port": int(port)})
 
 # Dictionary to hold the status of services
 service_status = {api["name"]: "DOWN" for api in api_endpoints}
@@ -47,6 +46,6 @@ def monitor_apis():
 
 if __name__ == "__main__":
     import threading
-    monitor_thread = threading.Thread(target=monitor_apis)  
+    monitor_thread = threading.Thread(target=monitor_apis)
     monitor_thread.start()
     app.run(host='0.0.0.0', port=5000)
