@@ -4,6 +4,7 @@ import time
 import logging
 from logging.handlers import RotatingFileHandler
 from flask import Flask, jsonify
+from flask_cors import CORS
 import yaml
 
 # Configuration for logging
@@ -23,6 +24,7 @@ for filename in os.listdir(services_dir):
 
 # Flask app setup
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/status', methods=['GET'])
 def status():

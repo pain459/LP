@@ -11,11 +11,6 @@ services:
           memory: 50M
     networks:
       - monitor_network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
 
   service2:
     build: ./service2
@@ -27,11 +22,6 @@ services:
           memory: 50M
     networks:
       - monitor_network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
 
   service3:
     build: ./service3
@@ -43,11 +33,6 @@ services:
           memory: 50M
     networks:
       - monitor_network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
 
   service4:
     build: ./service4
@@ -59,11 +44,6 @@ services:
           memory: 50M
     networks:
       - monitor_network
-    # healthcheck:
-    #   test: ["CMD-SHELL", "curl -f http://localhost || exit 1"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
 
   monitor:
     build: ./monitor
@@ -79,6 +59,13 @@ services:
         max-size: "100m"
     ports:
       - "5000:5000"
+
+  ui:
+    build: ./ui
+    ports:
+      - "3000:80"
+    networks:
+      - monitor_network
 
 networks:
   monitor_network:

@@ -7,7 +7,7 @@ COPY monitor.py /app
 # COPY endpoints.yaml /app
 COPY services /app/services
 
-RUN pip install flask requests pyyaml
+RUN pip install flask requests pyyaml Flask-Cors
 RUN apt-get update && apt-get install -y curl
 
 EXPOSE 80

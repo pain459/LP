@@ -168,3 +168,4 @@ cython_debug/
 # Custom ignores
 projects/Movie_recommender/movies.csv
 projects/Movie_recommender/ratings.csv
+projects/monitoring_grid/ui/node_modules
