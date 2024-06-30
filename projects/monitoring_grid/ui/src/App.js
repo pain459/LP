@@ -8,6 +8,7 @@ function App() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    console.log("Using API URL:", process.env.REACT_APP_API_URL || 'http://monitor:5000/status');
     const getData = async () => {
       try {
         const result = await fetchServiceData();
@@ -15,7 +16,7 @@ function App() {
         setData(result.services);
       } catch (err) {
         console.error("Error fetching data: ", err);
-        setError(err);
+        setError(err.message || "Error fetching data");
       }
     };
     getData();
@@ -50,7 +51,7 @@ function App() {
   return (
     <div className="App">
       <h1>Service Status Dashboard</h1>
-      {error && <div className="error">Error: {error.message}</div>}
+      {error && <div className="error">Error: {error}</div>}
       {renderGrid()}
     </div>
   );

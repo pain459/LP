@@ -2,7 +2,8 @@ version: '3.8'
 
 services:
   service1:
-    build: ./service1
+    build:
+      context: ./service1
     ports:
       - "8081:80"
     deploy:
@@ -13,7 +14,8 @@ services:
       - monitor_network
 
   service2:
-    build: ./service2
+    build:
+      context: ./service2
     ports:
       - "8082:80"
     deploy:
@@ -24,7 +26,8 @@ services:
       - monitor_network
 
   service3:
-    build: ./service3
+    build:
+      context: ./service3
     ports:
       - "8083:80"
     deploy:
@@ -35,7 +38,8 @@ services:
       - monitor_network
 
   service4:
-    build: ./service4
+    build:
+      context: ./service4
     ports:
       - "8084:80"
     deploy:
@@ -46,7 +50,8 @@ services:
       - monitor_network
 
   monitor:
-    build: ./monitor
+    build:
+      context: ./monitor
     deploy:
       resources:
         limits:
@@ -61,11 +66,14 @@ services:
       - "5000:5000"
 
   ui:
-    build: ./ui
+    build:
+      context: ./ui
     ports:
       - "3000:80"
     networks:
       - monitor_network
+    environment:
+      - REACT_APP_API_URL=http://monitor:5000/status
 
 networks:
   monitor_network:
