@@ -14,7 +14,7 @@ logger = logging.getLogger('MonitorLogger')
 logger.setLevel(logging.INFO)
 logger.addHandler(log_handler)
 
-# Read API endpoints from the services directory
+# Read API endpoints from the services directory    
 services_dir = 'services'
 api_configs = []
 for filename in os.listdir(services_dir):
