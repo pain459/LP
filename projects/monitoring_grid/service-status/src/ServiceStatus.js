@@ -1,6 +1,7 @@
 // src/ServiceStatus.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './ServiceStatus.css';
 
 const ServiceStatus = () => {
   const [statusData, setStatusData] = useState({});
@@ -20,14 +21,27 @@ const ServiceStatus = () => {
     // Fetch data immediately when the component mounts
     fetchStatusData();
 
-    // Set up interval to fetch data every 20 minutes
+    // Set up interval to fetch data every 20 seconds
     const interval = setInterval(() => {
       fetchStatusData();
-    }, 20 * 60 * 1000);
+    }, 20 * 1000);
 
     // Clean up the interval on component unmount
     return () => clearInterval(interval);
   }, []);
+
+  const getStatusClass = (status) => {
+    switch (status) {
+      case 'UP':
+        return 'status-up';
+      case 'DOWN':
+        return 'status-down';
+      case 'DEGRADED':
+        return 'status-degraded';
+      default:
+        return '';
+    }
+  };
 
   return (
     <div>
@@ -46,9 +60,15 @@ const ServiceStatus = () => {
           {Object.keys(statusData).map((service) => (
             <tr key={service}>
               <td>{service}</td>
-              <td>{statusData[service].dependents}</td>
-              <td>{statusData[service].genesis}</td>
-              <td>{statusData[service].potentials}</td>
+              <td className={getStatusClass(statusData[service].dependents)}>
+                {statusData[service].dependents}
+              </td>
+              <td className={getStatusClass(statusData[service].genesis)}>
+                {statusData[service].genesis}
+              </td>
+              <td className={getStatusClass(statusData[service].potentials)}>
+                {statusData[service].potentials}
+              </td>
             </tr>
           ))}
         </tbody>

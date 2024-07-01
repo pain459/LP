@@ -1,0 +1,31 @@
+/* src/ServiceStatus.css */
+.status-up {
+    background-color: green;
+    color: white;
+  }
+  
+  .status-down {
+    background-color: red;
+    color: white;
+  }
+  
+  .status-degraded {
+    background-color: orange;
+    color: white;
+  }
+  
+  table {
+    width: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
