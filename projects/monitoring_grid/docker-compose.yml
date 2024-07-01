@@ -65,15 +65,15 @@ services:
     ports:
       - "5000:5000"
 
-  ui:
-    build:
-      context: ./ui
-    ports:
-      - "3000:80"
-    networks:
-      - monitor_network
-    environment:
-      - REACT_APP_API_URL=http://monitor:5000/status
+  # ui:
+  #   build:
+  #     context: ./ui
+  #   ports:
+  #     - "3000:80"
+  #   networks:
+  #     - monitor_network
+  #   environment:
+  #     - REACT_APP_API_URL=http://monitor:5000/status
 
 networks:
   monitor_network:
