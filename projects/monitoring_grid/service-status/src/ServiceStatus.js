@@ -51,8 +51,8 @@ const ServiceStatus = () => {
         <thead>
           <tr>
             <th>Service</th>
-            <th>Dependents</th>
             <th>Genesis</th>
+            <th>Dependents</th>
             <th>Potentials</th>
           </tr>
         </thead>
@@ -60,14 +60,20 @@ const ServiceStatus = () => {
           {Object.keys(statusData).map((service) => (
             <tr key={service}>
               <td>{service}</td>
-              <td className={getStatusClass(statusData[service].dependents)}>
-                {statusData[service].dependents}
-              </td>
               <td className={getStatusClass(statusData[service].genesis)}>
                 {statusData[service].genesis}
+                <br />
+                <small>{statusData[service].registered_services.genesis}</small>
+              </td>
+              <td className={getStatusClass(statusData[service].dependents)}>
+                {statusData[service].dependents}
+                <br />
+                <small>{statusData[service].registered_services.dependents.join(', ')}</small>
               </td>
               <td className={getStatusClass(statusData[service].potentials)}>
                 {statusData[service].potentials}
+                <br />
+                <small>{statusData[service].registered_services.potentials.join(', ')}</small>
               </td>
             </tr>
           ))}

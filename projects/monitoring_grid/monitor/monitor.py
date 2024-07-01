@@ -6,6 +6,7 @@ from logging.handlers import RotatingFileHandler
 from flask import Flask, jsonify
 from flask_cors import CORS
 import yaml
+from collections import OrderedDict
 
 # Configuration for logging
 log_handler = RotatingFileHandler('monitor.log', maxBytes=104857600, backupCount=5)
@@ -48,34 +49,57 @@ def monitor_apis():
             dependents_status = [check_api(dep) for dep in api_config.get('dependents', [])]
             potentials_status = [check_api(pot) for pot in api_config.get('potentials', [])]
 
+            registered_services = OrderedDict([
+                ('genesis', f"{api_config['genesis']['host']}:{api_config['genesis']['port']}"),
+                ('dependents', [f"{dep['host']}:{dep['port']}" for dep in api_config.get('dependents', [])]),
+                ('potentials', [f"{pot['host']}:{pot['port']}" for pot in api_config.get('potentials', [])])
+            ])
+
             if not genesis_up:
-                service_status[name] = {
-                    'genesis': 'DOWN',
-                    'dependents': 'DEGRADED',
-                    'potentials': 'DEGRADED'
-                }
+                service_status[name] = OrderedDict([
+                    ('genesis', 'DOWN'),
+                    ('dependents', 'DEGRADED'),
+                    ('potentials', 'DEGRADED'),
+                    ('registered_services', registered_services)
+                ])
             elif any(not dep for dep in dependents_status):
-                service_status[name] = {
-                    'genesis': 'UP',
-                    'dependents': 'DOWN',
-                    'potentials': 'DEGRADED'
-                }
+                service_status[name] = OrderedDict([
+                    ('genesis', 'UP'),
+                    ('dependents', 'DOWN'),
+                    ('potentials', 'DEGRADED'),
+                    ('registered_services', registered_services)
+                ])
             elif any(not pot for pot in potentials_status):
-                service_status[name] = {
-                    'genesis': 'UP',
-                    'dependents': 'UP',
-                    'potentials': 'DEGRADED'
-                }
+                service_status[name] = OrderedDict([
+                    ('genesis', 'UP'),
+                    ('dependents', 'UP'),
+                    ('potentials', 'DEGRADED'),
+                    ('registered_services', registered_services)
+                ])
             else:
-                service_status[name] = {
-                    'genesis': 'UP',
-                    'dependents': 'UP',
-                    'potentials': 'UP'
-                }
+                service_status[name] = OrderedDict([
+                    ('genesis', 'UP'),
+                    ('dependents', 'UP'),
+                    ('potentials', 'UP'),
+                    ('registered_services', registered_services)
+                ])
         time.sleep(30)
 
 if __name__ == "__main__":
-    service_status = {api['genesis']['host']: {'genesis': 'UNKNOWN', 'dependents': 'UNKNOWN', 'potentials': 'UNKNOWN'} for api in api_configs}
+    service_status = OrderedDict()
+    for api in api_configs:
+        registered_services = OrderedDict([
+            ('genesis', f"{api['genesis']['host']}:{api['genesis']['port']}"),
+            ('dependents', [f"{dep['host']}:{dep['port']}" for dep in api.get('dependents', [])]),
+            ('potentials', [f"{pot['host']}:{pot['port']}" for pot in api.get('potentials', [])])
+        ])
+        service_status[api['genesis']['host']] = OrderedDict([
+            ('genesis', 'UNKNOWN'),
+            ('dependents', 'UNKNOWN'),
+            ('potentials', 'UNKNOWN'),
+            ('registered_services', registered_services)
+        ])
+
     import threading
     monitor_thread = threading.Thread(target=monitor_apis)
     monitor_thread.start()

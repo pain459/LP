@@ -1,31 +1,69 @@
 /* src/ServiceStatus.css */
-.status-up {
-    background-color: green;
-    color: white;
+body {
+    background-color: #1c1c1c;
+    color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
   }
   
-  .status-down {
-    background-color: red;
-    color: white;
+  h1 {
+    color: #32a852; /* Less bright green */
+    text-shadow: 0 0 2px #32a852;
+    margin-top: 20px;
+    font-size: 2em;
   }
   
-  .status-degraded {
-    background-color: orange;
-    color: white;
+  p {
+    color: #00b3cc; /* Less bright blue */
+    text-shadow: 0 0 2px #00b3cc;
+    font-size: 1em;
   }
   
   table {
     width: 80%;
-    margin: 0 auto;
+    margin: 20px auto;
     border-collapse: collapse;
+    box-shadow: 0 0 5px #00b3cc;
   }
   
   th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    border: 1px solid #00b3cc;
+    padding: 10px;
+    text-align: center;
+    font-size: 1em;
   }
   
   th {
-    background-color: #f2f2f2;
+    background-color: #333;
+    color: #f5f5f5;
+  }
+  
+  td {
+    color: #f5f5f5;
+  }
+  
+  .status-up {
+    background-color: #32a852; /* Less bright green */
+    color: #000;
+    text-shadow: 0 0 2px #32a852;
+  }
+  
+  .status-down {
+    background-color: #e60000; /* Less bright red */
+    color: #000;
+    text-shadow: 0 0 2px #e60000;
+  }
+  
+  .status-degraded {
+    background-color: #ff8c00; /* Less bright amber */
+    color: #000;
+    text-shadow: 0 0 2px #ff8c00;
+  }
+  
+  small {
+    display: block;
+    font-size: 0.8em;
+    color: #aaa;
   }
   
