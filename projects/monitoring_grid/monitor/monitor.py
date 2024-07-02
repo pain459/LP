@@ -3,11 +3,12 @@ import requests
 import time
 import logging
 from logging.handlers import RotatingFileHandler
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import yaml
 from collections import OrderedDict
 import json
+import threading
 
 # Configuration for logging
 log_handler = RotatingFileHandler('monitor.log', maxBytes=104857600, backupCount=5)
@@ -68,10 +69,12 @@ except Exception as e:
 
 # Flask app setup
 app = Flask(__name__)
-CORS(app, resources={r"/status": {"origins": "*"}})  # Allow all origins for the /status endpoint
+CORS(app, resources={r"/*": {"origins": "*"}})  # Allow all origins for all endpoints
 
-@app.route('/status', methods=['GET'])
+@app.route('/status', methods=['GET', 'OPTIONS'])
 def status():
+    if request.method == 'OPTIONS':
+        return '', 204  # Handle preflight requests
     return jsonify({'services': service_status})
 
 def check_api(api):
@@ -156,7 +159,6 @@ if __name__ == "__main__":
             ('registered_services', registered_services)
         ])
 
-    import threading
     monitor_thread = threading.Thread(target=monitor_apis)
     monitor_thread.start()
     app.run(host='0.0.0.0', port=5000)

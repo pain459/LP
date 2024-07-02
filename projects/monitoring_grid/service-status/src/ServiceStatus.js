@@ -1,4 +1,3 @@
-// src/ServiceStatus.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ServiceStatus.css';
@@ -6,18 +5,35 @@ import './ServiceStatus.css';
 const ServiceStatus = () => {
   const [statusData, setStatusData] = useState({});
   const [lastUpdated, setLastUpdated] = useState(null);
+  // const apiUrl = process.env.REACT_APP_API_URL || 'http://172.19.0.4:5000/status';
+  const apiUrl = process.env.REACT_APP_API_URL;
 
-  const fetchStatusData = async () => {
-    try {
-      const response = await axios.get('http://localhost:5000/status');
-      setStatusData(response.data.services);
-      setLastUpdated(new Date().toLocaleString());
-    } catch (error) {
-      console.error('Error fetching status data:', error);
-    }
-  };
 
   useEffect(() => {
+    const fetchStatusData = async () => {
+      try {
+        console.log('Fetching status data from API URL:', apiUrl);
+        const response = await axios.get(apiUrl);
+        console.log('Status data fetched successfully:', response.data);
+        setStatusData(response.data.services);
+        setLastUpdated(new Date().toLocaleString());
+      } catch (error) {
+        console.error('Error fetching status data:', error);
+        if (error.response) {
+          // Server responded with a status other than 2xx
+          console.error('Response data:', error.response.data);
+          console.error('Response status:', error.response.status);
+          console.error('Response headers:', error.response.headers);
+        } else if (error.request) {
+          // Request was made but no response was received
+          console.error('Request data:', error.request);
+        } else {
+          // Something happened in setting up the request
+          console.error('Error message:', error.message);
+        }
+      }
+    };
+
     // Fetch data immediately when the component mounts
     fetchStatusData();
 
@@ -28,7 +44,7 @@ const ServiceStatus = () => {
 
     // Clean up the interval on component unmount
     return () => clearInterval(interval);
-  }, []);
+  }, [apiUrl]);
 
   const getStatusClass = (status) => {
     switch (status) {

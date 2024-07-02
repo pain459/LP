@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  react-app:
+    build:
+      context: .
+      # args:
+        # - REACT_APP_API_URL=http://172.19.0.4:5000/status
+        # - REACT_APP_API_URL=http://localhost:5000/status
+    ports:
+      - "3000:80"
+    networks:
+      - monitoring_grid_monitor_network
+    # environment:
+      # - REACT_APP_API_URL=http://172.19.0.4:5000/status
+      # - REACT_APP_API_URL=http://localhost:5000/status
+
+networks:
+  monitoring_grid_monitor_network:
+    external: true
