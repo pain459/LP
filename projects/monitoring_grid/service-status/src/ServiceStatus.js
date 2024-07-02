@@ -54,6 +54,8 @@ const ServiceStatus = () => {
             <th>Genesis</th>
             <th>Dependents</th>
             <th>Potentials</th>
+            <th>Impacted Dependents</th>
+            <th>Impacted Potentials</th>
           </tr>
         </thead>
         <tbody>
@@ -62,18 +64,18 @@ const ServiceStatus = () => {
               <td>{service}</td>
               <td className={getStatusClass(statusData[service].genesis)}>
                 {statusData[service].genesis}
-                <br />
-                <small>{statusData[service].registered_services.genesis}</small>
               </td>
               <td className={getStatusClass(statusData[service].dependents)}>
                 {statusData[service].dependents}
-                <br />
-                <small>{statusData[service].registered_services.dependents.join(', ')}</small>
               </td>
               <td className={getStatusClass(statusData[service].potentials)}>
                 {statusData[service].potentials}
-                <br />
-                <small>{statusData[service].registered_services.potentials.join(', ')}</small>
+              </td>
+              <td>
+                {statusData[service].impacted_dependents.join(', ')}
+              </td>
+              <td>
+                {statusData[service].impacted_potentials.join(', ')}
               </td>
             </tr>
           ))}

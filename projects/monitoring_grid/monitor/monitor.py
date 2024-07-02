@@ -33,6 +33,7 @@ def transform_api_data(data):
     transformed_data = []
     for api in data.get('apis', []):
         transformed_data.append({
+            'name': api.get('name', api['genesis']['host']),
             'genesis': api.get('genesis', {}),
             'dependents': api.get('dependents', []),
             'potentials': api.get('potentials', [])
@@ -65,8 +66,6 @@ except yaml.YAMLError as e:
 except Exception as e:
     print(f"Unexpected error with file {file_path}: {e}")
 
-
-
 # Flask app setup
 app = Flask(__name__)
 CORS(app, resources={r"/status": {"origins": "*"}})  # Allow all origins for the /status endpoint
@@ -89,8 +88,11 @@ def monitor_apis():
         for api_config in api_configs:
             name = api_config.get('name', api_config['genesis']['host'])  # Fallback to genesis host if name is missing
             genesis_up = check_api(api_config['genesis'])
-            dependents_status = [check_api(dep) for dep in api_config.get('dependents', [])]
-            potentials_status = [check_api(pot) for pot in api_config.get('potentials', [])]
+            dependents_status = {f"{dep['host']}:{dep['port']}": check_api(dep) for dep in api_config.get('dependents', [])}
+            potentials_status = {f"{pot['host']}:{pot['port']}": check_api(pot) for pot in api_config.get('potentials', [])}
+
+            impacted_dependents = [dep for dep, status in dependents_status.items() if not status]
+            impacted_potentials = [pot for pot, status in potentials_status.items() if not status]
 
             registered_services = OrderedDict([
                 ('genesis', f"{api_config['genesis']['host']}:{api_config['genesis']['port']}"),
@@ -103,20 +105,26 @@ def monitor_apis():
                     ('genesis', 'DOWN'),
                     ('dependents', 'DEGRADED'),
                     ('potentials', 'DEGRADED'),
+                    ('impacted_dependents', impacted_dependents),
+                    ('impacted_potentials', impacted_potentials),
                     ('registered_services', registered_services)
                 ])
-            elif any(not dep for dep in dependents_status):
+            elif impacted_dependents:
                 service_status[name] = OrderedDict([
                     ('genesis', 'UP'),
                     ('dependents', 'DOWN'),
                     ('potentials', 'DEGRADED'),
+                    ('impacted_dependents', impacted_dependents),
+                    ('impacted_potentials', impacted_potentials),
                     ('registered_services', registered_services)
                 ])
-            elif any(not pot for pot in potentials_status):
+            elif impacted_potentials:
                 service_status[name] = OrderedDict([
                     ('genesis', 'UP'),
                     ('dependents', 'UP'),
                     ('potentials', 'DEGRADED'),
+                    ('impacted_dependents', impacted_dependents),
+                    ('impacted_potentials', impacted_potentials),
                     ('registered_services', registered_services)
                 ])
             else:
@@ -124,6 +132,8 @@ def monitor_apis():
                     ('genesis', 'UP'),
                     ('dependents', 'UP'),
                     ('potentials', 'UP'),
+                    ('impacted_dependents', impacted_dependents),
+                    ('impacted_potentials', impacted_potentials),
                     ('registered_services', registered_services)
                 ])
         time.sleep(30)
@@ -141,6 +151,8 @@ if __name__ == "__main__":
             ('genesis', 'UNKNOWN'),
             ('dependents', 'UNKNOWN'),
             ('potentials', 'UNKNOWN'),
+            ('impacted_dependents', []),
+            ('impacted_potentials', []),
             ('registered_services', registered_services)
         ])
 
