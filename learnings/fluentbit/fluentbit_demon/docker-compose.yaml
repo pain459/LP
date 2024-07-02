@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  python-app:
+    build: .
+    volumes:
+      - /var/log:/var/log
+
+  fluent-bit:
+    image: fluent/fluent-bit:latest
+    volumes:
+      - /var/log:/var/log
+      - ./fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+    ports:
+      - "2020:2020"
