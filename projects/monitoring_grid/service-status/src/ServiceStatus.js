@@ -71,10 +71,10 @@ const ServiceStatus = () => {
               <td className={getStatusClass(statusData[service].potentials)}>
                 {statusData[service].potentials}
               </td>
-              <td>
+              <td className="impact-data">
                 {statusData[service].impacted_dependents.join(', ')}
               </td>
-              <td>
+              <td className="impact-data">
                 {statusData[service].impacted_potentials.join(', ')}
               </td>
             </tr>
