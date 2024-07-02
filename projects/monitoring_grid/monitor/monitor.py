@@ -7,6 +7,7 @@ from flask import Flask, jsonify
 from flask_cors import CORS
 import yaml
 from collections import OrderedDict
+import json
 
 # Configuration for logging
 log_handler = RotatingFileHandler('monitor.log', maxBytes=104857600, backupCount=5)
@@ -15,13 +16,56 @@ logger = logging.getLogger('MonitorLogger')
 logger.setLevel(logging.INFO)
 logger.addHandler(log_handler)
 
-# Read API endpoints from the services directory    
-services_dir = 'services'
-api_configs = []
-for filename in os.listdir(services_dir):
-    if filename.endswith('.yaml'):
-        with open(os.path.join(services_dir, filename), 'r') as f:
-            api_configs.append(yaml.safe_load(f))
+# Determine the file path for endpoints.yaml
+try:
+    base_dir = os.path.dirname(__file__)
+except NameError:
+    base_dir = os.getcwd()
+
+file_path = os.path.join(base_dir, 'endpoints.yaml')
+output_file_path = os.path.join(base_dir, 'api_configs.json')
+
+def load_yaml_file(file_path):
+    with open(file_path, 'r') as file:
+        return yaml.safe_load(file)
+
+def transform_api_data(data):
+    transformed_data = []
+    for api in data.get('apis', []):
+        transformed_data.append({
+            'genesis': api.get('genesis', {}),
+            'dependents': api.get('dependents', []),
+            'potentials': api.get('potentials', [])
+        })
+    return transformed_data
+
+def save_to_json_file(data, file_path):
+    with open(file_path, 'w') as file:
+        json.dump(data, file, indent=4)
+
+try:
+    # Load the YAML data from the specified file
+    yaml_data = load_yaml_file(file_path)
+    
+    # Check if the 'apis' key is present in the loaded YAML data
+    if 'apis' in yaml_data:
+        # Transform the loaded data
+        api_configs = transform_api_data(yaml_data)
+        
+        # Save the transformed data to a JSON file
+        save_to_json_file(api_configs, output_file_path)
+        
+        # Print the transformed data
+        print(api_configs)
+    else:
+        print(f"The file {file_path} does not contain the 'apis' key")
+
+except yaml.YAMLError as e:
+    print(f"Error parsing YAML file {file_path}: {e}")
+except Exception as e:
+    print(f"Unexpected error with file {file_path}: {e}")
+
+
 
 # Flask app setup
 app = Flask(__name__)
@@ -41,10 +85,9 @@ def check_api(api):
         return False
 
 def monitor_apis():
-    global service_status
     while True:
         for api_config in api_configs:
-            name = api_config['genesis']['host']
+            name = api_config.get('name', api_config['genesis']['host'])  # Fallback to genesis host if name is missing
             genesis_up = check_api(api_config['genesis'])
             dependents_status = [check_api(dep) for dep in api_config.get('dependents', [])]
             potentials_status = [check_api(pot) for pot in api_config.get('potentials', [])]
@@ -88,12 +131,13 @@ def monitor_apis():
 if __name__ == "__main__":
     service_status = OrderedDict()
     for api in api_configs:
+        name = api.get('name', api['genesis']['host'])  # Fallback to genesis host if name is missing
         registered_services = OrderedDict([
             ('genesis', f"{api['genesis']['host']}:{api['genesis']['port']}"),
             ('dependents', [f"{dep['host']}:{dep['port']}" for dep in api.get('dependents', [])]),
             ('potentials', [f"{pot['host']}:{pot['port']}" for pot in api.get('potentials', [])])
         ])
-        service_status[api['genesis']['host']] = OrderedDict([
+        service_status[name] = OrderedDict([
             ('genesis', 'UNKNOWN'),
             ('dependents', 'UNKNOWN'),
             ('potentials', 'UNKNOWN'),

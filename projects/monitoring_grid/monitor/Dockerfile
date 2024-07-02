@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY monitor.py /app
 # COPY endpoints.txt /app
-# COPY endpoints.yaml /app
+COPY endpoints.yaml /app
 COPY services /app/services
 
 RUN pip install flask requests pyyaml Flask-Cors==1.10.3
