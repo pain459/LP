@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-app2
+  namespace: logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-app2
+  template:
+    metadata:
+      labels:
+        app: python-app2
+    spec:
+      containers:
+      - name: python-app2
+        image: python-app2:latest
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+      volumes:
+      - name: varlog
+        hostPath:
+          path: /var/log
+          type: DirectoryOrCreate

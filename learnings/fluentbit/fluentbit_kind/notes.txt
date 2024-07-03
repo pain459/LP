@@ -1,0 +1,38 @@
+### Step by step instructions for the setup ###
+
+-- create namespace named logging
+
+kubectl create namespace logging
+
+-- Build images 
+
+docker build -t python-app1:latest -f Dockerfile.app1 .
+docker build -t python-app2:latest -f Dockerfile.app2 .
+
+-- Load images into the kind cluster
+
+kind load docker-image python-app1:latest
+kind load docker-image python-app2:latest
+
+-- Verify the image loading
+
+docker exec -it kind-control-plane crictl images
+
+-- create service account
+
+kubectl apply -f fluent-bit-service-account.yaml
+
+-- Apply ClusterRole and ClusterRoleBinding configurations
+
+kubectl apply -f fluent-bit-cluster-role.yaml
+kubectl apply -f fluent-bit-cluster-role-binding.yaml
+
+-- Apply configmap and daemonset
+
+kubectl apply -f fluent-bit-configmap.yaml
+kubectl apply -f fluent-bit-daemonset.yaml
+
+-- Apply pods related yaml files
+
+kubectl apply -f sample-app1.yaml
+kubectl apply -f sample-app2.yaml
