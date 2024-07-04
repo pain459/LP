@@ -1,0 +1,8 @@
+FROM debian:buster
+
+RUN apt-get update && \
+    apt-get install -y krb5-user
+
+COPY krb5.conf /etc/krb5.conf
+
+CMD ["bash"]

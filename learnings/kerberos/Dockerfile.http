@@ -1,0 +1,13 @@
+FROM debian:buster
+
+RUN apt-get update && \
+    apt-get install -y apache2 libapache2-mod-auth-kerb
+
+COPY krb5.conf /etc/krb5.conf
+COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+
+RUN a2enmod ssl && \
+    a2enmod auth_kerb && \
+    a2ensite default-ssl
+
+CMD ["apache2ctl", "-D", "FOREGROUND"]

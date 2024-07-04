@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  kerberos:
+    image: kerberos/server
+    container_name: kerberos-server
+    environment:
+      REALM: EXAMPLE.COM
+      DOMAIN: example.com
+      ADMIN_PASSWORD: admin
+      USER_PASSWORD: user
+    ports:
+      - "88:88"
+      - "749:749"
+    volumes:
+      - krb5_config:/etc/krb5kdc
+
+  client:
+    image: kerberos/client
+    container_name: kerberos-client
+    environment:
+      REALM: EXAMPLE.COM
+      DOMAIN: example.com
+    depends_on:
+      - kerberos
+
+  http_service:
+    image: kerberos/http
+    container_name: http-service
+    environment:
+      REALM: EXAMPLE.COM
+      DOMAIN: example.com
+    depends_on:
+      - kerberos
+
+volumes:
+  krb5_config:

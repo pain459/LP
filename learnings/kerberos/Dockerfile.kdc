@@ -1,0 +1,13 @@
+FROM debian:buster
+
+RUN apt-get update && \
+    apt-get install -y krb5-kdc krb5-admin-server
+
+COPY krb5.conf /etc/krb5.conf
+COPY kdc.conf /etc/krb5kdc/kdc.conf
+COPY kadm5.acl /etc/krb5kdc/kadm5.acl
+COPY setup_kerberos.sh /setup_kerberos.sh
+
+RUN chmod +x /setup_kerberos.sh && /setup_kerberos.sh
+
+CMD ["/usr/sbin/krb5kdc", "-n"]
