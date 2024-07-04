@@ -22,5 +22,5 @@ query = "SELECT * FROM your_table"
 # Fetch data from the database into a DataFrame
 df = pd.read_sql(query, engine)
 
-# Display the DataFrame
-print(df)
+# Display the DataFrame without the index column
+print(df.to_string(index=False))
