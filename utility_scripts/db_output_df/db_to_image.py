@@ -1,5 +1,23 @@
 import pandas as pd
 from sqlalchemy import create_engine
+import matplotlib.pyplot as plt
+import sys
+
+def save_dataframe_as_image(df, filename='output.png'):
+    # Create a figure and a plot
+    fig, ax = plt.subplots(figsize=(12, 4))  # Adjust the size as needed
+    ax.axis('off')
+    ax.axis('tight')
+
+    # Create a table from the DataFrame
+    table = ax.table(cellText=df.values, colLabels=df.columns, cellLoc='center', loc='center')
+    table.auto_set_font_size(False)
+    table.set_fontsize(10)
+    table.scale(1.2, 1.2)
+
+    # Save the plot as an image
+    plt.savefig(filename, bbox_inches='tight', dpi=300)
+    plt.close()
 
 # Database connection parameters
 DB_TYPE = 'postgresql'
@@ -25,3 +43,8 @@ df = pd.read_sql(query, engine)
 
 # Display the DataFrame without the index column
 print(df.to_string(index=False))
+
+# Optional: Save the DataFrame as an image
+if '--save-image' in sys.argv:
+    save_dataframe_as_image(df)
+    print("DataFrame saved as image: output.png")
