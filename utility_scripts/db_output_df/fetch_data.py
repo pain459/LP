@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import sys
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
+import time
 
 
 """
@@ -66,11 +67,17 @@ engine = create_engine(DATABASE_URI)
 with open('query.sql', 'r') as file:
     query = file.read()
 
+# Measure query execution time
+start_time = time.time()
 # Fetch data from the database into a DataFrame
 df = pd.read_sql(query, engine)
+end_time = time.time()
 
 # Display the DataFrame without the index column
 print(df.to_string(index=False))
+
+# Print query execution time
+print(f"Query executed in {end_time - start_time:.2f} seconds")
 
 # Optional: Save the DataFrame as an image
 if '--save-image' in sys.argv:
