@@ -16,8 +16,9 @@ DATABASE_URI = f"{DB_TYPE}+{DB_DRIVER}://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}
 # Create a database engine
 engine = create_engine(DATABASE_URI)
 
-# Define the query to retrieve data
-query = "SELECT * FROM your_table"
+# Load the query from the query.sql file
+with open('query.sql', 'r') as file:
+    query = file.read()
 
 # Fetch data from the database into a DataFrame
 df = pd.read_sql(query, engine)
