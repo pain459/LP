@@ -1,0 +1,20 @@
+-- First time setup
+
+$ aws configure
+AWS Access Key ID [None]: test
+AWS Secret Access Key [None]: test
+Default region name [None]: us-east-1
+Default output format [None]: json
+$ aws --endpoint-url=http://localhost:4566 s3 mb s3://my-test-bucket
+make_bucket: my-test-bucket
+$ aws --endpoint-url=http://localhost:4566 s3 ls
+2024-07-07 09:10:42 my-test-bucket
+$ echo "Hello LocalStack" > testfile.txt
+aws --endpoint-url=http://localhost:4566 s3 cp testfile.txt s3://my-test-bucket/
+upload: ./testfile.txt to s3://my-test-bucket/testfile.txt      
+$ aws --endpoint-url=http://localhost:4566 s3 ls
+2024-07-07 09:10:42 my-test-bucket
+$ aws --endpoint-url=http://localhost:4566 s3 ls^C
+#$ aws --endpoint-url=http://localhost:4566 s3 ls s3://my-test-bucket/
+2024-07-07 09:11:15         17 testfile.txt
+
