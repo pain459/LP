@@ -7,7 +7,7 @@ services:
       - "4566:4566"
       - "4572:4572"
     environment:
-      - SERVICES=s3
+      - SERVICES=s3,lambda,dynamodb
       - DEFAULT_REGION=us-east-1
       - LAMBDA_EXECUTOR=docker
       - TMPDIR=/var/lib/localstack/tmp
