@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  localstack:
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+      - "4572:4572"
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=us-east-1
+      - LAMBDA_EXECUTOR=docker
+      - TMPDIR=/var/lib/localstack/tmp
+      - DATA_DIR=/var/lib/localstack/data
+    volumes:
+      - "localstack-data:/var/lib/localstack"
+
+volumes:
+  localstack-data:
