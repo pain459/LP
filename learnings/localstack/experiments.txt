@@ -1,0 +1,107 @@
+1. Lambda Functions
+
+    Create and Invoke a Lambda Function:
+
+    # Create a deployment package
+    echo 'def handler(event, context): return {"statusCode": 200, "body": "Hello from Lambda"}' > lambda_function.py
+    zip function.zip lambda_function.py
+
+    # Create the Lambda function
+    aws --endpoint-url=http://localhost:4566 lambda create-function --function-name my-function --runtime python3.8 --role arn:aws:iam::000000000000:role/irrelevant --handler lambda_function.handler --zip-file fileb://function.zip
+
+    # Invoke the Lambda function
+    aws --endpoint-url=http://localhost:4566 lambda invoke --function-name my-function output.txt
+
+    # Check the output
+    cat output.txt
+
+2. DynamoDB
+
+    Create a Table and Perform CRUD Operations:
+
+    # Create a table
+    aws --endpoint-url=http://localhost:4566 dynamodb create-table --table-name MyTable --attribute-definitions AttributeName=ID,AttributeType=S --key-schema AttributeName=ID,KeyType=HASH --provisioned-throughput ReadCapacityUnits=5,WriteCapacityUnits=5
+
+    # List tables
+    aws --endpoint-url=http://localhost:4566 dynamodb list-tables
+
+    # Put an item
+    aws --endpoint-url=http://localhost:4566 dynamodb put-item --table-name MyTable --item '{"ID": {"S": "123"}, "Name": {"S": "John Doe"}}'
+
+    # Get an item
+    aws --endpoint-url=http://localhost:4566 dynamodb get-item --table-name MyTable --key '{"ID": {"S": "123"}}'
+
+    # Update an item
+    aws --endpoint-url=http://localhost:4566 dynamodb update-item --table-name MyTable --key '{"ID": {"S": "123"}}' --update-expression "SET Age = :age" --expression-attribute-values '{":age": {"N": "30"}}'
+
+    # Delete an item
+    aws --endpoint-url=http://localhost:4566 dynamodb delete-item --table-name MyTable --key '{"ID": {"S": "123"}}'
+
+3. API Gateway
+
+    Create a REST API and Integrate with Lambda:
+
+    # Create a REST API
+    aws --endpoint-url=http://localhost:4566 apigateway create-rest-api --name "MyAPI"
+
+    # Get the root resource ID
+    REST_API_ID=$(aws --endpoint-url=http://localhost:4566 apigateway get-rest-apis | jq -r '.items[0].id')
+    ROOT_RESOURCE_ID=$(aws --endpoint-url=http://localhost:4566 apigateway get-resources --rest-api-id $REST_API_ID | jq -r '.items[0].id')
+
+    # Create a resource
+    aws --endpoint-url=http://localhost:4566 apigateway create-resource --rest-api-id $REST_API_ID --parent-id $ROOT_RESOURCE_ID --path-part "test"
+
+    # Get the resource ID
+    RESOURCE_ID=$(aws --endpoint-url=http://localhost:4566 apigateway get-resources --rest-api-id $REST_API_ID | jq -r '.items[1].id')
+
+    # Create a method
+    aws --endpoint-url=http://localhost:4566 apigateway put-method --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method GET --authorization-type "NONE"
+
+    # Create an integration with Lambda
+    aws --endpoint-url=http://localhost:4566 apigateway put-integration --rest-api-id $REST_API_ID --resource-id $RESOURCE_ID --http-method GET --type AWS_PROXY --integration-http-method POST --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:000000000000:function:my-function/invocations
+
+    # Deploy the API
+    aws --endpoint-url=http://localhost:4566 apigateway create-deployment --rest-api-id $REST_API_ID --stage-name dev
+
+    # Test the API
+    curl -X GET "http://localhost:4566/restapis/$REST_API_ID/dev/_user_request_/test"
+
+4. SNS and SQS
+
+    Create an SNS Topic and Subscribe an SQS Queue:
+
+    # Create an SNS topic
+    aws --endpoint-url=http://localhost:4566 sns create-topic --name MyTopic
+
+    # Create an SQS queue
+    aws --endpoint-url=http://localhost:4566 sqs create-queue --queue-name MyQueue
+
+    # Subscribe the SQS queue to the SNS topic
+    TOPIC_ARN=$(aws --endpoint-url=http://localhost:4566 sns list-topics | jq -r '.Topics[0].TopicArn')
+    QUEUE_URL=$(aws --endpoint-url=http://localhost:4566 sqs get-queue-url --queue-name MyQueue | jq -r '.QueueUrl')
+    QUEUE_ARN=$(aws --endpoint-url=http://localhost:4566 sqs get-queue-attributes --queue-url $QUEUE_URL --attribute-name QueueArn | jq -r '.Attributes.QueueArn')
+    aws --endpoint-url=http://localhost:4566 sns subscribe --topic-arn $TOPIC_ARN --protocol sqs --notification-endpoint $QUEUE_ARN
+
+    # Publish a message to the SNS topic
+    aws --endpoint-url=http://localhost:4566 sns publish --topic-arn $TOPIC_ARN --message "Hello, LocalStack!"
+
+    # Receive the message from the SQS queue
+    aws --endpoint-url=http://localhost:4566 sqs receive-message --queue-url $QUEUE_URL
+
+5. CloudFormation
+
+    Deploy a Stack Using CloudFormation:
+
+# Save this as template.yml
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  MyBucket:
+    Type: 'AWS::S3::Bucket'
+    Properties:
+      BucketName: 'my-cloudformation-bucket'
+
+# Create a stack
+aws --endpoint-url=http://localhost:4566 cloudformation create-stack --stack-name MyStack --template-body file://template.yml
+
+# Describe the stack
+aws --endpoint-url=http://localhost:4566 cloudformation describe-stacks --stack-name MyStack
