@@ -2,7 +2,8 @@ from kivy.app import App
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
-from kivy.uix.floatlayout import FloatLayout
+from kivy.uix.popup import Popup
+from kivy.uix.button import Button
 from kivy.core.window import Window
 import random
 import numpy as np
@@ -70,6 +71,12 @@ class Game2048(App):
         for i in range(4):
             for j in range(4):
                 self.layout.add_widget(self.labels[i][j])
+
+        # Add developer info button
+        self.dev_info_button = Button(text="About", size_hint=(1, 0.1))
+        self.dev_info_button.bind(on_press=self.show_developer_info)
+        self.layout.add_widget(self.dev_info_button, index=0)
+
         self.update_grid()
         Window.bind(on_key_down=self.on_key_down)
         return self.layout
@@ -98,6 +105,14 @@ class Game2048(App):
         else:
             add_new_tile(self.board)
             self.update_grid()
+
+    def show_developer_info(self, instance):
+        content = Button(text='This 2048 game is developed by Pain.')
+        popup = Popup(title='PAIN',
+                      content=content,
+                      size_hint=(0.6, 0.6))
+        content.bind(on_press=popup.dismiss)
+        popup.open()
 
     def show_game_over(self):
         self.layout.clear_widgets()
