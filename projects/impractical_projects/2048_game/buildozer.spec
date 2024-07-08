@@ -7,7 +7,7 @@ title = 2048
 package.name = pain2048
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.2048
+package.domain = org.my2048game
 
 # (str) Source code where the main.py live
 source.dir = .
