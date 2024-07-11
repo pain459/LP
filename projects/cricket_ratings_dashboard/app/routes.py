@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from .models import CountryRanking, db
+from .models import CountryRanking, Player, db
 from . import redis_client
 
 main = Blueprint('main', __name__)
@@ -60,3 +60,16 @@ def get_sorted_rankings():
     rankings = redis_client.zrevrange('country_rankings', 0, -1, withscores=True)
     sorted_rankings = [{ 'country': rank[0].decode('utf-8'), 'points': rank[1] } for rank in rankings]
     return jsonify(sorted_rankings)
+
+@main.route('/players/top', methods=['GET'])
+def get_top_players():
+    top_players = redis_client.zrevrange('player_rankings', 0, 99, withscores=True)
+    player_details = []
+    for player_id, points in top_players:
+        player_id = player_id.decode('utf-8')
+        player = Player.query.filter_by(unique_id=player_id).first()
+        if player:
+            player_info = player.to_dict()
+            player_info['points'] = points
+            player_details.append(player_info)
+    return jsonify(player_details)

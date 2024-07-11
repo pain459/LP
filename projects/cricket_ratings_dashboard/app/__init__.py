@@ -17,7 +17,7 @@ def create_app():
     db.init_app(app)
 
     with app.app_context():
-        from .models import CountryRanking
+        from .models import CountryRanking, Player
         db.create_all()
 
     from .routes import main
