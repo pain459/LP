@@ -14,6 +14,11 @@ services:
       - "5432:5432"
     networks:
       - rankings_network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "512M"
 
   ranking_service:
     build: .
@@ -28,6 +33,11 @@ services:
       - .:/app
     networks:
       - rankings_network
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: "1G"
 
 networks:
   rankings_network:
