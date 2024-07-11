@@ -1,6 +1,6 @@
 import random
-from app import create_app, db, get_redis_client
-from app.models import CountryRanking
+from app import create_app, get_redis_client
+from app.models import CountryRanking, db
 
 app = create_app()
 app.app_context().push()
