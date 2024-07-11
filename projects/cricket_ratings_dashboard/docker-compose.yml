@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: country_rankings
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - rankings_network
+
+  ranking_service:
+    build: .
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql+psycopg2://user:password@db:5432/country_rankings
+    volumes:
+      - .:/app
+    networks:
+      - rankings_network
+
+networks:
+  rankings_network:
+    driver: bridge
+
+volumes:
+  postgres_data:

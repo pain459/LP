@@ -187,3 +187,6 @@ fabric.properties
 
 # Custom
 projects/impractical_projects/2048_game/.buildozer
+projects/cricket_ratings_dashboard/__pycache__
+projects/cricket_ratings_dashboard/app/__pycache__
+env

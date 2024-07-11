@@ -1,0 +1,20 @@
+CRUD
+
+curl -X POST http://localhost:5000/ranking -H "Content-Type: application/json" -d '{
+  "unique_id": "12345",
+  "country": "India",
+  "points": 1200
+}'
+
+
+curl -X GET http://localhost:5000/rankings
+
+
+curl -X PUT http://localhost:5000/ranking/1 -H "Content-Type: application/json" -d '{
+  "unique_id": "12345",
+  "country": "India",
+  "points": 1250
+}'
+
+
+curl -X DELETE http://localhost:5000/ranking/1
