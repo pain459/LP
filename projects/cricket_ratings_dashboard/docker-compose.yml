@@ -20,15 +20,30 @@ services:
           cpus: "0.5"
           memory: "512M"
 
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - rankings_network
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: "256M"
+
   ranking_service:
     build: .
     restart: always
     depends_on:
       - db
+      - redis
     ports:
       - "5000:5000"
     environment:
       DATABASE_URL: postgresql+psycopg2://user:password@db:5432/country_rankings
+      REDIS_URL: redis://redis:6379/0
     volumes:
       - .:/app
     networks:

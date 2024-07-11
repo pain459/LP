@@ -1,10 +1,10 @@
-# insert_data.py
 import random
-from app import create_app, db
+from app import create_app, db, get_redis_client
 from app.models import CountryRanking
 
 app = create_app()
 app.app_context().push()
+redis_client = get_redis_client()
 
 # List of country codes (example)
 country_codes = {
@@ -37,6 +37,7 @@ def insert_countries():
         points = generate_points()
         ranking = CountryRanking(unique_id=unique_id, country=country, points=points)
         db.session.add(ranking)
+        redis_client.zadd('country_rankings', {country: points})
     db.session.commit()
 
 if __name__ == "__main__":

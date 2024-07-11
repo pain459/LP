@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from .models import CountryRanking, db
+from . import redis_client
 
 main = Blueprint('main', __name__)
 
@@ -11,14 +12,23 @@ def get_rankings():
 @main.route('/ranking', methods=['POST'])
 def add_ranking():
     data = request.get_json()
-    new_ranking = CountryRanking(
-        unique_id=data['unique_id'],
-        country=data['country'],
-        points=data['points']
-    )
-    db.session.add(new_ranking)
-    db.session.commit()
-    return jsonify(new_ranking.to_dict()), 201
+    existing_ranking = CountryRanking.query.filter_by(unique_id=data['unique_id']).first()
+    if existing_ranking:
+        existing_ranking.country = data['country']
+        existing_ranking.points = data['points']
+        db.session.commit()
+        redis_client.zadd('country_rankings', {data['country']: data['points']})
+        return jsonify(existing_ranking.to_dict()), 200
+    else:
+        new_ranking = CountryRanking(
+            unique_id=data['unique_id'],
+            country=data['country'],
+            points=data['points']
+        )
+        db.session.add(new_ranking)
+        db.session.commit()
+        redis_client.zadd('country_rankings', {data['country']: data['points']})
+        return jsonify(new_ranking.to_dict()), 201
 
 @main.route('/ranking/<int:id>', methods=['PUT'])
 def update_ranking(id):
@@ -31,6 +41,7 @@ def update_ranking(id):
     ranking.country = data.get('country', ranking.country)
     ranking.points = data.get('points', ranking.points)
     db.session.commit()
+    redis_client.zadd('country_rankings', {data['country']: data['points']})
     return jsonify(ranking.to_dict())
 
 @main.route('/ranking/<int:id>', methods=['DELETE'])
@@ -39,6 +50,13 @@ def delete_ranking(id):
     if not ranking:
         return jsonify({'message': 'Ranking not found'}), 404
 
+    redis_client.zrem('country_rankings', ranking.country)
     db.session.delete(ranking)
     db.session.commit()
     return jsonify({'message': 'Ranking deleted'})
+
+@main.route('/rankings/sorted', methods=['GET'])
+def get_sorted_rankings():
+    rankings = redis_client.zrevrange('country_rankings', 0, -1, withscores=True)
+    sorted_rankings = [{ 'country': rank[0].decode('utf-8'), 'points': rank[1] } for rank in rankings]
+    return jsonify(sorted_rankings)
