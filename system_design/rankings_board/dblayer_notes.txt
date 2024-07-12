@@ -153,3 +153,10 @@ rankings_board=# SELECT pg_size_pretty( pg_database_size('rankings_board'));
 (1 row)
 
 rankings_board=#
+
+---
+
+Check the materialized view from the database 
+
+SELECT unique_id, player_age, status
+	FROM public.player_status_materialized LIMIT 5;

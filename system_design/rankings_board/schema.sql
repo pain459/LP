@@ -35,3 +35,17 @@ CREATE TABLE IF NOT EXISTS rankings_board.player_stats (
 \d rankings_board.country_codes
 \d rankings_board.player_names
 \d rankings_board.player_stats
+
+
+
+-- Material view of the players information to determine wether they are retired or not
+CREATE MATERIALIZED VIEW player_status_materialized AS
+SELECT 
+    unique_id,
+    DATE_PART('year', AGE(DOB)) AS player_age,
+    CASE 
+        WHEN DATE_PART('year', AGE(DOB)) >= 40 THEN 'Retired'
+        ELSE 'Active'
+    END AS status
+FROM 
+    rankings_board.player_names;
