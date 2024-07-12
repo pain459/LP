@@ -243,7 +243,7 @@ def generate_unique_id(country_code):
     return f"{country_code}{current_date}{random_string}"
 
 # Insert player names and stats
-for _ in range(1000):  # Generate 100 players
+for _ in range(100000):  # Generate 100000 players
     first_name = fake.first_name()
     middle_name = fake.first_name()
     last_name = fake.last_name()

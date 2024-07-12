@@ -1,0 +1,6 @@
+To startup fresh from the scratch use the following approachh.
+
+1. bootup the server
+2. use schema.sql scripts to create tables.
+3. use the script populate_country_codes.py to populate country codes info.
+4. use the script populate_player_data to insert players information.
