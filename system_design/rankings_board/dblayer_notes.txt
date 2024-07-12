@@ -145,5 +145,11 @@ Execute sql command from shell
 psql -h localhost -p 5432 -U admin -d rankings_board -c "SQL_COMMAND"
 
 
+# Find the size of the database
+rankings_board=# SELECT pg_size_pretty( pg_database_size('rankings_board'));
+ pg_size_pretty
+----------------
+ 1601 MB
+(1 row)
 
-
+rankings_board=#
