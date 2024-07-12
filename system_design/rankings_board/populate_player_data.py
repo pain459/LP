@@ -287,7 +287,7 @@ def insert_player_data():
     conn.close()
 
 # Number of players to insert
-num_players = 10000000
+num_players = 1000
 
 # Use ThreadPoolExecutor to insert data concurrently
 with ThreadPoolExecutor(max_workers=10) as executor:
