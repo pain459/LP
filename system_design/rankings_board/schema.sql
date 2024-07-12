@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS rankings_board.player_stats (
 
 
 -- Material view of the players information to determine wether they are retired or not
-CREATE MATERIALIZED VIEW player_status_materialized AS
+CREATE MATERIALIZED VIEW rankings_board.player_status_materialized AS
 SELECT 
     unique_id,
     DATE_PART('year', AGE(DOB)) AS player_age,

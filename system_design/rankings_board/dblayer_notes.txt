@@ -159,4 +159,4 @@ rankings_board=#
 Check the materialized view from the database 
 
 SELECT unique_id, player_age, status
-	FROM public.player_status_materialized LIMIT 5;
+	FROM rankings_board.player_status_materialized LIMIT 5;
