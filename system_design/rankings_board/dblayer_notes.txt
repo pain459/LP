@@ -160,3 +160,15 @@ Check the materialized view from the database
 
 SELECT unique_id, player_age, status
 	FROM rankings_board.player_status_materialized LIMIT 5;
+
+
+------ To check the materialized views 
+
+select schemaname as schema_name,
+       matviewname as view_name,
+       matviewowner as owner,
+       ispopulated as is_populated,
+       definition
+from pg_matviews
+order by schema_name,
+         view_name;
