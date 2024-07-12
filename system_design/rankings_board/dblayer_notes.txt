@@ -1,0 +1,38 @@
+# Connect to DB via psql
+
+psql -h localhost -p 5432 -U admin -d rankings_board
+Password for user admin:
+psql (16.3 (Ubuntu 16.3-0ubuntu0.24.04.1))
+Type "help" for help.
+
+rankings_board=#
+
+------
+
+# Exploring databases
+
+\l  -- List databases
+\c rankings_board  -- Connect to the rankings_board database
+\dt  -- List tables in the current database
+
+
+rankings_board=# \l
+                                                     List of databases
+      Name      | Owner | Encoding | Locale Provider |  Collate   |   Ctype    | ICU Locale | ICU Rules | Access privileges
+----------------+-------+----------+-----------------+------------+------------+------------+-----------+-------------------
+ postgres       | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           |
+ rankings_board | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           |
+ template0      | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           | =c/admin         +
+                |       |          |                 |            |            |            |           | admin=CTc/admin
+ template1      | admin | UTF8     | libc            | en_US.utf8 | en_US.utf8 |            |           | =c/admin         +
+                |       |          |                 |            |            |            |           | admin=CTc/admin
+(4 rows)
+
+rankings_board=# \c rankings_board
+You are now connected to database "rankings_board" as user "admin".
+rankings_board=# \dt
+Did not find any relations.
+rankings_board=#
+
+------
+
