@@ -36,3 +36,114 @@ rankings_board=#
 
 ------
 
+# Few more administrative activities from the psql shell.
+
+Describe table
+\d table_name
+
+list users
+\du
+
+Create a new database
+CREATE DATABASE database_name;
+
+Drop a database
+DROP DATABASE database_name;
+
+Create a new user
+CREATE USER username WITH PASSWORD 'password';
+
+Grant priviliges to a user
+GRANT ALL PRIVILEGES ON DATABASE database_name TO username;
+
+Revoke priviliges from a user
+REVOKE ALL PRIVILEGES ON DATABASE database_name FROM username;
+
+Alter user role
+ALTER USER username WITH SUPERUSER;
+
+Drop a user
+DROP USER username;
+
+
+# Creating and managing tables
+
+Create a new table
+
+CREATE TABLE table_name (
+    column1_name data_type constraints,
+    column2_name data_type constraints,
+    ...
+);
+
+drop a table
+
+DROP TABLE table_name;
+
+Insert data into a table
+
+INSERT INTO table_name (column1, column2, ...) VALUES (value1, value2, ...);
+
+Update data in a table
+
+UPDATE table_name SET column1 = value1, column2 = value2 WHERE condition;
+
+Delete data from a table
+
+DELETE FROM table_name WHERE condition;
+
+
+# Backups and restores
+
+Backup a database
+
+pg_dump database_name > backup_file.sql
+
+Restore a database
+
+psql database_name < backup_file.sql
+
+# Monitoring a database
+
+Check server status
+
+SELECT pg_is_in_recovery();
+
+View active connections
+
+SELECT * FROM pg_stat_activity;
+
+Terminate a connection
+
+SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE pid = process_id;
+
+Analyze and vaccum
+
+AMALYZE;
+VACUUM;
+
+# Useful meta commands
+
+Show all meta commands
+\?
+
+Get help on SQL commands
+\h command_name
+
+Set output format
+\pset format aligned|unaligned|html|latex|troff-ms|csv
+
+Turn on/off timing
+\timing
+
+# Scripting and automation
+
+Run SQL script
+psql -h localhost -p 5432 -U admin -d rankings_board -f script.sql
+
+Execute sql command from shell
+psql -h localhost -p 5432 -U admin -d rankings_board -c "SQL_COMMAND"
+
+
+
+
