@@ -30,11 +30,19 @@ CREATE TABLE IF NOT EXISTS rankings_board.player_stats (
     FOREIGN KEY (unique_id) REFERENCES rankings_board.player_names(unique_id)
 );
 
+-- Create the table player_ratings
+CREATE TABLE IF NOT EXISTS rankings_board.player_ratings (
+    unique_id CHAR(64) PRIMARY KEY,
+    rating_points FLOAT
+);
+
+
 -- Verify the creation
 \dt rankings_board.*
 \d rankings_board.country_codes
 \d rankings_board.player_names
 \d rankings_board.player_stats
+\d rankings_board.rating_points
 
 
 
@@ -49,3 +57,28 @@ SELECT
     END AS status
 FROM 
     rankings_board.player_names;
+
+
+------------------- notification mechanism in the event of player stats update---------------------
+DROP FUNCTION notify_player_update;
+
+-- Function creation
+
+CREATE OR REPLACE FUNCTION notify_player_update()
+RETURNS TRIGGER AS $$
+BEGIN
+    PERFORM pg_notify('player_update', NEW.unique_id::text);
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Drop existing triggers
+
+DROP TRIGGER player_update_trigger ON rankings_board.player_stats;
+
+-- Create new trigger
+
+CREATE TRIGGER player_update_trigger
+AFTER INSERT OR UPDATE OR DELETE ON rankings_board.player_stats
+FOR EACH ROW
+EXECUTE FUNCTION notify_player_update();
