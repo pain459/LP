@@ -172,3 +172,6 @@ select schemaname as schema_name,
 from pg_matviews
 order by schema_name,
          view_name;
+
+------ refresh the view periodically
+REFRESH MATERIALIZED VIEW player_status_materialized;
