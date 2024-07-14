@@ -1,5 +1,7 @@
 import psycopg2
 import select
+import time
+import os
 
 def calculate_rating_points(mp, g, a, f, i):
     # Define weights
@@ -12,12 +14,12 @@ def update_player_rating(player_id):
     try:
         # Connect to the PostgreSQL database
         conn = psycopg2.connect(
-            dbname='rankings_board',
-            user='admin',
-            password='admin',
-            host='localhost',
-            port='5432'
-        )
+                dbname=os.getenv('POSTGRES_DB'),
+                user=os.getenv('POSTGRES_USER'),
+                password=os.getenv('POSTGRES_PASSWORD'),
+                host=os.getenv('POSTGRES_HOST'),
+                port=os.getenv('POSTGRES_PORT')
+            )
         cursor = conn.cursor()
         
         # Fetch player stats for the given player_id
@@ -45,12 +47,12 @@ def listen_for_notifications():
     try:
         # Connect to the PostgreSQL database
         conn = psycopg2.connect(
-            dbname='rankings_board',
-            user='admin',
-            password='admin',
-            host='localhost',
-            port='5432'
-        )
+                dbname=os.getenv('POSTGRES_DB'),
+                user=os.getenv('POSTGRES_USER'),
+                password=os.getenv('POSTGRES_PASSWORD'),
+                host=os.getenv('POSTGRES_HOST'),
+                port=os.getenv('POSTGRES_PORT')
+            )
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = conn.cursor()
         
