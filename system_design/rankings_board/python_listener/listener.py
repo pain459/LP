@@ -1,8 +1,10 @@
 import psycopg2
+import redis
 import select
 import time
 import os
 import logging
+import json
 
 # Configure logging
 logging.basicConfig(
@@ -21,7 +23,7 @@ def calculate_rating_points(mp, g, a, f, i):
     rating_points = w1 * mp + w2 * g + w3 * a - w4 * f - w5 * i
     return rating_points
 
-def update_player_rating(player_id):
+def update_player_rating(player_id, redis_conn):
     try:
         # Connect to the PostgreSQL database
         conn = psycopg2.connect(
@@ -45,6 +47,9 @@ def update_player_rating(player_id):
                 "ON CONFLICT (unique_id) DO UPDATE SET rating_points = EXCLUDED.rating_points",
                 (player_id, rating_points)
             )
+            
+            # Update Redis sorted set
+            redis_conn.zadd('player_ratings', {player_id: rating_points})
         
         # Commit changes and close the connection
         conn.commit()
@@ -54,6 +59,7 @@ def update_player_rating(player_id):
         logger.info(f"Player {player_id} updated successfully")
     except Exception as e:
         print(f"Error updating player {player_id}: {e}")
+        logger.error(f"Error updating player {player_id}: {e}")
 
 def listen_for_notifications():
     try:
@@ -68,6 +74,13 @@ def listen_for_notifications():
         conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
         cursor = conn.cursor()
         
+        # Connect to Redis
+        redis_conn = redis.StrictRedis(
+            host=os.getenv('REDIS_HOST'),
+            port=os.getenv('REDIS_PORT'),
+            db=0
+        )
+        
         # Listen for notifications
         cursor.execute("LISTEN player_update;")
         # print("Waiting for notifications on channel 'player_update'...")
@@ -81,7 +94,7 @@ def listen_for_notifications():
                 notify = conn.notifies.pop(0)
                 logger.info(f"Notification received: {notify.payload}")
                 player_id = str(notify.payload)
-                update_player_rating(player_id)
+                update_player_rating(player_id, redis_conn)
     except Exception as e:
         # print(f"Error listening for notifications: {e}")
         logger.error(f"Error listening for notifications: {e}")

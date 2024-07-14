@@ -31,6 +31,8 @@ services:
       POSTGRES_DB: rankings_board
       POSTGRES_HOST: postgres
       POSTGRES_PORT: 5432
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     deploy:
       resources:
         limits:
@@ -38,6 +40,19 @@ services:
           cpus: '1.0'
     depends_on:
       - postgres
+      - redis
+
+  redis:
+    image: "redis:latest"
+    container_name: redis_server
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    deploy:
+      resources:
+        limits:
+          memory: 512MiB
+          cpus: '0.5'
 
 volumes:
   rankings_board_postgres_data:
