@@ -6,6 +6,7 @@ import string
 from datetime import datetime
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+import hashlib
 
 # Initialize Faker
 fake = Faker()
@@ -20,11 +21,17 @@ db_params = {
 }
 
 # Function to generate a unique_id
+# def generate_unique_id(country_code):
+#     current_date = datetime.now().strftime("%Y%m%d")
+#     epoch_time = int(time.time() * 1000)  # Current time in milliseconds
+#     random_string = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
+#     return f"{country_code}{current_date}{epoch_time}{random_string}"
+
 def generate_unique_id(country_code):
     current_date = datetime.now().strftime("%Y%m%d")
-    epoch_time = int(time.time() * 1000)  # Current time in milliseconds
     random_string = ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))
-    return f"{country_code}{current_date}{epoch_time}{random_string}"
+    raw_id = f"{country_code}{current_date}{random_string}"
+    return hashlib.sha1(raw_id.encode()).hexdigest()[:24]
 
 # Function to read country codes from the database
 def read_country_codes():
@@ -79,14 +86,14 @@ def insert_player_data(country_codes):
     conn.close()
 
 # Number of players to insert
-num_players = 100
+num_players = 1000000
 
 # Read country codes from the database
 country_codes = read_country_codes()
 
 # Function to handle the insertion using multiple threads
 def main():
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=20) as executor:
         futures = [executor.submit(insert_player_data, country_codes) for _ in range(num_players)]
         for future in as_completed(futures):
             try:
