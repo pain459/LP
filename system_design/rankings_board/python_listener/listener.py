@@ -2,6 +2,17 @@ import psycopg2
 import select
 import time
 import os
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
 
 def calculate_rating_points(mp, g, a, f, i):
     # Define weights
@@ -40,6 +51,7 @@ def update_player_rating(player_id):
         cursor.close()
         conn.close()
         print(f"Player {player_id} updated successfully")
+        logger.info(f"Player {player_id} updated successfully")
     except Exception as e:
         print(f"Error updating player {player_id}: {e}")
 
@@ -58,7 +70,8 @@ def listen_for_notifications():
         
         # Listen for notifications
         cursor.execute("LISTEN player_update;")
-        print("Waiting for notifications on channel 'player_update'...")
+        # print("Waiting for notifications on channel 'player_update'...")
+        logger.info("Waiting for notifications on channel 'player_update'...")
         
         while True:
             if select.select([conn], [], [], 5) == ([], [], []):
@@ -66,10 +79,12 @@ def listen_for_notifications():
             conn.poll()
             while conn.notifies:
                 notify = conn.notifies.pop(0)
+                logger.info(f"Notification received: {notify.payload}")
                 player_id = str(notify.payload)
                 update_player_rating(player_id)
     except Exception as e:
-        print(f"Error listening for notifications: {e}")
+        # print(f"Error listening for notifications: {e}")
+        logger.error(f"Error listening for notifications: {e}")
 
 if __name__ == "__main__":
     listen_for_notifications()
