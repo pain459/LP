@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS rankings_board.player_stats (
 
 -- Create the table player_ratings
 CREATE TABLE IF NOT EXISTS rankings_board.player_ratings (
-    unique_id CHAR(64) PRIMARY KEY,
+    unique_id VARCHAR(24) PRIMARY KEY,
     rating_points FLOAT
 );
 
