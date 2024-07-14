@@ -13,7 +13,7 @@ services:
       POSTGRES_PASSWORD: admin
       POSTGRES_DB: rankings_board
     volumes:
-      - rankings_board_postgres_data:/var/lib/postgresql/data
+      - ranking_db:/var/lib/postgresql/data
     deploy:
       resources:
         limits:
@@ -55,5 +55,5 @@ services:
           cpus: '0.5'
 
 volumes:
-  rankings_board_postgres_data:
+  ranking_db:
     external: true

@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS rankings_board.country_codes (
 
 -- Create the player_names table (if it does not already exist)
 CREATE TABLE IF NOT EXISTS rankings_board.player_names (
-    unique_id CHAR(64) PRIMARY KEY,
+    unique_id CHAR(24) PRIMARY KEY,  -- fixed length id will be generated.
     first_name VARCHAR(255) NOT NULL,
     middle_name VARCHAR(255),
     last_name VARCHAR(255) NOT NULL,
