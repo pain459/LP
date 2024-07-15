@@ -6,7 +6,7 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install netcat
-RUN apt-get update && apt-get install -y netcat-traditional && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y netcat-traditional procps && rm -rf /var/lib/apt/lists/*
 
 COPY producer.py .
 COPY wait-for-it.sh .
