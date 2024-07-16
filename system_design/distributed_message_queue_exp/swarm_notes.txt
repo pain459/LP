@@ -1,0 +1,111 @@
+$ docker swarm init --advertise-addr 192.168.1.19
+Swarm initialized: current node (iohck8awayppimls3ye5lyjl7) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-02j4grlcqru8y5mgj8v4q6vayud6mqz64w89a1bqrpl0ruooqh-bnofp63bhzsdmp1hxr46kqste 192.168.1.19:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+
+Build images to accomodate into docker swarm
+
+docker build -t my_producer_image:latest ./producer
+docker build -t my_consumer_image:latest ./consumer
+
+
+Swarm Management commands
+
+    Initialize Docker Swarm:
+
+docker swarm init --advertise-addr <ip-address>
+
+Join a node to the Swarm:
+
+    docker swarm join --token <token> <manager-ip>:2377
+
+Node Management
+
+    List all nodes in the Swarm:
+
+docker node ls
+
+Inspect a specific node:
+
+docker node inspect <node-id>
+
+Promote a node to manager:
+
+
+docker node promote <node-id>
+
+Demote a manager node to worker:
+
+
+    docker node demote <node-id>
+
+Service Management
+
+    List all services in the Swarm:
+
+docker service ls
+
+Inspect a specific service:
+
+docker service inspect <service-id>
+
+Scale a service:
+
+docker service scale <service-name>=<replica-count>
+
+Update a service:
+
+    docker service update --image <new-image> <service-name>
+
+Stack Management
+
+    Deploy a stack:
+
+docker stack deploy -c <compose-file> <stack-name>
+
+List all stacks:
+
+docker stack ls
+
+Inspect a stack:
+
+docker stack services <stack-name>
+
+Remove a stack:
+
+    docker stack rm <stack-name>
+
+Task Management
+
+    List tasks for a service:
+
+docker service ps <service-name>
+
+Inspect a specific task:
+
+    docker inspect <task-id>
+
+Log Management
+
+    View logs for a service:
+
+docker service logs <service-name>
+
+Follow logs for a service:
+
+    docker service logs -f <service-name>
+
+Checking Overall Cluster Health
+
+    List all running tasks and their status:
+
+docker ps
+
+Inspect overall swarm state:
+
+docker info

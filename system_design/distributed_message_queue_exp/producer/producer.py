@@ -15,5 +15,6 @@ def send_message(topic, message):
 
 if __name__ == "__main__":
     while True:
-        send_message(TOPIC, 'Hello, Kafka!')
-        time.sleep(5)  # Send a message every 5 seconds
+        for _ in range(100):  # Send 100 messages at once
+            send_message(TOPIC, 'Hello, Kafka!')
+        time.sleep(1)  # Send batches every second

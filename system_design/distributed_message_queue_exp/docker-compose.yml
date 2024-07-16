@@ -22,11 +22,17 @@ services:
       - zookeeper
 
   producer:
-    build: ./producer
+    image: my_producer_image:latest
+    # build: ./producer
     depends_on:
       - kafka
+    deploy:
+      replicas: 10  # Scale the number of producer instances
 
   consumer:
-    build: ./consumer
+    image: my_consumer_image:latest
+    # build: ./consumer
     depends_on:
       - kafka
+    deploy:
+      replicas: 10  # Scale the number of consumer instances
