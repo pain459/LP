@@ -109,3 +109,68 @@ docker ps
 Inspect overall swarm state:
 
 docker info
+
+
+swarm cleanup
+
+1. Remove Services and Stacks
+
+First, you should remove the stacks and services that are deployed in the Swarm.
+Remove a Stack
+
+To remove a specific stack:
+
+docker stack rm <stack-name>
+
+Replace <stack-name> with the name of your stack.
+Remove All Services
+
+If you have individual services that are not part of a stack, you can remove them using:
+
+docker service rm <service-name>
+
+2. Leave the Swarm
+
+Next, you need to have each node leave the Swarm. This includes both worker and manager nodes.
+Worker Nodes
+
+On each worker node, run:
+
+docker swarm leave
+
+Manager Nodes
+
+On each manager node, except for the last one, run:
+
+docker swarm leave
+
+Finally, on the last manager node, run:
+
+docker swarm leave --force
+
+The --force flag is required for the last manager node to demote itself and leave the Swarm.
+3. Verify the Nodes Have Left the Swarm
+
+You can verify that all nodes have successfully left the Swarm by running:
+
+docker node ls
+
+This command should return an error indicating that the node is not part of a Swarm.
+4. Cleanup Resources
+
+Optionally, you can clean up any remaining Docker resources (containers, networks, volumes, images) to free up space:
+Remove All Stopped Containers
+
+docker container prune
+
+Remove All Networks Not Used by At Least One Container
+
+docker network prune
+
+Remove All Unused Volumes
+
+docker volume prune
+
+Remove All Unused Images
+
+docker image prune -a
