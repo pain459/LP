@@ -61,5 +61,5 @@ class SimpleWebCrawler:
         return soup.title.string if soup.title else 'No Title'
 
 if __name__ == "__main__":
-    crawler = SimpleWebCrawler(base_url="https://en.wikipedia.org/wiki/Visakhapatnam", max_pages=100)
+    crawler = SimpleWebCrawler(base_url="https://www.reddit.com/r/hyderabad/", max_pages=100)
     crawler.crawl()
