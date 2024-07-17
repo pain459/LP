@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 # Load the CSV file into a DataFrame
 df = pd.read_csv('crawled_data.csv')
@@ -25,9 +26,8 @@ word_counts = pd.Series(' '.join(df['Title']).lower().split()).value_counts()[:1
 print("\nMost common words in titles:")
 print(word_counts)
 
-# Plotting the most common words (requires matplotlib)
-import matplotlib.pyplot as plt
 
+# Plotting the most common words (requires matplotlib)
 word_counts.plot(kind='bar', title='Most Common Words in Titles')
 plt.xlabel('Words')
 plt.ylabel('Frequency')
