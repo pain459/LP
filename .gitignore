@@ -190,3 +190,7 @@ projects/impractical_projects/2048_game/.buildozer
 projects/cricket_ratings_dashboard/__pycache__
 projects/cricket_ratings_dashboard/app/__pycache__
 env
+projects/YT/data_analytics/superhero_movies/user_reviews.csv
+projects/YT/data_analytics/superhero_movies/movies.csv
+projects/YT/data_analytics/superhero_movies/critic_reviews.csv
+projects/YT/data_analytics/superhero_movies/movies.zip
