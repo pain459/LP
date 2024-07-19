@@ -18,7 +18,7 @@ CREATE TABLE bank.bank_branch_mapping (
     branch_name VARCHAR(255) NOT NULL,
     branch_shortcode VARCHAR(10) NOT NULL UNIQUE,
     created_on BIGINT NOT NULL,  -- epoch timestamp IST
-    unique_id VARCHAR(50) NOT NULL UNIQUE,  -- unique_id as per specification
+    unique_id VARCHAR(100) NOT NULL UNIQUE,  -- unique_id as per specification
     PRIMARY KEY (unique_id)
 );
 
@@ -33,5 +33,5 @@ CREATE TABLE bank.user_details (
     pin_code VARCHAR(10) NOT NULL,
     created_on_epoch_ist BIGINT NOT NULL,
     branch_shortcode VARCHAR(10) NOT NULL REFERENCES bank.bank_branch_mapping(branch_shortcode),
-    unique_id VARCHAR(50) NOT NULL UNIQUE
+    unique_id VARCHAR(150) NOT NULL UNIQUE  -- unique_id as per specification
 );
