@@ -1,0 +1,419 @@
+Data Structures and Algorithms
+
+    001 Implement a balanced binary search tree (AVL or Red-Black Tree) from scratch.
+            Description: Implement an AVL or Red-Black Tree to ensure the tree remains balanced after insertions and deletions.
+            Success Criteria: The tree maintains balance, and supports O(log n) search, insertion, and deletion times.
+
+    002 Design and implement a trie for efficient prefix-based search.
+            Description: Create a trie data structure to efficiently store and retrieve strings based on their prefixes.
+            Success Criteria: Supports insertion, deletion, and prefix-based search operations efficiently.
+
+    003 Create a custom hash table with open addressing and linear probing.
+            Description: Implement a hash table that uses open addressing and linear probing to handle collisions.
+            Success Criteria: Efficiently supports insertion, search, and deletion with appropriate handling of collisions.
+
+    004 Implement the A search algorithm for pathfinding.*
+            Description: Implement the A* search algorithm to find the shortest path between two points in a grid or graph.
+            Success Criteria: Finds the shortest path, optimizing for both path cost and heuristic estimate.
+
+    005 Write a program to solve the traveling salesman problem using dynamic programming.
+            Description: Solve the traveling salesman problem to find the shortest possible route that visits each city once and returns to the origin city.
+            Success Criteria: Finds the minimum cost tour visiting all cities and returning to the starting point.
+
+    006 Design a cache system using LRU (Least Recently Used) policy.
+            Description: Implement an LRU cache to efficiently manage data retrieval and storage with a fixed size.
+            Success Criteria: Manages cache with O(1) time complexity for both access and update operations.
+
+    007 Implement a disjoint-set data structure with path compression and union by rank.
+            Description: Create a disjoint-set (union-find) data structure to efficiently manage a collection of non-overlapping sets.
+            Success Criteria: Supports union and find operations in nearly constant time.
+
+    008 Solve the longest common subsequence problem using dynamic programming.
+            Description: Find the longest subsequence that appears in the same order in both given sequences.
+            Success Criteria: Correctly identifies the longest common subsequence between two sequences.
+
+    009 Create a Bloom filter and demonstrate its use in a practical scenario.
+            Description: Implement a probabilistic data structure that efficiently tests whether an element is in a set.
+            Success Criteria: Efficiently checks for membership with a low probability of false positives.
+
+    010 Implement the KMP (Knuth-Morris-Pratt) algorithm for substring search.
+            Description: Implement the KMP algorithm to efficiently search for occurrences of a substring within a string.
+            Success Criteria: Efficiently finds all occurrences of a substring within a text with O(n + m) complexity.
+
+Advanced Algorithms
+
+    Write a program to find the maximum flow in a network using the Ford-Fulkerson algorithm.
+        Description: Implement the Ford-Fulkerson algorithm to find the maximum flow from a source to a sink in a flow network.
+        Success Criteria: Correctly computes the maximum flow in a network.
+
+    Implement the Hungarian algorithm for the assignment problem.
+        Description: Implement the Hungarian algorithm to find the optimal assignment of tasks to agents minimizing total cost.
+        Success Criteria: Finds the optimal assignment minimizing the total cost.
+
+    Solve the edit distance problem using dynamic programming.
+        Description: Implement an algorithm to calculate the minimum number of operations required to convert one string into another.
+        Success Criteria: Computes the minimum edit distance between two strings.
+
+    Implement the Boyer-Moore algorithm for pattern matching.
+        Description: Implement the Boyer-Moore string search algorithm to efficiently find a pattern in a text.
+        Success Criteria: Efficiently finds all occurrences of a pattern within a text using O(n/m) comparisons on average.
+
+    Create a program to solve the knapsack problem using branch and bound.
+        Description: Solve the 0/1 knapsack problem to maximize the total value of items in the knapsack without exceeding the weight limit.
+        Success Criteria: Finds the optimal subset of items maximizing total value.
+
+    Design and implement Prim's algorithm for minimum spanning tree.
+        Description: Implement Prim's algorithm to find the minimum spanning tree of a connected, undirected graph.
+        Success Criteria: Constructs a minimum spanning tree.
+
+    Write a program to find all strongly connected components in a graph using Tarjan's algorithm.
+        Description: Implement Tarjan's algorithm to find strongly connected components in a directed graph.
+        Success Criteria: Correctly identifies all strongly connected components.
+
+    Implement the Viterbi algorithm for hidden Markov models.
+        Description: Implement the Viterbi algorithm to find the most probable sequence of hidden states given a sequence of observations.
+        Success Criteria: Computes the most probable sequence of states.
+
+    Solve the job scheduling problem with deadlines using a greedy algorithm.
+        Description: Implement a greedy algorithm to schedule jobs with deadlines to maximize the number of completed jobs.
+        Success Criteria: Maximizes the number of jobs completed within their deadlines.
+
+    Create a program to solve the integer linear programming problem using the branch-and-bound method.
+        Description: Solve an integer linear programming problem using the branch-and-bound method to find the optimal solution.
+        Success Criteria: Finds the optimal integer solution to a linear programming problem.
+
+Machine Learning and Data Science
+
+    Implement a linear regression model from scratch without using libraries.
+        Description: Implement linear regression to model the relationship between a dependent variable and one or more independent variables.
+        Success Criteria: Correctly fits a line to a set of data points and makes accurate predictions.
+
+    Write a program to perform k-means clustering from scratch.
+        Description: Implement k-means clustering to partition data into k clusters based on feature similarity.
+        Success Criteria: Partitions data into k clusters, minimizing within-cluster variance.
+
+    Create a decision tree classifier from scratch and use it on a dataset.
+        Description: Implement a decision tree classifier to make predictions based on feature values.
+        Success Criteria: Correctly classifies data points with a tree structure.
+
+    Implement the principal component analysis (PCA) algorithm from scratch.
+        Description: Implement PCA to reduce the dimensionality of a dataset while preserving variance.
+        Success Criteria: Reduces dimensionality and retains significant variance.
+
+    Write a program to perform gradient descent optimization.
+        Description: Implement gradient descent to find the minimum of a function by iteratively moving towards the steepest descent.
+        Success Criteria: Efficiently finds the function's minimum.
+
+    Create a support vector machine (SVM) classifier from scratch.
+        Description: Implement an SVM to classify data points by finding the optimal hyperplane separating the classes.
+        Success Criteria: Correctly separates data points with a hyperplane.
+
+    Implement the DBSCAN clustering algorithm from scratch.
+        Description: Implement DBSCAN to identify clusters and noise based on density.
+        Success Criteria: Correctly identifies clusters and noise points.
+
+    Write a program to perform logistic regression without using libraries.
+        Description: Implement logistic regression to model the probability of a binary outcome based on predictor variables.
+        Success Criteria: Correctly predicts binary outcomes.
+
+    Implement the random forest algorithm from scratch.
+        Description: Implement a random forest classifier to make predictions based on an ensemble of decision trees.
+        Success Criteria: Aggregates predictions from multiple trees for accurate classification.
+
+    Create a neural network from scratch and train it on a simple dataset.
+        Description: Implement a neural network to perform supervised learning on a labeled dataset.
+        Success Criteria: Correctly trains and makes predictions on a dataset.
+
+Data Processing and Visualization
+
+    Write a program to parse and analyze large JSON files.
+        Description: Implement a program to efficiently parse and analyze data from large JSON files.
+        Success Criteria: Efficiently handles large JSON files and extracts meaningful insights.
+
+    Create a data pipeline that extracts, transforms, and loads (ETL) data from multiple sources.
+        Description: Design and implement an ETL pipeline to handle data from various sources and load it into a target system.
+        Success Criteria: Successfully extracts, transforms, and loads data with consistency and integrity.
+
+    Implement a custom data cleaning and preprocessing module for a given dataset.
+        Description: Create a module to clean and preprocess raw data, handling missing values, outliers, and inconsistencies.
+        Success Criteria: Outputs a cleaned and preprocessed dataset ready for analysis.
+
+    Write a program to perform sentiment analysis on a dataset of text reviews.
+        Description: Implement sentiment analysis to determine the sentiment (positive, negative, neutral) of text reviews.
+        Success Criteria: Accurately classifies the sentiment of text reviews.
+
+    Create a visualization dashboard using Python and a web framework (e.g., Flask, Dash).
+        Description: Build an interactive dashboard to visualize and analyze data using a web framework.
+        Success Criteria: Provides meaningful and interactive visualizations.
+
+    Implement a program to analyze and visualize network data using NetworkX and Matplotlib.
+        Description: Use NetworkX and Matplotlib to analyze and visualize the structure and properties of a network.
+        Success Criteria: Produces insightful visualizations of network data.
+
+    Write a program to perform time series analysis and forecasting on financial data.
+        Description: Implement time series analysis techniques to forecast future values of financial data.
+        Success Criteria: Accurately forecasts future values with a low error rate.
+
+    Create an interactive map visualization using Folium and GeoPandas.
+        Description: Use Folium and GeoPandas to create an interactive map visualizing geographical data.
+        Success Criteria: Produces an interactive and informative map.
+
+    Implement a recommendation system using collaborative filtering.
+        Description: Build a recommendation system to suggest items to users based on collaborative filtering.
+        Success Criteria: Accurately recommends items based on user preferences and behaviors.
+
+    Write a program to scrape and analyze data from a website using BeautifulSoup and Requests.
+        Description: Use BeautifulSoup and Requests to scrape data from a website and perform analysis.
+        Success Criteria: Successfully scrapes and analyzes the data from a website.
+
+Software Development
+
+    Create a RESTful API using Flask or Django.
+        Description: Build a RESTful API to handle requests and serve data using Flask or Django.
+        Success Criteria: Provides a fully functional API with appropriate endpoints.
+
+    Write a program to manage user authentication and authorization.
+        Description: Implement a system to handle user authentication and authorization in a web application.
+        Success Criteria: Securely manages user login, registration, and permissions.
+
+    Implement a microservice architecture with Docker and Kubernetes.
+        Description: Design and deploy a set of microservices using Docker and manage them with Kubernetes.
+        Success Criteria: Successfully deploys and manages microservices.
+
+    Create a continuous integration and deployment (CI/CD) pipeline using Jenkins or GitHub Actions.
+        Description: Set up a CI/CD pipeline to automate the build, test, and deployment process.
+        Success Criteria: Automates the entire process from code commit to deployment.
+
+    Write a program to automate testing using pytest and coverage.
+        Description: Implement automated tests for a codebase using pytest and measure code coverage.
+        Success Criteria: Ensures high test coverage and identifies potential issues.
+
+    Implement a chat application using WebSockets.
+        Description: Build a real-time chat application that uses WebSockets for communication.
+        Success Criteria: Enables real-time communication between clients.
+
+    Create a web scraping framework with error handling and logging.
+        Description: Develop a robust web scraping framework with built-in error handling and logging.
+        Success Criteria: Efficiently scrapes data while handling errors and logging activities.
+
+    Write a program to simulate and test distributed systems using Apache Kafka.
+        Description: Use Apache Kafka to simulate and test distributed systems with message queues.
+        Success Criteria: Successfully simulates and tests distributed system scenarios.
+
+    Implement a blockchain and demonstrate its use in a decentralized application.
+        Description: Create a basic blockchain and use it in a simple decentralized application.
+        Success Criteria: Implements a functioning blockchain and demonstrates its use case.
+
+    Create a Python package and publish it to PyPI.
+        Description: Develop a Python package, document it, and publish it to the Python Package Index (PyPI).
+        Success Criteria: Successfully publishes a well-documented and functional Python package.
+
+Advanced Python Features
+
+    Write a program to demonstrate the use of metaclasses in Python.
+        Description: Implement and demonstrate metaclasses to modify class creation behavior.
+        Success Criteria: Successfully modifies class creation and behavior using metaclasses.
+
+    Implement a custom iterator and generator.
+        Description: Create custom iterators and generators to efficiently handle large datasets.
+        Success Criteria: Correctly implements and uses custom iterators and generators.
+
+    Create a program to perform asynchronous programming using asyncio.
+        Description: Use asyncio to handle asynchronous tasks and improve performance.
+        Success Criteria: Efficiently handles multiple asynchronous tasks.
+
+    Write a program to create and manage context managers.
+        Description: Implement custom context managers to manage resources and cleanup.
+        Success Criteria: Correctly manages resources using context managers.
+
+    Implement a plugin system using Python's importlib.
+        Description: Create a plugin system that dynamically loads and manages plugins.
+        Success Criteria: Successfully loads, manages, and uses plugins dynamically.
+
+    Create a program to use decorators for logging and performance measurement.
+        Description: Implement decorators to add logging and performance measurement to functions.
+        Success Criteria: Accurately logs and measures function performance.
+
+    Write a program to serialize and deserialize data using custom protocols.
+        Description: Implement custom serialization and deserialization protocols for data storage and transmission.
+        Success Criteria: Correctly serializes and deserializes data using custom protocols.
+
+    Implement a custom descriptor for data validation.
+        Description: Create custom descriptors to validate data attributes in a class.
+        Success Criteria: Correctly validates and manages data attributes using descriptors.
+
+    Create a program to demonstrate the use of the functools module for caching.
+        Description: Use the functools module to implement caching for function results.
+        Success Criteria: Efficiently caches and retrieves function results.
+
+    Write a program to perform parallel processing using the multiprocessing module.
+        Description: Use the multiprocessing module to parallelize tasks and improve performance.
+        Success Criteria: Successfully parallelizes tasks and improves execution time.
+
+Computer Vision and Image Processing
+
+    Implement image classification using a pre-trained convolutional neural network (CNN).
+        Description: Use a pre-trained CNN to classify images into categories.
+        Success Criteria: Accurately classifies images based on their content.
+
+    Write a program to perform object detection using OpenCV and YOLO.
+        Description: Use OpenCV and YOLO to detect and identify objects in images or videos.
+        Success Criteria: Correctly detects and identifies objects.
+
+    Create an image segmentation model using U-Net architecture.
+        Description: Implement a U-Net model to segment images into meaningful regions.
+        Success Criteria: Accurately segments images into distinct regions.
+
+    Implement facial recognition using deep learning.
+        Description: Use deep learning techniques to recognize faces in images or videos.
+        Success Criteria: Accurately recognizes and identifies faces.
+
+    Write a program to detect and recognize text in images using Tesseract OCR.
+        Description: Use Tesseract OCR to detect and extract text from images.
+        Success Criteria: Correctly detects and extracts text from images.
+
+    Create a program to perform style transfer between two images using deep learning.
+        Description: Implement a style transfer algorithm to blend the style of one image with the content of another.
+        Success Criteria: Successfully transfers the style of one image to another.
+
+    Implement a program to generate images using a GAN (Generative Adversarial Network).
+        Description: Use a GAN to generate realistic images from random noise.
+        Success Criteria: Generates realistic and high-quality images.
+
+    Write a program to create and use image filters (e.g., blur, edge detection) using OpenCV.
+        Description: Implement various image filters to process and enhance images.
+        Success Criteria: Correctly applies filters to images.
+
+    Create a program to track objects in video using OpenCV.
+        Description: Use OpenCV to track the movement of objects in a video.
+        Success Criteria: Accurately tracks objects across video frames.
+
+    Implement a program to perform image stitching and panorama creation.
+        Description: Use image stitching techniques to create panoramas from multiple images.
+        Success Criteria: Successfully stitches images to create seamless panoramas.
+
+Natural Language Processing
+
+    Write a program to perform text classification using a recurrent neural network (RNN).
+        Description: Use an RNN to classify text data into predefined categories.
+        Success Criteria: Accurately classifies text based on its content.
+
+    Implement a chatbot using sequence-to-sequence models.
+        Description: Use sequence-to-sequence models to create a conversational chatbot.
+        Success Criteria: Generates coherent and relevant responses in a conversation.
+
+    Create a program to perform named entity recognition (NER) using spaCy.
+        Description: Use spaCy to identify and classify named entities in text.
+        Success Criteria: Correctly identifies and classifies entities in text.
+
+    Write a program to perform machine translation using an attention mechanism.
+        Description: Implement a machine translation model using attention mechanisms to translate text between languages.
+        Success Criteria: Accurately translates text with attention to context.
+
+    Implement a program to generate text using a language model (e.g., GPT).
+        Description: Use a pre-trained language model to generate coherent text.
+        Success Criteria: Generates relevant and coherent text based on input prompts.
+
+    Create a program to perform topic modeling using LDA (Latent Dirichlet Allocation).
+        Description: Use LDA to discover topics in a collection of text documents.
+        Success Criteria: Correctly identifies and models topics in text data.
+
+    Write a program to perform sentiment analysis using a pre-trained transformer model.
+        Description: Use a pre-trained transformer model to determine the sentiment of text data.
+        Success Criteria: Accurately classifies the sentiment of text data.
+
+    Implement a program to summarize text using extractive and abstractive methods.
+        Description: Use extractive and abstractive methods to generate summaries of text documents.
+        Success Criteria: Generates concise and accurate summaries.
+
+    Create a program to analyze the semantic similarity between texts using word embeddings.
+        Description: Use word embeddings to measure the similarity between text documents.
+        Success Criteria: Accurately measures and compares semantic similarity.
+
+    Write a program to perform speech recognition using a pre-trained model.
+        Description: Use a pre-trained model to transcribe spoken language into text.
+        Success Criteria: Accurately transcribes speech into text.
+
+Security and Cryptography
+
+    Implement a program to perform encryption and decryption using RSA.
+        Description: Use RSA algorithm to encrypt and decrypt messages.
+        Success Criteria: Correctly encrypts and decrypts messages using RSA.
+
+    Write a program to create and verify digital signatures.
+        Description: Use cryptographic techniques to create and verify digital signatures.
+        Success Criteria: Successfully creates and verifies digital signatures.
+
+    Implement a program to detect and prevent SQL injection attacks.
+        Description: Develop a system to detect and prevent SQL injection attacks in a web application.
+        Success Criteria: Successfully detects and prevents SQL injection attempts.
+
+    Create a program to perform secure password hashing using bcrypt.
+        Description: Use bcrypt to securely hash and store passwords.
+        Success Criteria: Correctly hashes and verifies passwords using bcrypt.
+
+    Write a program to implement a basic intrusion detection system.
+        Description: Develop a system to monitor and detect suspicious activities on a network.
+        Success Criteria: Accurately detects and reports intrusions.
+
+    Implement a program to perform network packet analysis using Scapy.
+        Description: Use Scapy to capture and analyze network packets.
+        Success Criteria: Successfully captures and analyzes network traffic.
+
+    Create a program to perform secure file transfer using SFTP.
+        Description: Use SFTP to securely transfer files between remote systems.
+        Success Criteria: Successfully transfers files securely using SFTP.
+
+    Write a program to implement a blockchain-based voting system.
+        Description: Develop a voting system using blockchain technology to ensure security and transparency.
+        Success Criteria: Implements a secure and transparent voting system.
+
+    Implement a program to perform steganography (hiding data within images).
+        Description: Use steganography techniques to hide data within images.
+        Success Criteria: Successfully hides and retrieves data from images.
+
+    Create a program to perform penetration testing using Python.
+        Description: Use Python to develop tools for penetration testing and vulnerability assessment.
+        Success Criteria: Successfully identifies and reports vulnerabilities.
+
+Miscellaneous Challenges
+
+    Write a program to create a custom shell with basic commands.
+        Description: Develop a custom shell interface to execute basic commands and scripts.
+        Success Criteria: Successfully executes commands and handles input/output.
+
+    Implement a program to simulate and analyze cellular automata (e.g., Conway's Game of Life).
+        Description: Create a simulation of cellular automata to model complex systems.
+        Success Criteria: Correctly simulates and visualizes the behavior of cellular automata.
+
+    Create a program to solve puzzles (e.g., Sudoku, N-Queens) using backtracking.
+        Description: Implement a backtracking algorithm to solve combinatorial puzzles.
+        Success Criteria: Successfully solves the puzzles using backtracking.
+
+    Write a program to perform genetic algorithms for optimization problems.
+        Description: Use genetic algorithms to find optimal solutions to complex problems.
+        Success Criteria: Successfully optimizes solutions using genetic algorithms.
+
+    Implement a program to simulate a basic physics engine.
+        Description: Develop a physics engine to simulate physical interactions and behaviors.
+        Success Criteria: Accurately simulates physical interactions and behaviors.
+
+    Create a program to control a robot using the Python Robotics framework.
+        Description: Use a Python robotics framework to control and automate a robot.
+        Success Criteria: Successfully controls and automates the robot's movements.
+
+    Write a program to simulate and visualize fractals (e.g., Mandelbrot set).
+        Description: Create a visualization of fractals to model complex geometric patterns.
+        Success Criteria: Correctly generates and visualizes fractals.
+
+    Implement a program to create and solve mazes using different algorithms.
+        Description: Develop algorithms to generate and solve mazes of varying complexity.
+        Success Criteria: Successfully generates and solves mazes.
+
+    Create a program to analyze and visualize social network data.
+        Description: Use social network analysis techniques to visualize and analyze relationships in social networks.
+        Success Criteria: Provides insightful visualizations and analysis of social network data.
+
+    Write a program to create an interactive fiction game using a text-based interface.
+        Description: Develop a text-based interactive fiction game with multiple story paths.
+        Success Criteria: Creates an engaging and interactive text-based game experience.
