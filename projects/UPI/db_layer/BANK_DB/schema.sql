@@ -33,5 +33,5 @@ CREATE TABLE bank.user_details (
     pin_code VARCHAR(10) NOT NULL,
     created_on_epoch_ist BIGINT NOT NULL,
     branch_shortcode VARCHAR(10) NOT NULL REFERENCES bank.bank_branch_mapping(branch_shortcode),
-    unique_id VARCHAR(150) NOT NULL UNIQUE  -- unique_id as per specification
+    unique_id VARCHAR(250) NOT NULL UNIQUE  -- unique_id as per specification
 );
