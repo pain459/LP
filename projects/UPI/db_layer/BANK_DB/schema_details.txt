@@ -1,0 +1,14 @@
+schema name bank
+
+
+table_1 = bank_mapping
+
+1. Columns bank_name|bank_short_code|created_on (epoch timestamp IST)
+
+
+
+table_2 = bank_branch_mapping
+
+We should be only using the bank_short_code from bank_mapping table. 
+
+1. columns should be like bank_name|bank_name_shortcode|branch_name|branch_shortcode|created_on (epoch timestamp IST)|unique_id (bank_name_shortcode+branch_shortcode+current_epoch_ist+6_digit_alphanumeric_character).
