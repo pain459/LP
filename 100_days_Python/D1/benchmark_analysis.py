@@ -14,7 +14,8 @@ def get_height(node):
     return node.height
 
 def update_height(node):
-    node.height = max(get_height(node.left), get_height(node.right)) + 1
+    if node:
+        node.height = max(get_height(node.left), get_height(node.right)) + 1
 
 def right_rotate(y):
     x = y.left
@@ -34,21 +35,30 @@ def left_rotate(x):
     update_height(y)
     return y
 
-def balance(node, key):
+def balance(node):
     if not node:
         return node
+    
     balance_factor = get_height(node.left) - get_height(node.right)
 
-    if balance_factor > 1 and key < node.left.key:
+    # Left Left Case
+    if balance_factor > 1 and get_height(node.left.left) >= get_height(node.left.right):
         return right_rotate(node)
-    if balance_factor < -1 and key > node.right.key:
+    
+    # Right Right Case
+    if balance_factor < -1 and get_height(node.right.right) >= get_height(node.right.left):
         return left_rotate(node)
-    if balance_factor > 1 and key > node.left.key:
+    
+    # Left Right Case
+    if balance_factor > 1 and get_height(node.left.right) > get_height(node.left.left):
         node.left = left_rotate(node.left)
         return right_rotate(node)
-    if balance_factor < -1 and key < node.right.key:
+    
+    # Right Left Case
+    if balance_factor < -1 and get_height(node.right.left) > get_height(node.right.right):
         node.right = right_rotate(node.right)
         return left_rotate(node)
+    
     return node
 
 def insert(node, key):
@@ -58,8 +68,9 @@ def insert(node, key):
         node.left = insert(node.left, key)
     else:
         node.right = insert(node.right, key)
+
     update_height(node)
-    return balance(node, key)
+    return balance(node)
 
 def search(node, key):
     if not node or node.key == key:
@@ -78,6 +89,7 @@ def min_value_node(node):
 def delete(node, key):
     if not node:
         return node
+
     if key < node.key:
         node.left = delete(node.left, key)
     elif key > node.key:
@@ -90,8 +102,9 @@ def delete(node, key):
         temp_val = min_value_node(node.right)
         node.key = temp_val.key
         node.right = delete(node.right, temp_val.key)
+
     update_height(node)
-    return balance(node, key)
+    return balance(node)
 
 class BSTNode:
     def __init__(self, key):
@@ -165,7 +178,7 @@ def benchmark(tree_type, operations, data):
     return end_time - start_time
 
 # Example of running the benchmark
-n = 1000  # Number of operations
+n = 10000000  # Number of operations
 data = generate_test_data(n)
 operations = ['insert'] * (n//2) + ['search'] * (n//4) + ['delete'] * (n//4)
 random.shuffle(operations)
