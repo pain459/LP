@@ -1,3 +1,6 @@
     001 Implement a balanced binary search tree (AVL or Red-Black Tree) from scratch.
             Description: Implement an AVL or Red-Black Tree to ensure the tree remains balanced after insertions and deletions.
             Success Criteria: The tree maintains balance, and supports O(log n) search, insertion, and deletion times.
+
+
+Good resource https://www.cs.usfca.edu/~galles/visualization/AVLtree.html
