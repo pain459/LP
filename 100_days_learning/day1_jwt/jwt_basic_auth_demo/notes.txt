@@ -1,0 +1,8 @@
+# Login
+curl -X POST http://127.0.0.1:5000/login -H "Content-Type: application/json" -d '{"username":"example_user", "password":"password123"}'
+
+# Access protected resource
+curl -X GET http://127.0.0.1:5000/protected -H "Authorization: Bearer your.jwt.token"
+
+
+your.jwt.token will be returned when you login.
