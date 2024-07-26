@@ -1,3 +1,7 @@
     004 Implement the A search algorithm for pathfinding.*
             Description: Implement the A* search algorithm to find the shortest path between two points in a grid or graph.
             Success Criteria: Finds the shortest path, optimizing for both path cost and heuristic estimate.
+
+
+Learnings:
+https://www.youtube.com/watch?v=EFg3u_E6eHU -> Dikjstra's Algorithm 
