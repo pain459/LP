@@ -1,0 +1,39 @@
+Register a User:
+
+curl -X POST http://127.0.0.1:5000/register -H "Content-Type: application/json" -d '{"username":"new_user", "password":"newpassword"}'
+
+This should return a success message:
+
+{"message": "User registered successfully!"}
+
+Login:
+
+curl -X POST http://127.0.0.1:5000/login -H "Content-Type: application/json" -d '{"username":"new_user", "password":"newpassword"}'
+
+This should return a JSON response with the token:
+
+{"token": "your.jwt.token"}
+
+Access Protected Resource:
+
+curl -X GET http://127.0.0.1:5000/protected -H "Authorization: Bearer your.jwt.token"
+
+This should return a welcome message if the token is valid:
+
+{"message": "Welcome new_user!"}
+
+Refresh Token:
+
+curl -X POST http://127.0.0.1:5000/refresh -H "Authorization: Bearer your.jwt.token"
+
+This should return a new token:
+
+{"token": "new.jwt.token"}
+
+Access Admin Route (assuming you registered an admin user):
+
+curl -X GET http://127.0.0.1:5000/admin -H "Authorization: Bearer admin.jwt.token"
+
+This should return a welcome message if the token is valid and the user is an admin:
+
+{"message": "Welcome admin admin_user!"}
