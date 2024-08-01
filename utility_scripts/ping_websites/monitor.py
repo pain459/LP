@@ -58,7 +58,11 @@ def monitor_websites(file_path, interval=10):
             table.add_row([url, status])
         
         print(table)
-        time.sleep(interval)
+
+        for remaining in range(interval, 0, -1):
+            print(f"\rNext refresh in {remaining} seconds...", end="")
+            time.sleep(1)
+        print("\r", end="")  # Clear the countdown line
 
 if __name__ == "__main__":
     file_path = 'websites.txt'
