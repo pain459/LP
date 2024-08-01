@@ -3,16 +3,18 @@ import time
 from prettytable import PrettyTable
 from datetime import datetime
 import os
+import socket
 
-# List of URLs to monitor
-urls = [
-    "https://www.google.com",
-    "https://www.github.com",
-    # "https://www.nonexistentwebsite.com"  # Add more URLs as needed
-]
+# Function to read URLs from a file
+def read_urls_from_file(file_path):
+    with open(file_path, 'r') as file:
+        urls = file.read().splitlines()
+    return urls
 
 def check_status(url):
     try:
+        # Check DNS resolution
+        socket.gethostbyname(url.replace("https://", "").replace("http://", "").split('/')[0])
         response = requests.get(url)
         if response.status_code == 200:
             return "OK"
@@ -20,6 +22,8 @@ def check_status(url):
             return f"Down (Status Code: {response.status_code})"
     except requests.exceptions.RequestException as e:
         return f"Down (Error: {str(e)})"
+    except socket.gaierror:
+        return "DNS resolution error"
 
 def clear_screen():
     if os.name == 'nt':  # For Windows
@@ -27,7 +31,8 @@ def clear_screen():
     else:  # For macOS and Linux
         os.system('clear')
 
-def monitor_websites(urls, interval=10):
+def monitor_websites(file_path, interval=10):
+    urls = read_urls_from_file(file_path)
     while True:
         clear_screen()
         current_time = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S UTC')
@@ -43,4 +48,5 @@ def monitor_websites(urls, interval=10):
         time.sleep(interval)
 
 if __name__ == "__main__":
-    monitor_websites(urls)
+    file_path = 'websites.txt'
+    monitor_websites(file_path)
