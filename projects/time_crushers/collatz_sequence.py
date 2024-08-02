@@ -21,4 +21,4 @@ def plot_collatz_sequence(n):
     plt.show()
 
 # Test with a number
-plot_collatz_sequence(19)
+plot_collatz_sequence(201)
