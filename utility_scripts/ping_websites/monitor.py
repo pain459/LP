@@ -33,12 +33,17 @@ def check_status(url, retries=3):
             if response.status_code == 200:
                 return "OK"
             else:
-                return f"Down (Status Code: {response.status_code})"
+                return f"HTTP_ERR (Status Code: {response.status_code})"
+        except requests.exceptions.Timeout:
+            last_exception = "TIMEOUT_ERR"
         except (requests.exceptions.RequestException, socket.gaierror) as e:
-            last_exception = e
+            if isinstance(e, socket.gaierror):
+                last_exception = "DNS_ERR"
+            else:
+                last_exception = "HTTP_ERR (Error: {str(e)})"
         except ValueError as ve:
-            return f"Error: {str(ve)}"
-    return f"Down (Error: {str(last_exception)})"
+            return f"FORMAT_ERR (Error: {str(ve)})"
+    return last_exception
 
 # Function to clear the screen
 def clear_screen():
@@ -82,7 +87,7 @@ def monitor_websites(file_path, interval=10):
                 try:
                     status = future.result()
                 except Exception as exc:
-                    status = f"Down (Error: {str(exc)})"
+                    status = f"OTHER_ERR (Error: {str(exc)})"
                 table.add_row([url, status])
                 log_entries.append(f"{url} - {status}")
         
