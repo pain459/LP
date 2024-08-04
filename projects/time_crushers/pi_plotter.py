@@ -14,12 +14,12 @@ def plot_pi_spiral(pi_digits, n):
     ax.set_facecolor('black')
     
     # Parameters for the spiral
-    r_max = 50  # Max radius, reduced to fit within the page
-    theta_max = 10 * np.pi  # Total angle in radians
-    theta = np.linspace(0, theta_max, n)  # Angle in radians
+    a = 0.0001  # Initial radius
+    b = 0.004  # Distance between turns
+    theta = np.linspace(0, 4 * np.pi * n / 100, n)  # Angle in radians
     
     # Generate spiral coordinates
-    r = np.linspace(0, r_max, n)
+    r = a + b * theta
     x = r * np.cos(theta)
     y = r * np.sin(theta)
     
