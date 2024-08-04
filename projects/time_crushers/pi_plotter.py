@@ -1,10 +1,10 @@
 import matplotlib.pyplot as plt
 import numpy as np
+from mpmath import mp
 
 def generate_pi_digits(n):
     """Generate the first n digits of pi."""
-    from mpmath import mp
-    mp.dps = n  # Set decimal places
+    mp.dps = n + 1  # Set decimal places (n + 1 to include the leading 3)
     pi_str = str(mp.pi)[2:]  # Get pi digits as a string (excluding "3.")
     return pi_str
 
@@ -14,8 +14,9 @@ def plot_pi_spiral(pi_digits, n):
     ax.set_facecolor('black')
     
     # Parameters for the spiral
-    r_max = 100  # Max radius
-    theta = np.linspace(0, 4 * np.pi, n)  # Angle in radians
+    r_max = 50  # Max radius, reduced to fit within the page
+    theta_max = 10 * np.pi  # Total angle in radians
+    theta = np.linspace(0, theta_max, n)  # Angle in radians
     
     # Generate spiral coordinates
     r = np.linspace(0, r_max, n)
