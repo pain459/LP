@@ -2,33 +2,72 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-def draw_fibonacci_spiral(image, center, max_radius, num_turns):
+def draw_golden_ratio(image, num_rectangles=5):
     """
-    Draw a Fibonacci spiral on an image.
+    Draw golden ratio rectangles and spirals on an image.
     
     Parameters:
-    - image: Input image on which to draw the spiral.
-    - center: Tuple (x, y) for the center of the spiral.
-    - max_radius: The maximum radius of the spiral.
-    - num_turns: The number of turns in the spiral.
+    - image: Input image on which to draw the golden ratio pattern.
+    - num_rectangles: Number of iterations for drawing the golden ratio pattern.
     """
-    golden_ratio = (1 + np.sqrt(5)) / 2
-    theta = np.linspace(0, 2 * np.pi * num_turns, 1000)
-    radius = max_radius * np.exp(theta * np.log(golden_ratio) / (2 * np.pi * num_turns))
-    x = center[0] + radius * np.cos(theta)
-    y = center[1] + radius * np.sin(theta)
+    h, w, _ = image.shape
+    min_dimension = min(h, w)
     
-    for i in range(len(x) - 1):
-        cv2.line(image, (int(x[i]), int(y[i])), (int(x[i+1]), int(y[i+1])), (0, 255, 0), 2)
+    # Calculate the scaling factor based on the golden ratio
+    phi = (1 + np.sqrt(5)) / 2
+    scale_factor = 1 / phi
+    
+    # Starting dimensions and position
+    rect_w, rect_h = min_dimension, min_dimension
+    x, y = (w - rect_w) // 2, (h - rect_h) // 2
 
-def process_image(input_image_path, output_image_path, num_turns=5):
+    for i in range(num_rectangles):
+        # Draw the rectangle
+        cv2.rectangle(image, (x, y), (x + int(rect_w), y + int(rect_h)), (0, 255, 0), 2)
+        
+        # Draw the arc for the spiral
+        if i % 4 == 0:
+            center = (x + int(rect_w), y + int(rect_h))
+            start_angle = 180
+            end_angle = 270
+        elif i % 4 == 1:
+            center = (x, y + int(rect_h))
+            start_angle = 270
+            end_angle = 360
+        elif i % 4 == 2:
+            center = (x, y)
+            start_angle = 0
+            end_angle = 90
+        else:
+            center = (x + int(rect_w), y)
+            start_angle = 90
+            end_angle = 180
+
+        axes = (int(rect_w), int(rect_h))
+        cv2.ellipse(image, (int(center[0]), int(center[1])), (int(axes[0]), int(axes[1])), 0, start_angle, end_angle, (0, 255, 0), 2)
+        
+        # Update the coordinates and dimensions for the next rectangle
+        if i % 4 == 0:
+            x += int(rect_w * (1 - scale_factor))
+        elif i % 4 == 1:
+            y += int(rect_h * (1 - scale_factor))
+        elif i % 4 == 2:
+            x -= int(rect_w * scale_factor)
+        elif i % 4 == 3:
+            y -= int(rect_h * scale_factor)
+
+        rect_w, rect_h = rect_w * scale_factor, rect_h * scale_factor
+
+    return image
+
+def process_image(input_image_path, output_image_path, num_rectangles=5):
     """
-    Process the input image to overlay a Fibonacci spiral.
+    Process the input image to overlay a golden ratio pattern.
     
     Parameters:
     - input_image_path: Path to the input image.
     - output_image_path: Path to save the output image.
-    - num_turns: Number of turns in the Fibonacci spiral.
+    - num_rectangles: Number of iterations for drawing the golden ratio pattern.
     """
     # Read the input image
     image = cv2.imread(input_image_path)
@@ -36,28 +75,23 @@ def process_image(input_image_path, output_image_path, num_turns=5):
         print("Error: Could not load image")
         return
     
-    # Convert the image to RGB (OpenCV uses BGR by default)
-    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    
-    # Define the center and maximum radius for the Fibonacci spiral
-    center = (image.shape[1] // 2, image.shape[0] // 2)
-    max_radius = min(center) // 2
-    
-    # Draw the Fibonacci spiral on the image
-    draw_fibonacci_spiral(image_rgb, center, max_radius, num_turns)
+    # Draw the golden ratio pattern on the image
+    image_with_golden_ratio = draw_golden_ratio(image, num_rectangles)
     
     # Save the output image
-    output_image_rgb = cv2.cvtColor(image_rgb, cv2.COLOR_RGB2BGR)
-    cv2.imwrite(output_image_path, output_image_rgb)
+    cv2.imwrite(output_image_path, image_with_golden_ratio)
+    
+    # Convert the image to RGB (OpenCV uses BGR by default)
+    image_rgb = cv2.cvtColor(image_with_golden_ratio, cv2.COLOR_BGR2RGB)
     
     # Display the image
     plt.imshow(image_rgb)
     plt.axis('off')
-    plt.title('Fibonacci Spiral Overlay')
+    plt.title('Golden Ratio Overlay')
     plt.show()
 
 # Example usage
-input_image_path = 'sample_hurricane1.jpg'  # Replace with your input image path
-output_image_path = 'output_image_with_fibonacci_spiral.jpg'  # Replace with your desired output image path
+input_image_path = 'sample_hurricane2.jpg'  # Replace with your input image path
+output_image_path = 'output_image_with_golden_ratio.jpg'  # Replace with your desired output image path
 
-process_image(input_image_path, output_image_path, num_turns=5)
+process_image(input_image_path, output_image_path, num_rectangles=5)
