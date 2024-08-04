@@ -38,16 +38,26 @@ def koch_snowflake(order, scale=10):
     
     return snowflake
 
+def plot_and_save_koch_snowflake(order, scale=10, filename=None):
+    # Generate and plot the Koch Snowflake
+    snowflake = koch_snowflake(order, scale)
+    x, y = zip(*snowflake)
+
+    plt.figure(figsize=(10, 10))
+    plt.plot(x, y)
+    plt.axis('equal')
+    plt.title(f'Koch Snowflake of Order {order}')
+    
+    if filename:
+        plt.savefig(filename, dpi=300, bbox_inches='tight')
+        print(f'Saved high-resolution image as {filename}')
+    else:
+        plt.show()
+
 # Parameters
 order = 4
 scale = 10
+filename = 'koch_snowflake.png'  # Set to None if you don't want to save the image
 
-# Generate and plot the Koch Snowflake
-snowflake = koch_snowflake(order, scale)
-x, y = zip(*snowflake)
-
-plt.figure(figsize=(8, 8))
-plt.plot(x, y)
-plt.axis('equal')
-plt.title(f'Koch Snowflake of Order {order}')
-plt.show()
+# Plot and save the Koch Snowflake
+plot_and_save_koch_snowflake(order, scale, filename)
