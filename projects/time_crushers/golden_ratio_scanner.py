@@ -57,7 +57,7 @@ def process_image(input_image_path, output_image_path, num_turns=5):
     plt.show()
 
 # Example usage
-input_image_path = 'input_image.jpg'  # Replace with your input image path
+input_image_path = 'sample_hurricane1.jpg'  # Replace with your input image path
 output_image_path = 'output_image_with_fibonacci_spiral.jpg'  # Replace with your desired output image path
 
 process_image(input_image_path, output_image_path, num_turns=5)
