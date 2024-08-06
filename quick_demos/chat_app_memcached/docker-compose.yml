@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  memcached:
+    image: memcached:alpine
+    container_name: memcached
+    ports:
+      - "11211:11211"
+
+  backend:
+    build: ./backend
+    container_name: flask_app
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./frontend:/app/templates
+    depends_on:
+      - memcached
