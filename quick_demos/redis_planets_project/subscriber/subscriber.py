@@ -1,9 +1,24 @@
 import redis
 import time
+import logging
 from threading import Thread
 
+logging.basicConfig(level=logging.INFO)
+
 def handle_message(message):
-    print(f"Received message from {message['channel'].decode('utf-8')}: {message['data'].decode('utf-8')}")
+    channel = message['channel']
+    data = message['data']
+
+    # Check if the message is of type 'message'
+    if message['type'] == 'message':
+        if isinstance(channel, bytes):
+            channel = channel.decode('utf-8')
+        if isinstance(data, bytes):
+            data = data.decode('utf-8')
+
+        logging.info(f"Received message from {channel}: {data}")
+    else:
+        logging.info(f"Received non-message type: {message}")
 
 def subscribe_to_channels():
     try:
@@ -13,14 +28,14 @@ def subscribe_to_channels():
         pubsub = r.pubsub()
         pubsub.subscribe(**{planet: handle_message for planet in planets})
 
-        print("Subscribed to channels. Waiting for messages...")
+        logging.info("Subscribed to channels. Waiting for messages...")
         while True:
             message = pubsub.get_message()
             if message:
                 handle_message(message)
             time.sleep(0.1)
     except Exception as e:
-        print(f"Error: {e}")
+        logging.error(f"Error: {e}")
         time.sleep(5)
         subscribe_to_channels()
 
