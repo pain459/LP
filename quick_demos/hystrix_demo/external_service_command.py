@@ -10,3 +10,6 @@ class ExternalServiceCommand:
             return self.breaker.call(self.external_service.call)
         except pybreaker.CircuitBreakerError:
             return "Fallback: Service is unavailable"
+        except Exception as e:
+            self.breaker._state_storage.increment_counter()
+            return "Fallback: Service failed"
