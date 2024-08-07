@@ -1,3 +1,8 @@
 # To post a message
 
 curl -X POST http://localhost:5000/publish -H "Content-Type: application/json" -d '{"channel": "Mars", "message": "Hello Mars!"}'
+
+
+# After building, attach to the container and then give the channel name to read the Content
+
+docker attach redis_user_subscriber

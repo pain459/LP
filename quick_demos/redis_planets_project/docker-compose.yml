@@ -3,7 +3,9 @@ services:
   redis:
     image: "redis:latest"
     container_name: "redis"
-  
+    ports:
+      - "6379:6379"
+
   api:
     build:
       context: ./api
@@ -19,3 +21,12 @@ services:
     container_name: "redis_subscriber"
     depends_on:
       - redis
+
+  user_subscriber:
+    build:
+      context: ./user_subscriber
+    container_name: "redis_user_subscriber"
+    depends_on:
+      - redis
+    stdin_open: true
+    tty: true
