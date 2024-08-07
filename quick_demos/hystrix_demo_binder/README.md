@@ -17,3 +17,7 @@ This script runs after the environment is built and can be used to perform addit
 ```sh
 #!/bin/bash
 pip install -r requirements.txt
+
+Binder URL
+
+https://mybinder.org/v2/gh/pain459/LP/main?urlpath=quick_demos%2Fhystrix_demo_binder
