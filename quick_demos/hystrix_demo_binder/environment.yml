@@ -1,0 +1,8 @@
+name: hystrix-demo
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+  - pip:
+    - pybreaker
