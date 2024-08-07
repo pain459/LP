@@ -1,0 +1,21 @@
+version: '3'
+services:
+  redis:
+    image: "redis:latest"
+    container_name: "redis"
+  
+  api:
+    build:
+      context: ./api
+    container_name: "flask_api"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+
+  subscriber:
+    build:
+      context: ./subscriber
+    container_name: "redis_subscriber"
+    depends_on:
+      - redis
