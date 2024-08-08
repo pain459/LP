@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  tambola_caller:
+    build: .
+    ports:
+      - "5000:80"
+    volumes:
+      - ./scanning_layer/data:/app/scanning_layer/data
+    environment:
+      - FLASK_ENV=development
