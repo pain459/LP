@@ -1,10 +1,11 @@
 # Use the official Python image from the Docker Hub
 FROM python:3.9-slim
 
-# Install the necessary dependencies for OpenCV
+# Install the necessary dependencies for OpenCV and Tesseract OCR
 RUN apt-get update && apt-get install -y \
     libgl1-mesa-glx \
-    libglib2.0-0
+    libglib2.0-0 \
+    tesseract-ocr
 
 # Set the working directory
 WORKDIR /app/scanning_layer
