@@ -51,8 +51,8 @@ def batch_process_images(input_folder, output_folder, lang='eng'):
 # Example usage
 if __name__ == "__main__":
     # Single image processing
-    image_path = 'sample_ocr_1.jpg'  # Replace with your image file path
-    output_text_file = 'output_text.txt'
+    image_path = 'sample1.jpg'  # Replace with your image file path
+    output_text_file = 'ticket_output.txt'
     image_to_text(image_path, output_text_file, lang='eng')
 
     # # Batch processing
