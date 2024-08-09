@@ -54,8 +54,9 @@ def ocr_on_boxes(boxes):
         # Convert the box to a PIL image
         pil_box = Image.fromarray(box)
         
-        # Perform OCR on the box
-        text = pytesseract.image_to_string(pil_box, config='--psm 8 digits')
+        # Perform OCR on the box, limiting to digits only
+        custom_config = r'--oem 3 --psm 8 -c tessedit_char_whitelist=0123456789'
+        text = pytesseract.image_to_string(pil_box, config=custom_config)
         logging.info(f"OCR result for box {i}: {text.strip()}")
         
         # Append the result
