@@ -16,5 +16,5 @@ EXPOSE 5000
 # Define environment variable
 ENV FLASK_ENV=development
 
-# Run app.py when the container launches
-CMD ["flask", "run", "--host=0.0.0.0"]
+# Run migrations before starting the app
+CMD ["sh", "-c", "flask db upgrade && flask run --host=0.0.0.0"]
