@@ -3,3 +3,5 @@ SQLAlchemy
 psycopg2-binary
 redis
 Flask-SocketIO
+Flask-Migrate
+Flask-SQLAlchemy
