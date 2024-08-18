@@ -1,56 +1,47 @@
 import pandas as pd
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.decomposition import TruncatedSVD
-from scipy.sparse import csr_matrix
+from scipy.sparse import coo_matrix, csr_matrix
 import streamlit as st
 import matplotlib.pyplot as plt
 from collections import Counter
 from itertools import chain
 
-# Load the data in chunks to handle large datasets
-def load_data_in_chunks(file_path, chunksize=100000):
-    chunks = []
-    for chunk in pd.read_csv(file_path, chunksize=chunksize):
-        chunks.append(chunk)
-    return pd.concat(chunks, axis=0)
+# Function to reduce memory usage
+def reduce_memory_usage(df):
+    start_mem = df.memory_usage().sum() / 1024**2
+    for col in df.columns:
+        col_type = df[col].dtype
+        if col_type != object:
+            c_min = df[col].min()
+            c_max = df[col].max()
+            if str(col_type)[:3] == 'int':
+                df[col] = pd.to_numeric(df[col], downcast='integer')
+            else:
+                df[col] = pd.to_numeric(df[col], downcast='float')
+    end_mem = df.memory_usage().sum() / 1024**2
+    return df
 
-# Load movies and ratings data
+# Load data
 movies = pd.read_csv('ml-32m/movies.csv')
-ratings = load_data_in_chunks('ml-32m/ratings.csv')
+movies = reduce_memory_usage(movies)
 
-# Merge movies and ratings on movieId
+ratings = pd.read_csv('ml-32m/ratings.csv')
+ratings = reduce_memory_usage(ratings)
+
+# Merge and preprocess
 movie_ratings = pd.merge(ratings, movies, on='movieId')
-
-# Drop duplicates if any
+del ratings, movies  # Free memory
 movie_ratings.drop_duplicates(inplace=True)
 
-# Extract useful features
-movie_ratings = movie_ratings[['userId', 'movieId', 'rating', 'title', 'genres']]
+# Directly create sparse matrix
+user_ids = movie_ratings['userId'].astype('category').cat.codes
+movie_ids = movie_ratings['title'].astype('category').cat.codes
+ratings = movie_ratings['rating'].values
 
-# Create a pivot table (user-movie matrix)
-user_movie_matrix = movie_ratings.pivot_table(index='userId', columns='title', values='rating')
+user_movie_matrix_sparse = coo_matrix((ratings, (user_ids, movie_ids))).tocsr()
 
-# Fill NaN values with 0s for similarity calculation and convert to sparse matrix
-user_movie_matrix_sparse = csr_matrix(user_movie_matrix.fillna(0).values)
-
-# Apply Truncated SVD for dimensionality reduction
-svd = TruncatedSVD(n_components=50)
-user_movie_matrix_reduced = svd.fit_transform(user_movie_matrix_sparse)
-
-# Calculate cosine similarity on the reduced matrix
-movie_similarity = cosine_similarity(user_movie_matrix_reduced.T)
-
-# Convert similarity matrix to a DataFrame
-movie_similarity_df = pd.DataFrame(movie_similarity, index=user_movie_matrix.columns, columns=user_movie_matrix.columns)
-
-# Function to recommend movies based on a given movie title
-def recommend_movies(movie_title, num_recommendations=5):
-    if movie_title in movie_similarity_df:
-        similar_movies = movie_similarity_df[movie_title].sort_values(ascending=False)[1:num_recommendations+1]
-        return similar_movies
-    else:
-        return None
+user_map = movie_ratings['userId'].astype('category').cat.categories
+movie_map = movie_ratings['title'].astype('category').cat.categories
 
 # Streamlit UI
 st.title('Movie Recommendation System')
@@ -77,17 +68,15 @@ if st.checkbox('Show Genre Popularity'):
     st.pyplot(plt)
 
 # Select a movie from the list
-selected_movie = st.selectbox('Choose a movie:', user_movie_matrix.columns)
+selected_movie = st.selectbox('Choose a movie:', movie_map)
 
 # Number of recommendations
 num_recommendations = st.slider('Number of Recommendations:', 1, 10, 5)
 
 # Display recommendations
 if st.button('Recommend'):
-    recommendations = recommend_movies(selected_movie, num_recommendations)
-    if recommendations is not None:
-        st.write('Recommended Movies:')
-        for movie, similarity in recommendations.items():
-            st.write(f'{movie} - Similarity: {similarity:.2f}')
-    else:
-        st.write('No recommendations found. Please try another movie.')
+    movie_id = np.where(movie_map == selected_movie)[0][0]
+    similar_movie_ids = user_movie_matrix_sparse.T.dot(user_movie_matrix_sparse[:, movie_id].T).toarray().ravel()
+    similar_movies = [(movie_map[i], similar_movie_ids[i]) for i in np.argsort(similar_movie_ids)[::-1][:num_recommendations]]
+    for movie, score in similar_movies:
+        st.write(f'{movie} - Similarity Score: {score:.2f}')
