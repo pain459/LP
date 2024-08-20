@@ -2,6 +2,11 @@ import cv2
 import numpy as np
 import os
 from glob import glob
+import argparse
+
+# Usage
+# python advanced_image_stitcher.py --input_folder ./images_to_stitch --output_folder ./output --output_filename my_panorama.jpg
+
 
 def load_images_from_folder(folder):
     images = []
@@ -91,7 +96,11 @@ def stitch_images_from_folder(input_folder, output_folder, output_filename='stit
     cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    input_folder = 'path/to/your/images/folder'  # Replace with your images folder path
-    output_folder = 'path/to/output/folder'      # Replace with your output folder path
+    parser = argparse.ArgumentParser(description="Image Stitching Script")
+    parser.add_argument('--input_folder', type=str, required=True, help='Path to the folder containing images to stitch')
+    parser.add_argument('--output_folder', type=str, required=True, help='Path to the folder to save the stitched image')
+    parser.add_argument('--output_filename', type=str, default='stitched_output.jpg', help='Name of the output stitched image file (default: stitched_output.jpg)')
     
-    stitch_images_from_folder(input_folder, output_folder)
+    args = parser.parse_args()
+    
+    stitch_images_from_folder(args.input_folder, args.output_folder, args.output_filename)
