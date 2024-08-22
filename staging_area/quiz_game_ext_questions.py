@@ -1,4 +1,5 @@
 import json
+import random
 
 # Open JSON file
 with open('DB.json', 'r') as file:
@@ -10,4 +11,19 @@ with open('DB.json', 'r') as file:
 # print(data[1]["question"])
 # print(data[1]["answers"])
 # print(data[1]["answers"][0:3])
+# print(len(data))  # Give number of questions
 
+total_questions = len(data)
+score = 0
+questions_per_game = 10
+selected_question = []
+
+def choose_random_question():
+    return random.randint(0, total_questions)
+
+for i in range(questions_per_game):
+    extract_question = choose_random_question()
+    selected_question.append(extract_question)
+    print(f'Your question is {extract_question}')
+
+print(selected_question)
