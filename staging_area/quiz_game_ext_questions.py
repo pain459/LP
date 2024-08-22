@@ -15,7 +15,7 @@ with open('DB.json', 'r') as file:
 
 total_questions = len(data)
 score = 0
-questions_per_game = 10
+questions_per_game = 3
 selected_question = []
 
 def choose_random_question():
@@ -25,5 +25,9 @@ for i in range(questions_per_game):
     extract_question = choose_random_question()
     selected_question.append(extract_question)
     print(f'Your question is {extract_question}')
+    print(f'{data[extract_question]["question"]}')
+    print("Your options: \n")
+    for options in data[extract_question]["answers"]:
+        print(f"{options['choice']}: {options['text']}")
 
 print(selected_question)
