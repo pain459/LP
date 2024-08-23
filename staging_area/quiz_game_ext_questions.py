@@ -31,6 +31,7 @@ for i in range(questions_per_game):
     for options in data[extract_question]["answers"]:
         print(f"{options['choice']}: {options['text']}")
     answer = input("Your answer? ").strip().upper()
-    print(data[extract_question]["question"]["answers"][0]['correct'])
+    print(answer)
+    print(data[extract_question]["answers"])
 
 print(selected_question)
