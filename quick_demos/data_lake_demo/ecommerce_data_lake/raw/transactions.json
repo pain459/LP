@@ -1,0 +1,1 @@
+[{"transaction_id": 101, "customer_id": 1, "product_id": 1001, "amount": 250.0, "date": "2024-08-24"}, {"transaction_id": 102, "customer_id": 2, "product_id": 1002, "amount": 150.0, "date": "2024-08-24"}, {"transaction_id": 103, "customer_id": 1, "product_id": 1003, "amount": 300.0, "date": "2024-08-25"}]
