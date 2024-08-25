@@ -358,3 +358,4 @@ cython_debug/
 #.idea/
 
 /projects/movie_recommendation_system/ml-32m
+/quick_demos/data_lake_demo/brazil_data_lake
