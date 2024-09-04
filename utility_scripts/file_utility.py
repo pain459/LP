@@ -59,7 +59,7 @@ class FileUtility:
 
 # Example usage
 if __name__ == "__main__":
-    base_dir = "/home/ravik/src_git/LP/utility_scripts/"
+    base_dir = "LP/utility_scripts/"
     utility = FileUtility(base_dir)
     
     # List all .txt files greater than 1KB and modified after Jan 1, 2023
