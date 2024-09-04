@@ -74,7 +74,7 @@ def clean_old_files(directory, days_old, delete=False):
 
 if __name__ == "__main__":
     # Directory to clean
-    base_dir = "/path/to/your/directory"  # Replace with your target directory
+    base_dir = "/home/ravik/src_git/LP/"  # Replace with your target directory
     
     # Option 1: Clean large files
     min_file_size = 100 * 1024 * 1024  # Example: 100 MB
