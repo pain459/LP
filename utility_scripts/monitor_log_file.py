@@ -43,7 +43,7 @@ class LogFileMonitor:
 
 # Example usage
 if __name__ == "__main__":
-    log_file_path = "/path/to/your/logfile.log"  # Specify the log file path
+    log_file_path = "/home/ravik/src_git/LP/utility_scripts/sample_log_file.log"  # Specify the log file path
     keyword_to_watch = "ERROR"  # Specify the keyword to look for (optional)
 
     monitor = LogFileMonitor(log_file_path, keyword_to_watch)
