@@ -46,8 +46,8 @@ class CSVtoJSONConverter:
 
 # Example usage
 if __name__ == "__main__":
-    source_directory = "/path/to/your/csv_directory"
-    destination_directory = "/path/to/your/json_directory"
+    source_directory = "/home/ravik/src_git/LP/utility_scripts/"
+    destination_directory = "/home/ravik/src_git/LP/utility_scripts/"
     
     converter = CSVtoJSONConverter(source_directory, destination_directory)
 
