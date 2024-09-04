@@ -1,0 +1,72 @@
+import os
+import psutil
+import platform
+import time
+from datetime import timedelta, datetime
+
+# Function to get system uptime
+def get_system_uptime():
+    boot_time_timestamp = psutil.boot_time()
+    boot_time = datetime.fromtimestamp(boot_time_timestamp)
+    uptime_seconds = time.time() - boot_time_timestamp
+    uptime = str(timedelta(seconds=uptime_seconds))
+    return boot_time, uptime
+
+# Function to get CPU load averages
+def get_cpu_load():
+    load_1, load_5, load_15 = os.getloadavg()  # UNIX-based systems
+    return load_1, load_5, load_15
+
+# Function to get memory usage
+def get_memory_usage():
+    memory_info = psutil.virtual_memory()
+    return {
+        'total': memory_info.total,
+        'available': memory_info.available,
+        'percent': memory_info.percent,
+        'used': memory_info.used,
+        'free': memory_info.free
+    }
+
+# Function to get disk usage
+def get_disk_usage():
+    disk_info = psutil.disk_usage('/')
+    return {
+        'total': disk_info.total,
+        'used': disk_info.used,
+        'free': disk_info.free,
+        'percent': disk_info.percent
+    }
+
+# Function to display the report
+def display_system_report():
+    print("System Uptime and Resource Report")
+    print("-" * 50)
+    
+    # System uptime
+    boot_time, uptime = get_system_uptime()
+    print(f"System Boot Time: {boot_time.strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"System Uptime: {uptime}")
+    
+    # CPU load averages
+    load_1, load_5, load_15 = get_cpu_load()
+    print(f"CPU Load Averages: 1 min: {load_1:.2f}, 5 min: {load_5:.2f}, 15 min: {load_15:.2f}")
+    
+    # Memory usage
+    memory_usage = get_memory_usage()
+    print(f"Memory Usage: {memory_usage['percent']}%")
+    print(f"Total Memory: {memory_usage['total'] / (1024 ** 3):.2f} GB")
+    print(f"Used Memory: {memory_usage['used'] / (1024 ** 3):.2f} GB")
+    print(f"Free Memory: {memory_usage['free'] / (1024 ** 3):.2f} GB")
+    
+    # Disk usage
+    disk_usage = get_disk_usage()
+    print(f"Disk Usage: {disk_usage['percent']}%")
+    print(f"Total Disk Space: {disk_usage['total'] / (1024 ** 3):.2f} GB")
+    print(f"Used Disk Space: {disk_usage['used'] / (1024 ** 3):.2f} GB")
+    print(f"Free Disk Space: {disk_usage['free'] / (1024 ** 3):.2f} GB")
+    
+    print("-" * 50)
+
+if __name__ == "__main__":
+    display_system_report()
