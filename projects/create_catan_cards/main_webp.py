@@ -18,7 +18,7 @@ a4_height_mm = 297
 card_width_pt = mm_to_pt(card_width_mm)
 card_height_pt = mm_to_pt(card_height_mm)
 
-# Resource image paths (replace these with paths to your actual resource images)
+# Resource image paths (replace these with paths to your actual high-resolution resource images)
 resource_images = {
     "wood": "/home/ravik/src_git/LP/projects/create_catan_cards/wood.webp",   # Replace with actual image path
     "stone": "/home/ravik/src_git/LP/projects/create_catan_cards/stone.webp", # Replace with actual image path
@@ -45,22 +45,36 @@ def create_card(image_path, radius=20):
     # Create a blank card with transparent background
     card = Image.new('RGBA', (int(mm_to_pt(card_width_mm)), int(mm_to_pt(card_height_mm))), color=(255, 255, 255, 0))
     
-    # Open resource image and convert to RGBA to handle transparency
+    # Open resource image, ensure it's in high resolution, and convert to RGBA to handle transparency
     resource_img = Image.open(image_path).convert("RGBA")
-    resource_img = resource_img.resize((card.width - 20, card.height - 50), Image.Resampling.LANCZOS)
+    
+    # Resize resource image maintaining high quality
+    # Maintain aspect ratio while resizing to fit the card, use LANCZOS for high quality resizing
+    aspect_ratio = resource_img.width / resource_img.height
+    new_width = card.width - 20
+    new_height = int(new_width / aspect_ratio)
+    
+    if new_height > card.height - 50:
+        new_height = card.height - 50
+        new_width = int(new_height * aspect_ratio)
+    
+    resource_img = resource_img.resize((new_width, new_height), Image.Resampling.LANCZOS)
+
+    # Center the image within the card
+    img_x = (card.width - new_width) // 2
+    img_y = (card.height - new_height) // 2
 
     # Paste the resource image onto the card using its alpha channel as a mask
-    card.paste(resource_img, (10, 10), resource_img)
+    card.paste(resource_img, (img_x, img_y), resource_img)
 
     # Add rounded corners
     card_with_rounded_corners = add_rounded_corners(card, radius)
 
     return card_with_rounded_corners
 
-
-# Generate the PDF file
+# Generate the PDF file with higher quality DPI for printing
 def generate_pdf():
-    c = canvas.Canvas("catan_cards_webp.pdf", pagesize=A4)
+    c = canvas.Canvas("catan_cards_high_quality.pdf", pagesize=A4)
 
     x_offset = mm_to_pt(10)  # Small margin from the left
     y_offset = mm_to_pt(10)  # Small margin from the top
@@ -76,12 +90,12 @@ def generate_pdf():
     for i, resource_name in enumerate(resource_names * cards_per_resource):
         card_img = create_card(resource_images[resource_name])
 
-        # Save the card temporarily as an image file
+        # Save the card temporarily as an image file in high resolution (300 DPI)
         card_img_path = f"{resource_name}_{i}.png"
-        card_img.save(card_img_path)
+        card_img.save(card_img_path, dpi=(300, 300))
 
-        # Draw the image on the PDF
-        c.drawImage(card_img_path, x_pos, y_pos, card_width_pt, card_height_pt)
+        # Draw the image on the PDF with high quality
+        c.drawImage(card_img_path, x_pos, y_pos, card_width_pt, card_height_pt, mask='auto')
 
         # Update x and y positions for the next card
         x_pos += card_width_pt + x_margin
@@ -101,7 +115,7 @@ def generate_pdf():
     for i, resource_name in enumerate(resource_names * cards_per_resource):
         os.remove(f"{resource_name}_{i}.png")
 
-# Call the function to generate the PDF
+# Call the function to generate the high-quality PDF
 generate_pdf()
 
-print("PDF generated successfully!")
+print("High-quality PDF generated successfully!")
