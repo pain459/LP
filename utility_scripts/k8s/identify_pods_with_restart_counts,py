@@ -1,0 +1,18 @@
+from kubernetes import client, config
+
+config.load_kube_config()
+
+v1 = client.CoreV1Api()
+
+# Replace 'default' with your namespace
+namespace = 'default'
+pods = v1.list_namespaced_pod(namespace)
+
+for pod in pods.items:
+    for container_status in pod.status.container_statuses or []:
+        restart_count = container_status.restart_count
+        if restart_count > 0:
+            print(f"Pod: {pod.metadata.name}")
+            print(f"Container: {container_status.name}")
+            print(f"Restart Count: {restart_count}")
+            print("-" * 40)
