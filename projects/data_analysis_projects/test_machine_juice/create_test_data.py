@@ -65,7 +65,7 @@ def generate_large_dataset(n_rows, n_cores):
     return pd.concat(data_chunks, ignore_index=True)
 
 # Number of rows to generate
-n_rows = 100000000  # 100 million rows
+n_rows = 100000  # 100 million rows
 # Number of cores to use (you can get the number of available cores on your machine)
 n_cores = cpu_count()
 
