@@ -1,0 +1,163 @@
+                      Country Currency  Exchange Rate (INR)
+                        India      INR             1.000000
+         United Arab Emirates      AED             0.043900
+                  Afghanistan      AFN             0.830000
+                      Albania      ALL             1.065800
+                      Armenia      AMD             4.632000
+Netherlands Antillean Guilder      ANG             0.021400
+                       Angola      AOA            11.267300
+                    Argentina      ARS            11.520100
+                    Australia      AUD             0.017550
+                        Aruba      AWG             0.021400
+                   Azerbaijan      AZN             0.020330
+           Bosnia-Herzegovina      BAM             0.020980
+                     Barbados      BBD             0.023910
+                   Bangladesh      BDT             1.429300
+                     Bulgaria      BGN             0.020980
+                      Bahrain      BHD             0.004494
+                      Burundi      BIF            34.714300
+                      Bermuda      BMD             0.011950
+                       Brunei      BND             0.015460
+                      Bolivia      BOB             0.082810
+                       Brazil      BRL             0.064840
+                      Bahamas      BSD             0.011950
+                       Bhutan      BTN             1.000000
+                     Botswana      BWP             0.157800
+                      Belarus      BYN             0.038790
+                       Belize      BZD             0.023910
+                       Canada      CAD             0.016210
+ Democratic Republic of Congo      CDF            34.065400
+                  Switzerland      CHF             0.010130
+                        Chile      CLP            11.118500
+                        China      CNY             0.084540
+                     Colombia      COP            49.973800
+                   Costa Rica      CRC             6.197600
+                         Cuba      CUP             0.286900
+                   Cape Verde      CVE             1.182700
+               Czech Republic      CZK             0.269000
+                     Djibouti      DJF             2.124400
+                      Denmark      DKK             0.079980
+           Dominican Republic      DOP             0.718800
+                      Algeria      DZD             1.580600
+                        Egypt      EGP             0.580100
+                      Eritrea      ERN             0.179300
+                     Ethiopia      ETB             1.375500
+               European Union      EUR             0.010730
+                         Fiji      FJD             0.026290
+             Falkland Islands      FKP             0.009012
+                Faroe Islands      FOK             0.079990
+               United Kingdom      GBP             0.009011
+                      Georgia      GEL             0.032530
+                      Unknown      GGP             0.009012
+                        Ghana      GHS             0.188700
+                    Gibraltar      GIP             0.009012
+                       Gambia      GMD             0.844100
+                       Guinea      GNF           103.656900
+                    Guatemala      GTQ             0.092500
+                       Guyana      GYD             2.500000
+                    Hong Kong      HKD             0.093180
+                     Honduras      HNL             0.297200
+                      Croatia      HRK             0.080810
+                        Haiti      HTG             1.575200
+                      Hungary      HUF             4.227800
+                    Indonesia      IDR           181.883200
+                       Israel      ILS             0.044900
+                      Unknown      IMP             0.009012
+                         Iraq      IQD            15.643800
+                         Iran      IRR           507.959300
+                      Iceland      ISK             1.635300
+                      Unknown      JEP             0.009012
+                      Jamaica      JMD             1.880100
+                       Jordan      JOD             0.008475
+                        Japan      JPY             1.709100
+                        Kenya      KES             1.542600
+                   Kyrgyzstan      KGS             1.010200
+                     Cambodia      KHR            48.600000
+                      Unknown      KID             0.017550
+                      Comoros      KMF             5.276800
+                  South Korea      KRW            15.875800
+                       Kuwait      KWD             0.003647
+               Cayman Islands      KYD             0.009961
+                   Kazakhstan      KZT             5.727000
+                         Laos      LAK           263.125300
+                      Lebanon      LBP          1069.831300
+                    Sri Lanka      LKR             3.639900
+                      Liberia      LRD             2.389600
+                      Lesotho      LSL             0.209100
+                        Libya      LYD             0.056930
+                      Morocco      MAD             0.116100
+                      Moldova      MDL             0.207800
+                   Madagascar      MGA            54.403000
+              North Macedonia      MKD             0.661200
+                      Myanmar      MMK            34.383500
+                     Mongolia      MNT            40.705900
+                        Macau      MOP             0.095990
+                   Mauritania      MRU             0.472300
+                    Mauritius      MUR             0.549400
+                     Maldives      MVR             0.184500
+                       Malawi      MWK            20.832700
+                       Mexico      MXN             0.230100
+                     Malaysia      MYR             0.050390
+                   Mozambique      MZN             0.763800
+                      Namibia      NAD             0.209100
+                      Nigeria      NGN            19.710900
+                    Nicaragua      NIO             0.440500
+                       Norway      NOK             0.125400
+                        Nepal      NPR             1.600000
+                  New Zealand      NZD             0.019150
+                         Oman      OMR             0.004596
+                       Panama      PAB             0.011950
+                         Peru      PEN             0.044850
+             Papua New Guinea      PGK             0.046770
+                  Philippines      PHP             0.663600
+                     Pakistan      PKR             3.324700
+                       Poland      PLN             0.045800
+                     Paraguay      PYG            93.344300
+                        Qatar      QAR             0.043510
+                      Romania      RON             0.053360
+                       Serbia      RSD             1.256000
+                       Russia      RUB             1.106400
+                       Rwanda      RWF            16.418300
+                 Saudi Arabia      SAR             0.044830
+                      Unknown      SBD             0.100900
+                   Seychelles      SCR             0.169500
+                        Sudan      SDG             5.344600
+                       Sweden      SEK             0.121600
+                    Singapore      SGD             0.015460
+                 Saint Helena      SHP             0.009012
+                      Unknown      SLE             0.271200
+                 Sierra Leone      SLL           271.194600
+                      Somalia      SOS             6.825800
+                     Suriname      SRD             0.358400
+                  South Sudan      SSP            33.480700
+        Sao Tome and Principe      STN             0.262800
+                        Syria      SYP           153.810400
+                     Eswatini      SZL             0.209100
+                     Thailand      THB             0.396600
+                   Tajikistan      TJS             0.127000
+                 Turkmenistan      TMT             0.041820
+                      Tunisia      TND             0.036260
+                        Tonga      TOP             0.027810
+                       Turkey      TRY             0.407300
+          Trinidad and Tobago      TTD             0.081290
+                       Tuvalu      TVD             0.017550
+                      Unknown      TWD             0.381100
+                     Tanzania      TZS            32.523300
+                      Ukraine      UAH             0.495700
+                       Uganda      UGX            44.432000
+                United States      USD             0.011950
+                      Uruguay      UYU             0.491800
+                   Uzbekistan      UZS           152.951200
+                    Venezuela      VES             0.439900
+                      Vietnam      VND           299.935800
+                      Vanuatu      VUV             1.412900
+                        Samoa      WST             0.032310
+    Central African CFA Franc      XAF             7.035700
+        East Caribbean Dollar      XCD             0.032270
+                      Unknown      XDR             0.008832
+       West African CFA Franc      XOF             7.035700
+                    CFP Franc      XPF             1.279900
+                        Yemen      YER             2.992800
+                 South Africa      ZAR             0.209100
+                       Zambia      ZMW             0.314800
+                     Zimbabwe      ZWL             0.167000
