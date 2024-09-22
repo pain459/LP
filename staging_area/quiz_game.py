@@ -13,7 +13,7 @@ def quiz_game():
         },
         {
             "question": "Who wrote 'To Kill a Mockingbird'?",
-            "options": ["A) Harper Lee", "B) Mark Twain", "C) Ernest Hemingway", "D) F. Scott Fitzgerald"],
+            "options": ["A) Harper Lee", "B) Mark Twain", "C) Ernest Hemingway", "D) F. Scott Fitzgerald "],
             "answer": "A"
         },
         {
