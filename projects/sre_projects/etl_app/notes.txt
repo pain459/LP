@@ -1,0 +1,23 @@
+etl-app/
+│
+├── data/                         # Directory for source files (input data)
+│   └── source_file.csv
+│
+├── db/                           # Directory for database-related files
+│   └── init.sql                  # SQL script to initialize DB schema (optional)
+│
+├── docker/                       # Directory for Docker-related files
+│   ├── Dockerfile                # Dockerfile for ETL application
+│   └── requirements.txt          # Python dependencies for ETL application
+│
+├── monitoring/                   # Directory for monitoring setup
+│   ├── prometheus.yml            # Prometheus configuration file
+│   └── grafana/                  # Grafana configuration and dashboards
+│       └── dashboards.json       # Example Grafana dashboard configuration (optional)
+│
+├── src/                          # Source code for ETL and monitoring
+│   ├── etl_app.py                # Python ETL script
+│   └── prometheus_exporter.py    # Prometheus exporter script for metrics
+│
+├── docker-compose.yml            # Docker Compose file to orchestrate services
+└── README.md                     # Documentation for setting up and running the application
