@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: etl_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - etl_network
+
+  etl:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/data
+    depends_on:
+      - db
+    networks:
+      - etl_network
+
+volumes:
+  db_data:
+
+networks:
+  etl_network:
+    driver: bridge
