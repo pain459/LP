@@ -22,6 +22,22 @@ services:
     networks:
       - etl_network
 
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - etl_network
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - etl_network
+
 volumes:
   db_data:
 
