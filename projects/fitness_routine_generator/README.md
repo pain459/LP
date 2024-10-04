@@ -39,3 +39,19 @@ Sample response
   "schedule": "4-week program",
   "notes": "Rest days on Wednesday and Sunday."
 }
+
+
+Sample call
+
+curl -X 'POST' \
+  'http://localhost:8000/generate-workout' \
+  -H 'Content-Type: application/json' \
+  -d '{
+  "goal": "build muscle",
+  "fitness_level": "intermediate",
+  "workout_preference": "strength training",
+  "available_equipment": ["dumbbells", "bodyweight"],
+  "time_per_day": 45,
+  "days_per_week": 5
+}'
+
