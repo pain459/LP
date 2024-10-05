@@ -1,8 +1,7 @@
 # run.py
-from app import app, db
-from app.models import Flight
+from app import app, db  # Ensure this points to the 'app' directory and not a module conflict
 
-# Initialize the database if it doesn't exist
+# Initialize the database
 with app.app_context():
     db.create_all()
 
