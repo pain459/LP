@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Personal Finance Tracker</h1>
+
+        <!-- Income Form -->
+        <h2>Add Income</h2>
+        <form action="/add_income" method="POST">
+            <label for="amount">Amount:</label>
+            <input type="number" name="amount" required>
+            <label for="category">Category:</label>
+            <input type="text" name="category" required>
+            <button type="submit">Add Income</button>
+        </form>
+
+        <!-- Expense Form -->
+        <h2>Add Expense</h2>
+        <form action="/add_expense" method="POST">
+            <label for="amount">Amount:</label>
+            <input type="number" name="amount" required>
+            <label for="category">Category:</label>
+            <input type="text" name="category" required>
+            <button type="submit">Add Expense</button>
+        </form>
+
+        <!-- Display Data -->
+        <h2>Income Records</h2>
+        <ul>
+            {% for income in incomes %}
+            <li>{{ income.amount }} - {{ income.category }}</li>
+            {% endfor %}
+        </ul>
+
+        <h2>Expense Records</h2>
+        <ul>
+            {% for expense in expenses %}
+            <li>{{ expense.amount }} - {{ expense.category }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
