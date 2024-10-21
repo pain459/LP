@@ -11,7 +11,13 @@ db.init_app(app)
 def index():
     incomes = Income.query.all()
     expenses = Expense.query.all()
-    return render_template('index.html', incomes=incomes, expenses=expenses)
+
+    # Calculate total income and total expense
+    total_income = db.session.query(db.func.sum(Income.amount)).scalar() or 0
+    total_expense = db.session.query(db.func.sum(Expense.amount)).scalar() or 0
+    balance = total_income - total_expense
+
+    return render_template('index.html', incomes=incomes, expenses=expenses, balance=balance)
 
 @app.route('/add_income', methods=['POST'])
 def add_income():

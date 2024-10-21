@@ -10,6 +10,14 @@
     <div class="container">
         <h1>Personal Finance Tracker</h1>
 
+        <!-- Display Total Balance -->
+        <h2>Total Balance: {{ balance }}</h2>
+        <p style="color: {{ 'red' if balance < 0 else 'green' }}">
+            {% if balance < 0 %}
+                Warning: Your expenses exceed your income!
+            {% endif %}
+        </p>
+
         <!-- Income Form -->
         <h2>Add Income</h2>
         <form action="/add_income" method="POST">
