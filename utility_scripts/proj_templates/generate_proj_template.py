@@ -18,6 +18,7 @@ def create_project_structure(project_name):
         f"{project_name}/app/schemas/item.py": schema_content(),
         f"{project_name}/app/crud/item.py": crud_content(),
         f"{project_name}/app/database/database.py": db_content(),
+        f"{project_name}/requirements.txt": requirements_content(),
     }
 
     # Create directories
@@ -124,6 +125,14 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
+'''
+
+def requirements_content():
+    return '''\
+fastapi
+sqlalchemy
+pydantic
+uvicorn[standard]
 '''
 
 if __name__ == "__main__":
