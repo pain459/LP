@@ -1,0 +1,19 @@
+Folder structure
+
+project-root/
+├── docker-compose.yml
+├── voice_recognition/
+│   ├── Dockerfile
+│   └── main.py
+├── nlp_service/
+│   ├── Dockerfile
+│   └── main.py
+├── task_automation/
+│   ├── Dockerfile
+│   └── main.py
+├── text_to_speech/
+│   ├── Dockerfile
+│   └── main.py
+└── orchestration/
+    ├── Dockerfile
+    └── main.py
