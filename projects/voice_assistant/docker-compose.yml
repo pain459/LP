@@ -7,14 +7,9 @@ services:
       - "/dev/snd:/dev/snd"  # Ensures audio device access
     environment:
       - MIC_DEVICE=default
-    depends_on:
-      - nlp_service
 
   nlp_service:
     build: ./nlp_service
-    depends_on:
-      - task_automation
-      - text_to_speech
 
   task_automation:
     build: ./task_automation
@@ -23,8 +18,6 @@ services:
     build: ./text_to_speech
     devices:
       - "/dev/snd:/dev/snd"  # Audio output access
-    depends_on:
-      - voice_recognition
 
   orchestration:
     build: ./orchestration
