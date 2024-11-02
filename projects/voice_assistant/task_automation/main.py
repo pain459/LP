@@ -1,13 +1,18 @@
 import requests
 import time
+from flask import Flask, jsonify
 
+app = Flask(__name__)
+
+@app.route('/get_weather', methods=['GET'])
 def get_weather():
-    response = requests.get("http://api.openweathermap.org/...")  # Add API details
-    return response.json()
+    # Implement API call for weather
+    return jsonify({"description": "sunny"})
 
+@app.route('/tell_time', methods=['GET'])
 def tell_time():
-    return time.strftime("%H:%M:%S")
+    current_time = time.strftime("%H:%M:%S")
+    return jsonify({"time": current_time})
 
 if __name__ == "__main__":
-    # This can be extended to listen for incoming task requests if needed
-    print("Task automation service running...")
+    app.run(host="0.0.0.0", port=5001)

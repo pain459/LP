@@ -1,13 +1,6 @@
 version: '3.8'
 
 services:
-  voice_recognition:
-    build: ./voice_recognition
-    devices:
-      - "/dev/snd:/dev/snd"  # Ensures audio device access
-    environment:
-      - MIC_DEVICE=default
-
   nlp_service:
     build: ./nlp_service
 
@@ -16,13 +9,12 @@ services:
 
   text_to_speech:
     build: ./text_to_speech
-    devices:
-      - "/dev/snd:/dev/snd"  # Audio output access
 
   orchestration:
     build: ./orchestration
+    ports:
+      - "8000:8000"  # Expose port to communicate with host scripts
     depends_on:
-      - voice_recognition
       - nlp_service
       - task_automation
       - text_to_speech

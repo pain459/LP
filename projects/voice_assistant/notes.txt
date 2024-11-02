@@ -1,19 +1,20 @@
-Folder structure
-
 project-root/
 ├── docker-compose.yml
+├── host_scripts/
+│   ├── capture_audio.py       # Captures audio and sends it to Docker for processing
+│   └── play_audio.py          # Plays audio responses from Docker
 ├── voice_recognition/
 │   ├── Dockerfile
-│   └── main.py
+│   └── main.py                # Processes transcribed text commands
 ├── nlp_service/
 │   ├── Dockerfile
-│   └── main.py
+│   └── main.py                # Interprets commands
 ├── task_automation/
 │   ├── Dockerfile
-│   └── main.py
+│   └── main.py                # Handles tasks like weather, time, etc.
 ├── text_to_speech/
 │   ├── Dockerfile
-│   └── main.py
+│   └── main.py                # Sends response text to be played as audio
 └── orchestration/
     ├── Dockerfile
-    └── main.py
+    └── main.py                # Orchestrates command flow across services

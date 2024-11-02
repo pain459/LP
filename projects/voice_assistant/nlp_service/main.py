@@ -7,7 +7,6 @@ def interpret_command(command):
         return {"action": "get_weather"}
     elif "time" in command:
         return {"action": "tell_time"}
-    # Add more command interpretations here
     return {"action": "unknown"}
 
 @app.route('/interpret', methods=['POST'])
