@@ -6,6 +6,10 @@ RUN apt-get update && \
     apt-get install -y gcc portaudio19-dev libasound-dev && \
     pip install SpeechRecognition pyaudio
 
+# Install required dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
 # Copy application code
 WORKDIR /app
 COPY main.py .

@@ -1,7 +1,8 @@
 FROM python:3.10-slim
 
-# Install necessary libraries
-RUN pip install pyttsx3
+# Install required dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
 WORKDIR /app
