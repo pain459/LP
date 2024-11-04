@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  whisper:
+    build: .
+    container_name: whisper_container
+    volumes:
+      - ./data/audio_files:/app/data/audio_files  # Mount audio data
+    depends_on:
+      - spark
+    environment:
+      - SPARK_MASTER=spark://spark:7077  # Link to Spark master
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+
+  spark:
+    build: ./spark
+    container_name: spark_container
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          memory: 8G

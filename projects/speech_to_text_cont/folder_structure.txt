@@ -1,0 +1,15 @@
+speech_to_text_project/
+├── main.py                    # Main script for running the transcription
+├── Dockerfile                 # Dockerfile for Whisper and dependencies
+├── docker-compose.yml         # Docker Compose file to manage Whisper and Spark containers
+├── requirements.txt           # Python dependencies
+├── config.py                  # Configuration file for sample rate and model size
+├── spark/                     # Directory for Spark container setup
+│   └── Dockerfile             # Dockerfile for the Spark container
+├── utils/                     # Utility scripts for audio processing and transcription
+│   ├── audio_processing.py    # Script for recording audio in real-time
+│   ├── transcriber.py         # Script to perform transcription with Whisper
+│   └── __init__.py            # Makes `utils` a package
+├── data/                      # Data directory to store audio files for transcription
+│   └── audio_files/           # Folder for audio files
+└── README.md                  # Project documentation

@@ -1,0 +1,4 @@
+openai-whisper
+sounddevice
+scipy
+pyspark  # For Spark connection
