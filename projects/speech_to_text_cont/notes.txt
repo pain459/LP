@@ -1,0 +1,3 @@
+docker exec -it whisper_container python3 main.py --file /app/data/audio_files/sample.mp3
+
+docker exec -it whisper_container python3 main.py --record 5
