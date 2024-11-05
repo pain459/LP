@@ -10,3 +10,13 @@ D:\src_git\LP\LP\projects\video_subtitle_summary\input\Transporter.2.2005.720p.B
 
 
 docker run --rm -v "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\input\\:/app/input" -v "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\output\\:/app/output" video-audio-extractor
+
+
+version: '3.8'
+
+services:
+  p1:
+    build: ./p1
+    volumes:
+      - "D:/src_git/LP/LP/projects/video_subtitle_summary/input:/app/input"
+      - "D:/src_git/LP/LP/projects/video_subtitle_summary/output:/app/output"

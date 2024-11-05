@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  p1:
+    build: ./p1
+    # volumes:
+      # - ./p1/input:/app/input
+      # - ./p1/output:/app/output
+    volumes:
+      - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p1\\input:/app/input"
+      - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p1\\output:/app/output"
