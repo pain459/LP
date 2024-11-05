@@ -1,2 +1,2 @@
 openai-whisper
-torch
+torch==1.13.1

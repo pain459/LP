@@ -12,6 +12,9 @@ services:
 
   p2:
     build: ./p2
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
     volumes:
       - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p1\\output:/app/input"  # Reads audio files from p1's output
       - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p2\\output:/app/output"  # Stores .srt files in p2's output
