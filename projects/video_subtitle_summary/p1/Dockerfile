@@ -1,23 +1,26 @@
-# Use a base Python image
-FROM python:3.10-slim
+# Use NVIDIA base image for CUDA support
+FROM nvidia/cuda:11.8.0-cudnn8-runtime-ubuntu20.04
 
-# Install ffmpeg
+# Set environment variable for timezone
+ENV TZ=Etc/UTC
+
+# Install Python, system dependencies, and tzdata non-interactively
 RUN apt-get update && \
-    apt-get install -y ffmpeg && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y python3 python3-pip ffmpeg tzdata && \
     rm -rf /var/lib/apt/lists/*
 
 # Set up the working directory
 WORKDIR /app
 
-# Copy the requirements file if you plan to add additional Python packages
+# Copy Python script and any required dependencies
 COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
-# Copy the Python script
+# Copy audio extraction script
 COPY extract_audio.py ./
 
-# Directories for input video files and output audio files
+# Create input and output directories
 RUN mkdir -p /app/input /app/output
 
-# Set the command to run the script when the container starts
-CMD ["python", "extract_audio.py"]
+# Set the command to run the script
+CMD ["python3", "extract_audio.py"]

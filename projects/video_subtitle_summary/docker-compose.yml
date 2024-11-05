@@ -2,10 +2,14 @@
 
 services:
   p1:
-    build: ./p1
+    # build: ./p1
     # volumes:
       # - ./p1/input:/app/input
       # - ./p1/output:/app/output
+    build: ./p1
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
     volumes:
       - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p1\\input:/app/input"
       - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p1\\output:/app/output"
