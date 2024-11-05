@@ -1,0 +1,12 @@
+# Build Docker image
+
+docker build -t video-audio-extractor .
+
+# Run container and extract the output
+
+docker run --rm -v "%cd%/input:/app/input" -v "%cd%/output:/app/output" video-audio-extractor
+
+D:\src_git\LP\LP\projects\video_subtitle_summary\input\Transporter.2.2005.720p.BrRip.x264.YIFY+HI.mp4
+
+
+docker run --rm -v "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\input\\:/app/input" -v "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\output\\:/app/output" video-audio-extractor
