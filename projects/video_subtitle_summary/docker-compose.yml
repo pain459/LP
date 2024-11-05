@@ -22,3 +22,12 @@ services:
     volumes:
       - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p1\\output:/app/input"  # Reads audio files from p1's output
       - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p2\\output:/app/output"  # Stores .srt files in p2's output
+
+  p3:
+    build: ./p3
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+    volumes:
+      - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p2\\output:/app/input"  # Reads .srt files from p2's output
+      - "D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\p3\\output:/app/output"  # Stores summary files in p3's output
