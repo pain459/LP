@@ -86,7 +86,7 @@ def summarize_chunks(chunks, summarizer):
     chunk_summaries = []
     for chunk in chunks:
         # Summarize each chunk and append to results list
-        summary = summarizer(chunk, max_length=100, min_length=30, do_sample=False)
+        summary = summarizer(chunk, max_length=150, min_length=50, do_sample=False)
         chunk_summaries.append(summary[0]['summary_text'])
     
     # Combine all chunk summaries into one large text
@@ -116,7 +116,7 @@ def final_summary(text, summarizer, section_length=400, max_input_length=1024):
     # Summarize each section separately
     section_summaries = []
     for section in sections:
-        summary = summarizer(section, max_length=120, min_length=40, do_sample=False)
+        summary = summarizer(section, max_length=150, min_length=50, do_sample=False)
         section_summaries.append(summary[0]['summary_text'])
     
     # Combine section summaries into a single text
@@ -127,7 +127,7 @@ def final_summary(text, summarizer, section_length=400, max_input_length=1024):
         combined_summary = " ".join(combined_summary.split()[:max_input_length])
     
     # Summarize the combined text to get the final movie summary
-    final_summary = summarizer(combined_summary, max_length=150, min_length=50, do_sample=False)
+    final_summary = summarizer(combined_summary, max_length=200, min_length=80, do_sample=False)
     return final_summary[0]['summary_text']
 
 
