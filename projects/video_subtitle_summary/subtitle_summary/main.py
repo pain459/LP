@@ -219,7 +219,8 @@ def generate_movie_summary(file_path):
 
 
 # file_path = 'D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\subtitle_summary\\avatar_twow.srt'
-file_path = 'D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\subtitle_summary\\JohnWick.srt'
+# file_path = 'D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\subtitle_summary\\JohnWick.srt'
+file_path = 'D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\subtitle_summary\\Interstellar.srt'
 
 
 summary = generate_movie_summary(file_path)
