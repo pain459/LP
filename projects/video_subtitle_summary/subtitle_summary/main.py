@@ -1,10 +1,52 @@
 # Loading the summarization model
 from transformers import pipeline
-
-# Load the summarization pipeline
-summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
-
+from tmdbv3api import TMDb, Movie
+from dotenv import load_dotenv
+import os
 import re
+
+
+# Load environment variables from .env file
+load_dotenv()
+tmdb_api_key = os.getenv("TMDB_API_KEY")
+
+
+# Initialize TMDb API
+tmdb = TMDb()
+tmdb.api_key = tmdb_api_key
+movie_api = Movie()
+
+
+# # Load the summarization pipeline 
+# summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
+
+
+def get_movie_details(movie_title):
+    """
+    Fetch additional movie details from TMDb using the title.
+    
+    Parameters:
+    - movie_title (str): Title of the movie.
+
+    Returns:
+    - dict: Dictionary containing additional movie details.
+    """
+    try:
+        search_results = movie_api.search(movie_title)
+        if search_results:
+            movie_data = search_results[0]  # Take the first result
+            return {
+                "title": movie_data.title,
+                "release_date": movie_data.release_date,
+                "overview": movie_data.overview,
+                "genres": [genre.name for genre in movie_data.genres],
+                "cast": [cast.name for cast in movie_api.credits(movie_data.id)['cast'][:5]],  # Top 5 cast members
+                "director": next((crew.name for crew in movie_api.credits(movie_data.id)['crew'] if crew.job == "Director"), "N/A")
+            }
+    except Exception as e:
+        print(f"Error fetching movie details: {e}")
+    return {}
+
 
 def preprocess_subtitles(file_path):
     """
@@ -156,11 +198,28 @@ def generate_movie_summary(file_path):
     
     # Step 5: Generate a final summary from the combined chunk summaries
     movie_summary = final_summary(combined_summary, summarizer)
+    
+    # Step 6: Fetch additional movie details from TMDb
+    movie_title = file_path.split("\\")[-1].replace('.srt', '').replace('.', ' ')
+    movie_details = get_movie_details(movie_title)
+    
+    # Step 7: Combine summary with TMDb data
+    if movie_details:
+        movie_summary = f"{movie_summary}\n\nAdditional Information:\n" \
+                        f"Title: {movie_details['title']}\n" \
+                        f"Release Date: {movie_details['release_date']}\n" \
+                        f"Genres: {', '.join(movie_details['genres'])}\n" \
+                        f"Overview: {movie_details['overview']}\n" \
+                        f"Director: {movie_details['director']}\n" \
+                        f"Top Cast: {', '.join(movie_details['cast'])}"
+    else:
+        movie_summary += "\n\nNo additional information available from TMDb."
+
     return movie_summary
 
 
 # file_path = 'D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\subtitle_summary\\avatar_twow.srt'
-file_path = 'D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\subtitle_summary\\John_Wick.srt'
+file_path = 'D:\\src_git\\LP\\LP\\projects\\video_subtitle_summary\\subtitle_summary\\JohnWick.srt'
 
 
 summary = generate_movie_summary(file_path)
