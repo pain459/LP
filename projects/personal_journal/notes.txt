@@ -1,0 +1,18 @@
+Project: Daily Journal Application with Sentiment Analysis
+
+Project Outline
+
+1. Log Daily Entries: Allow the user to write a journal entry for each day, saving it with the date.
+2. Data Storage: Save entries in a CSV file or SQLite database, including fields for date and content.
+3. Sentiment Analysis:
+    a. Use TextBlob or NLTK to analyze the sentiment of each entry (positive, neutral, negative).
+    b. Store the sentiment score alongside each entry for future analysis.
+4. Search and Filter:
+    a. Implement search functionality to filter entries by keywords or by sentiment (e.g., only positive entries).
+5. Visualize Mood Over Time: Create graphs to visualize changes in mood over weeks or months.
+6. Advanced (Optional):
+    a. Add a word cloud feature to display commonly used words.
+    b. Implement password protection for privacy.
+
+Requirements
+Python libraries: pandas, TextBlob (or NLTK), matplotlib, and optionally wordcloud.
