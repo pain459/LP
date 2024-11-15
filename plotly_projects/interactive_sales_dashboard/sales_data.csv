@@ -1,0 +1,1001 @@
+Date,Product Category,Region,Sales Amount,Units Sold
+2024-07-08,Furniture,North,2212.66,12
+2024-02-23,Furniture,West,4054.13,7
+2024-10-29,Office Supplies,North,2718.4,13
+2024-07-28,Furniture,West,3303.49,5
+2024-04-27,Furniture,North,3223.86,13
+2024-03-22,Electronics,West,273.58,5
+2024-05-26,Electronics,East,2821.92,14
+2024-09-04,Toys,South,4684.51,9
+2024-08-20,Toys,West,4420.58,12
+2023-12-12,Electronics,North,3137.31,10
+2024-08-26,Furniture,East,4315.62,12
+2024-02-28,Toys,East,2321.7,15
+2023-11-29,Apparel,East,3153.23,12
+2024-05-03,Furniture,South,87.08,20
+2023-12-10,Office Supplies,South,944.66,14
+2024-02-05,Toys,West,124.86,17
+2024-05-27,Office Supplies,East,3969.98,15
+2023-11-21,Toys,East,1293.02,17
+2024-08-06,Apparel,West,1143.49,1
+2024-08-10,Electronics,South,4689.61,15
+2024-09-01,Toys,East,2751.8,10
+2024-05-15,Electronics,East,1725.09,4
+2024-04-20,Toys,East,4729.08,2
+2023-12-17,Toys,East,3241.22,9
+2024-09-22,Toys,East,2936.45,12
+2024-05-07,Apparel,South,2972.88,3
+2023-12-10,Office Supplies,West,4282.61,6
+2023-11-15,Apparel,West,617.23,5
+2024-11-14,Toys,East,4577.88,7
+2023-12-18,Toys,North,3664.25,18
+2024-03-10,Office Supplies,East,1107.15,11
+2024-09-09,Furniture,East,3563.09,3
+2024-06-24,Office Supplies,East,1215.46,4
+2024-02-03,Office Supplies,South,337.63,9
+2024-04-29,Office Supplies,South,100.71,11
+2024-06-13,Electronics,South,2755.1,10
+2024-03-13,Apparel,East,458.26,2
+2024-08-22,Office Supplies,East,2230.66,6
+2024-02-09,Office Supplies,West,2037.38,9
+2024-09-22,Toys,West,1911.81,7
+2024-02-08,Furniture,East,3198.24,8
+2024-05-09,Apparel,East,101.28,15
+2023-12-27,Furniture,West,4336.58,17
+2024-08-22,Toys,North,2238.61,17
+2023-12-18,Electronics,West,307.16,5
+2024-01-02,Electronics,North,3150.4,20
+2023-12-16,Electronics,South,4575.46,17
+2024-04-25,Apparel,West,4096.57,17
+2024-02-16,Toys,East,3150.3,8
+2024-01-23,Furniture,West,1456.47,13
+2024-03-12,Toys,West,3523.26,8
+2024-09-03,Furniture,East,4568.55,12
+2024-11-01,Office Supplies,North,2224.46,16
+2023-12-16,Apparel,South,2010.77,8
+2024-08-14,Office Supplies,East,1295.88,15
+2024-05-12,Furniture,South,1671.46,11
+2024-01-31,Furniture,East,1678.32,14
+2024-01-21,Office Supplies,North,4703.88,2
+2024-09-22,Electronics,East,1908.58,8
+2024-09-11,Office Supplies,East,1574.57,7
+2024-10-26,Apparel,South,4465.66,6
+2024-09-21,Toys,East,4086.18,11
+2023-12-06,Toys,North,4686.86,10
+2023-12-17,Apparel,South,3759.11,16
+2024-04-04,Furniture,South,1654.23,16
+2024-03-18,Apparel,North,2758.28,19
+2024-10-13,Electronics,South,105.24,12
+2024-03-07,Apparel,North,1346.91,14
+2023-12-30,Furniture,East,1967.44,19
+2024-02-19,Furniture,South,4329.07,18
+2024-07-21,Toys,East,2889.34,20
+2024-03-11,Office Supplies,South,3196.4,11
+2024-02-11,Electronics,North,3107.66,10
+2024-01-13,Office Supplies,North,3759.23,19
+2024-04-17,Furniture,East,3302.86,9
+2024-09-12,Furniture,North,3036.97,3
+2023-12-14,Furniture,South,4929.17,7
+2024-02-05,Electronics,East,3066.03,13
+2024-09-18,Office Supplies,North,3062.3,1
+2024-05-01,Apparel,North,2972.16,16
+2024-09-25,Toys,East,1734.28,14
+2024-09-06,Apparel,West,316.5,20
+2024-02-05,Toys,East,3096.24,12
+2024-08-24,Office Supplies,North,2209.25,14
+2024-06-29,Office Supplies,West,3926.82,2
+2024-08-23,Electronics,West,631.14,6
+2023-12-04,Office Supplies,South,4479.98,9
+2024-08-04,Apparel,East,3590.55,19
+2024-07-07,Toys,West,2849.35,19
+2024-03-17,Office Supplies,East,1817.01,14
+2023-12-05,Furniture,West,4664.05,12
+2024-07-10,Electronics,South,2684.84,18
+2024-02-22,Apparel,South,4914.33,7
+2024-06-19,Office Supplies,North,3530.1,10
+2024-08-22,Apparel,North,1189.02,16
+2024-10-01,Electronics,East,4050.0,3
+2024-05-20,Office Supplies,East,1469.99,7
+2024-02-18,Furniture,West,4518.1,20
+2023-12-03,Toys,East,1054.01,20
+2024-01-10,Apparel,West,4984.74,20
+2024-02-24,Furniture,East,930.72,19
+2024-03-28,Office Supplies,South,183.83,20
+2024-06-17,Furniture,East,964.05,13
+2024-07-16,Office Supplies,West,3073.99,6
+2024-03-18,Apparel,North,2572.42,5
+2024-06-19,Electronics,North,4952.57,16
+2023-12-04,Toys,North,3914.08,15
+2023-12-26,Office Supplies,South,1408.47,16
+2024-08-07,Toys,East,2547.89,8
+2024-04-04,Electronics,West,2744.88,5
+2024-04-23,Furniture,West,3425.37,1
+2024-04-29,Electronics,East,3389.73,20
+2024-03-06,Apparel,North,1408.13,12
+2024-07-15,Apparel,North,1416.7,4
+2024-04-12,Apparel,South,4901.5,17
+2024-11-11,Furniture,East,1986.37,3
+2024-05-30,Apparel,North,3570.05,5
+2023-11-20,Toys,East,3607.87,7
+2024-10-05,Office Supplies,North,1140.73,3
+2024-06-01,Electronics,West,330.1,9
+2024-05-26,Furniture,South,4602.42,2
+2023-12-03,Office Supplies,West,2383.31,19
+2024-03-14,Office Supplies,East,1061.92,14
+2024-04-27,Toys,East,3400.68,11
+2024-02-28,Toys,South,1602.26,3
+2024-11-10,Office Supplies,North,1867.21,4
+2024-07-24,Apparel,North,477.5,17
+2024-10-08,Apparel,East,1538.65,5
+2023-11-30,Toys,North,2825.21,5
+2023-12-05,Electronics,South,3965.62,5
+2024-11-13,Electronics,South,1468.09,16
+2024-09-06,Apparel,West,4532.86,16
+2024-04-14,Furniture,North,3633.55,4
+2024-10-22,Office Supplies,South,2838.25,10
+2024-03-08,Electronics,West,4222.56,3
+2024-02-20,Office Supplies,North,2012.26,16
+2024-09-20,Apparel,West,2122.99,15
+2024-04-01,Toys,West,2493.59,3
+2024-10-08,Office Supplies,East,520.69,5
+2024-02-12,Toys,South,270.38,3
+2024-04-10,Electronics,South,747.76,3
+2024-02-10,Toys,East,3303.18,5
+2024-03-19,Electronics,East,3577.61,20
+2024-06-03,Apparel,South,1106.44,2
+2024-02-12,Furniture,West,1077.88,20
+2024-07-21,Furniture,South,1991.39,6
+2024-06-19,Electronics,North,2220.84,8
+2024-03-24,Office Supplies,North,4857.17,13
+2024-09-15,Office Supplies,West,3077.65,5
+2024-05-05,Office Supplies,North,2527.86,1
+2024-08-19,Furniture,West,2731.69,6
+2024-10-22,Furniture,South,3166.25,3
+2024-03-26,Apparel,West,89.51,10
+2024-03-24,Furniture,North,1431.28,20
+2024-08-18,Toys,South,4715.39,15
+2024-08-07,Apparel,East,4177.53,16
+2024-06-08,Office Supplies,South,1240.75,11
+2024-04-07,Apparel,West,2197.2,17
+2024-06-29,Electronics,West,2498.39,15
+2024-05-19,Electronics,East,4328.15,17
+2024-10-30,Office Supplies,South,89.66,17
+2023-11-27,Toys,West,1094.78,8
+2024-01-21,Furniture,South,4568.88,10
+2024-06-27,Toys,South,878.9,5
+2024-01-29,Office Supplies,West,4523.31,12
+2024-06-28,Toys,West,576.47,15
+2024-01-06,Electronics,East,2872.01,11
+2024-08-31,Furniture,East,2229.33,18
+2024-09-17,Furniture,East,4642.0,5
+2023-12-22,Furniture,West,1962.9,7
+2024-03-28,Apparel,North,3194.62,6
+2024-05-22,Electronics,West,2723.9,3
+2024-06-01,Toys,West,3159.34,11
+2024-03-12,Furniture,East,1791.24,18
+2024-01-09,Electronics,West,408.13,6
+2024-01-13,Office Supplies,West,2985.21,8
+2024-05-22,Apparel,East,3643.63,3
+2024-10-08,Apparel,East,3369.27,10
+2024-08-08,Toys,East,2989.36,14
+2024-04-27,Office Supplies,South,2217.0,18
+2024-01-23,Toys,West,2320.58,12
+2024-05-23,Electronics,South,411.12,2
+2023-12-17,Toys,South,572.76,12
+2024-10-22,Office Supplies,West,2004.9,9
+2024-06-19,Furniture,South,2154.4,6
+2024-07-06,Office Supplies,North,71.88,13
+2024-09-07,Toys,West,4529.9,9
+2024-01-09,Furniture,West,1842.49,12
+2024-04-04,Toys,West,3683.32,6
+2024-10-05,Office Supplies,North,3176.16,9
+2024-02-03,Toys,South,3150.59,14
+2024-03-04,Furniture,North,2518.19,12
+2024-05-22,Furniture,South,1039.24,12
+2024-09-07,Electronics,East,4080.66,14
+2024-05-08,Electronics,South,3503.36,17
+2024-03-19,Apparel,East,2025.88,1
+2024-02-28,Office Supplies,North,4870.31,2
+2024-06-28,Office Supplies,South,1391.62,18
+2024-11-12,Toys,East,4686.07,4
+2024-03-17,Apparel,South,952.84,13
+2024-09-01,Toys,South,3386.15,17
+2024-08-02,Apparel,South,1737.7,6
+2024-02-21,Electronics,North,1769.89,19
+2024-09-25,Apparel,East,4019.67,8
+2024-03-08,Apparel,East,2349.28,19
+2024-01-23,Furniture,South,1663.72,14
+2024-06-07,Apparel,North,1011.2,12
+2024-07-01,Furniture,West,4761.95,6
+2024-04-15,Office Supplies,East,3608.77,4
+2023-12-29,Office Supplies,West,4577.38,7
+2024-09-01,Office Supplies,North,998.9,4
+2024-02-12,Toys,North,3445.71,7
+2024-03-16,Furniture,West,3354.98,2
+2024-07-10,Electronics,West,924.4,11
+2023-12-11,Apparel,South,4435.62,3
+2024-09-04,Electronics,South,2370.29,11
+2024-11-14,Apparel,East,2140.95,18
+2024-03-04,Electronics,West,2994.7,11
+2024-03-17,Office Supplies,South,4655.26,19
+2024-03-14,Electronics,East,4460.95,20
+2024-01-27,Toys,South,2115.11,7
+2024-05-06,Toys,East,3688.17,10
+2024-09-06,Office Supplies,North,410.57,1
+2024-01-24,Office Supplies,North,2039.94,1
+2024-08-07,Office Supplies,North,3871.69,9
+2024-07-27,Apparel,West,1952.5,16
+2024-03-30,Office Supplies,East,3596.42,6
+2024-10-05,Furniture,North,2009.66,8
+2024-08-07,Furniture,East,2677.92,12
+2024-08-02,Office Supplies,East,4912.09,1
+2024-07-14,Office Supplies,North,216.81,12
+2024-06-15,Furniture,South,2270.06,10
+2024-02-14,Apparel,East,2842.44,3
+2023-12-25,Toys,North,2771.55,13
+2024-08-09,Office Supplies,East,1401.21,13
+2024-07-07,Toys,West,2357.3,13
+2024-09-14,Toys,West,1427.83,2
+2024-10-07,Furniture,West,3327.35,19
+2024-11-13,Electronics,East,3431.28,14
+2024-07-24,Furniture,North,1131.86,18
+2024-10-31,Office Supplies,East,4169.77,9
+2024-06-25,Office Supplies,South,4141.4,10
+2024-01-10,Office Supplies,North,4256.08,14
+2024-04-28,Office Supplies,South,3202.8,19
+2024-03-11,Electronics,North,1023.02,13
+2023-12-15,Furniture,South,4549.22,10
+2024-01-25,Toys,North,2892.93,8
+2024-09-21,Toys,East,78.66,9
+2024-02-27,Office Supplies,South,758.65,4
+2024-08-16,Electronics,West,341.34,14
+2024-01-01,Furniture,West,2111.74,20
+2024-03-03,Office Supplies,East,769.48,4
+2024-02-27,Electronics,South,1855.04,2
+2024-04-29,Furniture,West,704.12,1
+2024-09-10,Office Supplies,North,351.15,2
+2024-08-03,Furniture,South,4111.93,5
+2024-03-14,Electronics,West,3384.82,9
+2024-03-17,Apparel,West,2063.4,11
+2024-05-10,Toys,South,3369.37,15
+2024-05-23,Electronics,West,3809.96,1
+2024-04-04,Furniture,North,1210.12,13
+2024-07-27,Electronics,West,1821.21,20
+2024-05-24,Office Supplies,West,4996.44,10
+2024-04-30,Toys,South,4323.15,4
+2024-01-10,Furniture,West,4411.56,17
+2024-02-12,Furniture,East,363.75,1
+2024-08-23,Office Supplies,North,1100.54,3
+2024-02-07,Office Supplies,West,74.15,3
+2024-05-09,Office Supplies,South,4735.43,17
+2024-02-05,Apparel,North,4860.55,1
+2024-10-23,Apparel,South,1474.0,18
+2024-06-03,Apparel,South,1485.95,6
+2024-03-29,Electronics,West,2403.19,8
+2024-05-28,Apparel,West,3635.09,15
+2024-05-21,Toys,South,3363.52,18
+2024-01-05,Apparel,West,3837.53,18
+2024-10-24,Apparel,South,2325.5,18
+2023-12-24,Furniture,West,1076.4,8
+2024-08-28,Apparel,East,4341.81,4
+2024-09-17,Furniture,East,3516.13,12
+2024-09-21,Electronics,West,1501.7,1
+2023-12-14,Electronics,North,4238.18,9
+2024-10-07,Office Supplies,North,387.73,8
+2024-04-28,Apparel,West,3860.18,16
+2024-03-15,Electronics,East,546.76,6
+2024-04-06,Electronics,South,577.43,17
+2023-12-29,Toys,West,2195.45,11
+2024-01-20,Office Supplies,East,3739.84,9
+2024-10-16,Apparel,North,2565.32,17
+2024-07-29,Furniture,West,4822.49,19
+2024-09-21,Toys,West,3320.3,7
+2024-03-30,Electronics,East,2127.01,13
+2024-02-15,Office Supplies,West,901.71,5
+2024-10-03,Office Supplies,South,1397.48,19
+2024-03-22,Apparel,South,1132.0,5
+2024-04-02,Toys,South,4139.3,7
+2024-04-08,Office Supplies,East,2182.31,11
+2024-07-19,Electronics,East,123.97,2
+2024-06-28,Office Supplies,North,3130.87,11
+2024-04-27,Electronics,West,832.06,10
+2024-05-21,Furniture,East,2559.93,11
+2024-05-03,Furniture,North,4362.2,7
+2024-05-23,Electronics,South,4367.18,12
+2024-02-25,Office Supplies,East,2805.41,10
+2023-11-26,Furniture,West,4576.51,13
+2024-07-04,Furniture,West,4956.89,4
+2024-06-02,Electronics,East,4791.03,3
+2024-03-12,Toys,West,1439.08,3
+2024-01-09,Office Supplies,North,2775.98,14
+2024-09-15,Office Supplies,South,2509.74,19
+2024-05-14,Toys,East,1711.71,2
+2024-10-03,Apparel,North,3038.6,5
+2024-05-25,Office Supplies,North,2239.63,2
+2024-01-19,Office Supplies,North,4392.83,12
+2024-02-04,Toys,West,3669.15,1
+2023-12-23,Office Supplies,West,1830.41,14
+2024-05-21,Electronics,North,3529.85,14
+2024-11-08,Office Supplies,East,4235.77,1
+2024-06-02,Office Supplies,South,105.72,8
+2024-04-02,Office Supplies,West,1566.16,13
+2023-12-17,Office Supplies,North,4299.93,20
+2024-05-04,Apparel,West,4460.95,13
+2024-06-15,Furniture,North,1464.03,15
+2023-12-28,Toys,North,3013.88,17
+2024-05-18,Apparel,East,1639.56,5
+2024-07-27,Apparel,North,3606.38,6
+2024-11-05,Electronics,North,3621.41,7
+2024-04-26,Toys,East,1658.81,6
+2024-06-08,Toys,East,1572.96,16
+2024-07-04,Apparel,West,1113.36,16
+2024-09-20,Electronics,North,1172.96,19
+2024-05-22,Electronics,South,887.13,17
+2024-02-07,Electronics,South,3601.86,16
+2023-11-18,Apparel,West,2871.59,3
+2024-02-19,Apparel,South,2702.72,16
+2024-02-28,Furniture,North,57.49,15
+2024-05-01,Office Supplies,South,722.36,3
+2024-06-24,Apparel,South,4445.91,14
+2024-08-10,Furniture,South,190.22,9
+2024-01-02,Office Supplies,West,52.21,14
+2024-07-24,Apparel,South,3459.55,15
+2024-01-09,Electronics,South,1527.22,19
+2023-12-05,Apparel,East,3465.83,19
+2024-04-04,Furniture,West,4131.08,8
+2023-12-09,Office Supplies,South,3294.3,17
+2023-11-21,Apparel,North,1186.32,8
+2024-07-12,Toys,East,1809.31,11
+2024-06-29,Apparel,East,934.61,6
+2024-06-16,Furniture,South,3844.26,20
+2024-08-08,Furniture,East,2224.82,8
+2024-01-01,Electronics,West,2048.74,8
+2024-02-09,Apparel,North,4531.34,17
+2024-03-30,Apparel,North,4013.89,12
+2024-10-25,Apparel,South,4200.46,4
+2024-10-08,Toys,North,2166.24,1
+2024-04-04,Office Supplies,North,537.35,11
+2024-09-05,Electronics,East,2888.17,12
+2024-01-17,Toys,North,3729.21,11
+2024-11-06,Apparel,East,2880.77,7
+2024-09-18,Apparel,West,3679.75,16
+2024-01-31,Furniture,South,2844.84,1
+2024-08-15,Toys,West,2553.23,17
+2024-04-28,Toys,North,1334.11,19
+2024-07-15,Toys,South,484.47,5
+2024-01-23,Apparel,East,3562.35,2
+2024-08-19,Electronics,East,4408.25,20
+2024-02-24,Apparel,North,510.17,14
+2024-08-31,Furniture,West,2170.87,1
+2024-06-01,Toys,East,2644.83,13
+2024-10-17,Furniture,East,4509.24,16
+2023-12-05,Toys,East,2135.46,7
+2024-08-17,Electronics,South,4660.7,10
+2024-11-01,Toys,North,75.34,11
+2024-08-14,Toys,South,2807.58,10
+2024-11-02,Furniture,West,2210.51,14
+2024-07-29,Electronics,South,4881.66,4
+2024-07-11,Apparel,West,2954.26,17
+2024-04-17,Electronics,North,2310.59,9
+2024-05-26,Toys,East,2041.17,10
+2024-02-10,Office Supplies,South,985.15,12
+2023-12-07,Apparel,South,175.44,16
+2024-07-27,Apparel,North,2140.23,18
+2024-06-03,Electronics,North,4119.4,15
+2024-03-02,Apparel,East,3769.4,16
+2024-09-18,Toys,West,2658.77,3
+2024-06-09,Apparel,South,4147.42,10
+2024-07-03,Furniture,South,1458.09,15
+2024-05-09,Electronics,North,2897.69,18
+2024-04-02,Electronics,West,2019.61,2
+2024-06-03,Electronics,North,1388.46,18
+2024-07-17,Electronics,North,2340.77,19
+2024-09-18,Apparel,North,2573.34,1
+2024-05-23,Electronics,East,3096.36,15
+2024-11-05,Furniture,East,4091.83,13
+2023-12-13,Toys,West,1928.69,20
+2024-06-18,Office Supplies,West,3300.06,8
+2024-07-18,Office Supplies,West,506.14,11
+2024-02-06,Toys,North,4309.81,9
+2024-09-01,Apparel,South,1802.62,2
+2024-10-16,Furniture,East,3134.14,13
+2024-07-03,Toys,East,2094.61,14
+2024-06-23,Office Supplies,East,4213.69,14
+2024-07-02,Toys,North,99.51,11
+2024-02-28,Furniture,South,737.53,5
+2024-11-04,Office Supplies,South,2399.94,7
+2024-02-19,Electronics,East,3562.86,19
+2024-02-11,Electronics,West,3498.06,14
+2024-02-21,Toys,West,3057.64,15
+2024-07-27,Office Supplies,North,4066.51,5
+2024-06-19,Toys,East,4652.02,18
+2024-03-19,Furniture,West,3070.39,16
+2023-12-16,Office Supplies,North,4394.3,20
+2024-10-24,Apparel,North,1258.26,19
+2024-08-31,Apparel,North,2591.73,19
+2024-09-28,Furniture,East,4534.68,16
+2024-02-04,Electronics,North,3344.74,4
+2024-07-03,Toys,South,612.54,4
+2024-10-08,Furniture,South,1288.65,20
+2024-07-05,Furniture,West,4393.4,20
+2024-09-20,Toys,North,338.35,13
+2024-10-13,Office Supplies,West,3499.09,4
+2024-05-04,Apparel,West,404.62,17
+2024-01-17,Electronics,North,4869.42,4
+2024-04-19,Toys,North,4705.67,17
+2024-05-04,Toys,East,3340.39,7
+2024-01-31,Furniture,West,376.76,14
+2024-10-07,Apparel,North,3261.94,1
+2024-04-18,Furniture,West,4156.3,19
+2024-06-03,Electronics,South,1170.02,12
+2024-09-11,Office Supplies,North,791.67,7
+2024-04-29,Furniture,North,3440.68,19
+2023-12-17,Electronics,South,1943.09,4
+2024-08-23,Electronics,West,4758.02,13
+2024-06-23,Apparel,South,4449.08,17
+2024-01-10,Office Supplies,West,316.47,7
+2024-07-28,Furniture,East,1964.26,18
+2024-09-06,Electronics,West,3499.68,17
+2024-07-04,Apparel,North,2079.1,20
+2024-05-02,Electronics,North,2415.38,11
+2024-04-27,Furniture,South,3739.47,6
+2024-11-05,Toys,North,2405.66,16
+2024-01-13,Electronics,North,4533.52,5
+2023-11-21,Office Supplies,South,2281.21,20
+2024-09-17,Electronics,North,374.68,10
+2023-12-08,Furniture,South,909.38,18
+2024-06-24,Apparel,North,3740.91,14
+2024-09-14,Office Supplies,South,1680.44,16
+2024-05-03,Office Supplies,East,3174.4,9
+2024-08-17,Toys,East,1512.52,11
+2023-11-24,Apparel,South,1575.33,19
+2023-12-20,Office Supplies,East,919.2,15
+2023-12-06,Apparel,South,3055.6,6
+2024-07-08,Apparel,South,3639.03,2
+2024-08-28,Office Supplies,West,1976.26,9
+2024-07-12,Toys,West,634.62,1
+2024-11-11,Office Supplies,East,1208.86,13
+2024-05-21,Apparel,East,2669.72,4
+2024-02-28,Furniture,South,3965.24,11
+2024-04-06,Apparel,North,3846.91,1
+2024-01-16,Apparel,North,3267.72,9
+2024-06-30,Furniture,North,388.61,13
+2024-04-23,Furniture,North,2249.09,19
+2024-08-11,Electronics,East,1615.19,7
+2024-01-22,Electronics,North,2452.83,1
+2024-02-13,Toys,East,315.21,15
+2024-01-21,Toys,West,2775.33,20
+2023-11-15,Apparel,South,3695.84,18
+2023-12-09,Toys,North,2971.07,15
+2024-11-09,Furniture,North,241.87,6
+2024-02-08,Apparel,East,1876.88,16
+2024-01-23,Office Supplies,North,103.55,18
+2024-04-16,Electronics,North,4705.78,17
+2024-05-26,Electronics,West,1850.48,14
+2024-08-12,Furniture,East,3177.37,18
+2024-05-09,Toys,South,4497.34,7
+2024-01-24,Office Supplies,North,2672.8,5
+2024-03-20,Office Supplies,North,1083.7,7
+2024-03-19,Furniture,North,3162.37,15
+2024-09-11,Apparel,East,4407.91,14
+2023-11-28,Electronics,North,57.76,13
+2024-02-15,Electronics,West,295.06,10
+2024-07-17,Apparel,East,1562.75,12
+2024-11-08,Toys,West,1650.24,16
+2024-02-04,Toys,North,546.79,1
+2024-04-23,Office Supplies,South,2955.85,4
+2024-01-31,Furniture,East,1451.41,16
+2024-09-26,Office Supplies,North,3129.8,10
+2024-05-17,Furniture,South,3497.3,16
+2024-04-09,Apparel,West,3022.48,20
+2024-01-16,Apparel,South,1785.05,1
+2024-05-07,Apparel,West,1497.36,18
+2024-04-12,Electronics,South,3205.41,1
+2024-01-24,Office Supplies,West,635.63,16
+2024-10-19,Office Supplies,East,2399.51,15
+2024-09-17,Electronics,South,1906.29,13
+2024-05-25,Electronics,North,1540.62,2
+2024-05-02,Electronics,South,2275.86,11
+2024-11-04,Electronics,South,103.22,1
+2024-08-21,Electronics,East,3810.58,15
+2024-04-25,Apparel,South,4582.16,4
+2024-01-10,Apparel,West,1931.5,6
+2024-05-22,Apparel,North,1732.24,12
+2024-05-23,Office Supplies,West,1571.65,16
+2024-10-21,Electronics,South,3948.22,10
+2024-06-23,Furniture,South,2596.81,15
+2024-06-12,Office Supplies,East,1878.88,10
+2023-12-31,Toys,South,3296.32,10
+2024-04-23,Furniture,North,2357.49,18
+2024-10-10,Furniture,East,4418.11,18
+2024-06-17,Electronics,West,2623.28,17
+2024-01-04,Office Supplies,South,189.95,16
+2024-07-10,Office Supplies,South,3365.41,13
+2024-06-30,Furniture,South,2753.02,13
+2024-11-03,Toys,North,1662.57,13
+2024-10-04,Furniture,East,3081.33,3
+2024-03-17,Apparel,West,1486.69,4
+2024-08-04,Furniture,North,4573.24,17
+2024-07-08,Apparel,North,665.4,8
+2024-10-28,Furniture,East,4013.94,15
+2024-08-12,Office Supplies,West,581.64,15
+2024-08-05,Electronics,East,2401.48,6
+2023-11-30,Electronics,East,531.02,1
+2023-11-24,Office Supplies,West,1996.06,8
+2024-09-03,Electronics,West,2021.03,17
+2023-11-15,Toys,South,4530.77,12
+2024-09-06,Furniture,South,3469.16,9
+2024-02-22,Toys,West,3370.07,5
+2023-11-20,Apparel,West,4294.19,16
+2024-10-15,Furniture,North,4534.12,5
+2023-12-26,Furniture,North,3714.36,19
+2024-07-04,Electronics,South,1482.58,10
+2024-05-23,Apparel,West,308.52,13
+2024-03-04,Apparel,West,821.41,2
+2024-07-20,Toys,West,2796.04,15
+2024-10-27,Electronics,South,3819.7,3
+2024-06-08,Furniture,South,4088.9,16
+2023-12-01,Apparel,East,2533.29,10
+2024-10-11,Furniture,North,2080.78,17
+2024-05-12,Furniture,East,2413.25,11
+2024-01-22,Office Supplies,East,2354.72,15
+2024-09-25,Electronics,North,3429.26,12
+2024-07-16,Apparel,North,2306.73,14
+2024-08-25,Office Supplies,North,942.42,4
+2024-08-17,Electronics,East,4544.56,20
+2024-05-23,Office Supplies,East,3911.37,18
+2024-06-25,Electronics,South,449.06,11
+2024-01-31,Toys,South,512.24,19
+2024-09-04,Toys,North,1520.29,8
+2024-08-30,Apparel,North,3011.14,17
+2024-05-01,Apparel,South,464.55,14
+2024-04-30,Furniture,West,4942.29,19
+2024-06-12,Furniture,East,2861.81,10
+2024-10-14,Office Supplies,South,2213.52,20
+2024-02-18,Electronics,East,2031.16,12
+2024-04-21,Electronics,North,1102.78,10
+2024-10-01,Electronics,North,4742.87,11
+2024-02-15,Toys,East,4752.59,13
+2024-07-31,Office Supplies,South,2978.37,10
+2024-10-13,Electronics,West,4554.68,15
+2024-05-02,Toys,West,209.5,17
+2024-03-23,Furniture,West,2655.44,17
+2024-05-04,Apparel,North,1687.12,5
+2024-03-03,Office Supplies,East,2614.36,8
+2024-01-17,Toys,North,3111.72,3
+2024-03-14,Office Supplies,East,2318.48,17
+2024-08-05,Toys,West,2095.27,13
+2023-12-07,Furniture,East,2238.14,10
+2024-09-19,Furniture,South,1787.58,13
+2024-04-17,Apparel,South,4427.02,8
+2024-10-15,Toys,East,2360.81,6
+2024-08-19,Apparel,East,2457.98,2
+2024-08-04,Apparel,East,3049.22,1
+2024-01-13,Electronics,North,3003.87,19
+2023-11-22,Office Supplies,East,2743.72,1
+2024-07-16,Furniture,North,1440.04,1
+2024-04-29,Office Supplies,South,4370.78,11
+2023-12-20,Furniture,West,4515.35,10
+2024-05-15,Electronics,South,3781.1,12
+2024-05-21,Apparel,North,180.96,17
+2024-06-22,Electronics,South,4203.12,1
+2024-05-27,Toys,West,1316.18,19
+2024-04-21,Apparel,East,3480.84,18
+2023-11-26,Apparel,East,3430.04,7
+2024-04-12,Furniture,North,417.06,10
+2024-06-10,Apparel,West,4514.13,5
+2024-09-09,Office Supplies,West,2472.15,6
+2024-08-15,Electronics,North,153.31,9
+2024-10-23,Electronics,South,1226.37,19
+2023-12-09,Toys,South,1882.29,19
+2024-09-03,Office Supplies,South,2072.15,4
+2024-03-13,Electronics,West,745.14,20
+2024-08-06,Toys,West,3770.77,8
+2024-03-15,Furniture,East,1501.95,1
+2024-09-21,Office Supplies,East,2550.76,4
+2024-09-27,Furniture,West,2978.15,18
+2024-10-26,Furniture,South,3076.24,19
+2024-06-25,Toys,South,267.2,15
+2023-11-17,Furniture,North,1877.81,10
+2024-04-10,Electronics,West,2733.25,16
+2023-11-21,Furniture,West,4270.69,11
+2024-08-03,Apparel,East,1840.69,15
+2024-01-13,Toys,East,4502.3,7
+2024-05-22,Furniture,East,1134.11,11
+2024-08-20,Electronics,North,1672.01,4
+2024-09-09,Furniture,East,659.16,16
+2024-01-28,Apparel,East,2239.1,16
+2024-09-29,Furniture,East,3502.71,1
+2024-10-20,Apparel,South,4872.58,2
+2024-03-06,Toys,East,2366.85,9
+2024-06-02,Apparel,South,4772.86,18
+2024-02-07,Office Supplies,North,2165.84,20
+2024-08-31,Furniture,West,1648.82,17
+2024-08-12,Office Supplies,South,4939.34,16
+2024-01-27,Electronics,North,702.72,5
+2023-12-24,Furniture,South,1853.72,16
+2024-01-23,Toys,West,3506.66,6
+2024-05-11,Toys,East,281.52,4
+2024-02-12,Furniture,South,3436.17,8
+2024-04-12,Apparel,West,4559.3,12
+2023-12-14,Furniture,North,2989.16,19
+2023-12-07,Office Supplies,North,2046.78,20
+2023-12-28,Apparel,East,757.9,4
+2024-05-16,Apparel,West,2168.92,18
+2024-03-11,Office Supplies,West,3325.02,6
+2024-11-14,Office Supplies,West,759.03,16
+2024-07-25,Office Supplies,West,2985.54,12
+2024-06-02,Furniture,North,385.89,20
+2024-05-25,Apparel,West,537.93,13
+2024-08-27,Apparel,South,1201.83,14
+2023-12-16,Office Supplies,West,589.85,8
+2023-12-23,Office Supplies,North,4120.06,13
+2024-04-30,Electronics,East,1551.88,2
+2024-05-29,Apparel,East,4761.04,5
+2024-11-02,Toys,East,2376.18,2
+2024-07-11,Office Supplies,South,473.26,1
+2024-07-25,Office Supplies,East,324.79,19
+2024-05-25,Furniture,South,2393.59,12
+2024-02-16,Toys,East,244.23,2
+2024-06-29,Toys,East,1006.18,4
+2024-01-04,Apparel,South,3161.84,20
+2024-05-06,Furniture,South,4868.16,18
+2024-03-08,Apparel,South,4153.87,20
+2024-05-19,Electronics,West,789.06,6
+2024-07-22,Toys,East,3004.23,4
+2023-12-20,Electronics,East,1209.9,8
+2024-04-18,Apparel,South,2262.14,15
+2024-02-09,Toys,North,2333.66,9
+2024-02-26,Apparel,East,160.98,18
+2024-04-09,Apparel,East,1542.65,6
+2024-06-03,Furniture,South,2476.16,5
+2024-11-11,Toys,South,1226.32,8
+2024-09-20,Furniture,South,1451.69,13
+2023-12-04,Toys,East,57.51,5
+2024-03-10,Apparel,South,4733.31,6
+2024-06-22,Toys,East,3527.82,7
+2024-05-21,Apparel,North,4277.49,15
+2023-11-29,Apparel,North,983.23,17
+2024-07-24,Furniture,North,4784.71,8
+2024-04-08,Furniture,North,4790.08,16
+2024-01-08,Electronics,South,1905.3,13
+2024-09-05,Office Supplies,South,2565.98,11
+2023-12-19,Furniture,East,4115.43,16
+2023-11-23,Furniture,East,4925.64,20
+2024-11-14,Toys,West,4881.42,9
+2024-06-22,Apparel,South,2321.09,3
+2024-03-12,Apparel,East,4986.98,13
+2024-03-04,Office Supplies,West,119.68,20
+2023-12-21,Electronics,West,2261.85,18
+2023-11-15,Toys,East,4526.62,18
+2024-02-18,Electronics,North,1382.86,15
+2024-08-04,Apparel,East,4601.57,19
+2024-07-15,Apparel,West,2097.47,5
+2024-06-22,Toys,East,3516.39,6
+2024-01-15,Toys,South,4807.48,8
+2024-04-10,Toys,South,4457.27,7
+2024-04-27,Toys,North,4399.2,3
+2024-03-03,Apparel,East,1062.69,5
+2024-08-20,Office Supplies,South,4074.61,11
+2024-10-08,Electronics,West,4862.24,7
+2024-04-02,Electronics,East,4562.64,9
+2024-05-10,Toys,East,3670.61,15
+2023-11-15,Furniture,West,202.73,18
+2024-06-16,Electronics,South,4117.91,4
+2024-01-14,Toys,South,4376.33,16
+2024-03-25,Apparel,West,4100.69,12
+2023-12-23,Electronics,South,1021.83,3
+2024-05-27,Electronics,East,1821.07,12
+2024-01-29,Furniture,East,3483.43,8
+2024-05-19,Electronics,West,4580.58,5
+2024-10-01,Apparel,North,1456.59,10
+2024-06-24,Apparel,North,3150.86,6
+2024-01-20,Apparel,East,902.14,4
+2024-09-07,Apparel,North,2760.86,13
+2023-12-11,Electronics,South,2047.87,9
+2024-05-18,Apparel,East,1338.86,15
+2024-02-09,Apparel,North,2414.64,11
+2024-04-28,Toys,South,1008.11,20
+2024-01-05,Furniture,East,2756.82,9
+2024-11-01,Furniture,East,2191.57,14
+2024-10-22,Apparel,East,3511.96,15
+2024-07-16,Apparel,East,2043.48,10
+2024-10-03,Furniture,North,111.81,6
+2023-11-24,Toys,South,809.46,11
+2023-12-06,Apparel,South,4152.43,2
+2024-05-13,Office Supplies,North,4212.29,10
+2024-03-11,Furniture,East,252.56,2
+2024-09-21,Apparel,West,4719.84,10
+2024-07-27,Office Supplies,North,712.66,4
+2024-03-22,Office Supplies,North,664.89,19
+2024-11-02,Furniture,East,3635.95,18
+2024-06-15,Furniture,West,360.42,11
+2024-10-30,Electronics,South,1699.33,20
+2024-05-30,Office Supplies,North,3172.0,10
+2024-10-05,Toys,North,2811.11,10
+2024-03-29,Furniture,East,1224.47,13
+2024-09-05,Toys,West,865.11,12
+2024-06-29,Apparel,East,2517.91,10
+2024-07-05,Apparel,South,1884.55,15
+2024-06-28,Electronics,West,1228.47,17
+2024-08-26,Office Supplies,East,926.87,7
+2024-07-23,Apparel,North,3831.91,10
+2024-04-17,Furniture,East,3890.76,12
+2024-01-27,Apparel,South,2499.64,14
+2024-06-09,Furniture,West,4059.64,8
+2024-07-16,Office Supplies,South,3984.16,18
+2024-08-12,Furniture,South,4750.51,13
+2024-01-22,Office Supplies,West,1800.61,13
+2024-11-07,Office Supplies,East,3653.87,5
+2024-06-25,Electronics,South,3166.97,2
+2024-08-23,Apparel,North,199.79,8
+2024-05-26,Office Supplies,East,1802.53,11
+2024-09-11,Toys,South,3691.89,1
+2024-04-12,Furniture,North,1828.33,19
+2024-06-01,Office Supplies,East,521.02,5
+2024-06-02,Office Supplies,South,4915.9,6
+2024-03-14,Electronics,East,3560.44,1
+2024-10-11,Office Supplies,North,3065.72,16
+2024-03-11,Electronics,West,1348.1,12
+2024-10-17,Electronics,West,3908.67,15
+2024-07-23,Electronics,South,4627.1,10
+2024-08-01,Electronics,North,3013.88,7
+2024-05-05,Toys,North,1264.2,14
+2023-12-16,Toys,South,2837.58,7
+2024-07-05,Furniture,South,4775.68,6
+2024-05-25,Electronics,East,231.41,2
+2024-05-01,Apparel,North,3856.95,2
+2024-04-20,Toys,East,857.78,16
+2024-08-31,Office Supplies,South,3834.67,19
+2024-06-08,Toys,North,2643.61,15
+2024-02-15,Furniture,West,2514.25,11
+2024-06-17,Furniture,West,4110.16,17
+2024-08-30,Toys,West,4950.64,18
+2024-05-28,Furniture,West,4315.05,8
+2024-09-07,Furniture,West,1184.13,13
+2024-03-16,Furniture,West,4052.83,18
+2024-01-20,Apparel,North,4848.51,1
+2023-11-15,Apparel,North,3084.61,17
+2024-02-12,Office Supplies,South,767.68,15
+2024-02-08,Furniture,West,4696.63,15
+2024-01-02,Apparel,North,576.83,4
+2024-08-25,Furniture,East,403.27,9
+2024-08-31,Furniture,West,2868.9,17
+2024-03-22,Furniture,South,4758.43,19
+2024-10-28,Toys,South,4722.37,1
+2023-11-17,Apparel,South,4854.4,12
+2024-07-27,Electronics,South,4776.25,7
+2024-04-23,Apparel,West,985.57,10
+2023-11-24,Furniture,East,1828.56,4
+2024-01-05,Electronics,East,2457.42,8
+2024-01-30,Toys,East,1975.35,20
+2024-11-05,Office Supplies,East,3857.38,4
+2024-04-29,Apparel,West,4803.81,3
+2024-06-02,Toys,South,483.98,9
+2024-07-16,Electronics,East,925.86,12
+2024-08-19,Office Supplies,South,2306.45,18
+2024-06-01,Furniture,South,4668.86,13
+2024-11-05,Toys,South,2581.51,1
+2024-04-13,Electronics,West,1966.62,4
+2024-04-22,Apparel,West,3900.72,16
+2024-01-04,Toys,North,2278.84,13
+2024-05-31,Apparel,South,3495.48,4
+2024-05-22,Office Supplies,North,1450.79,17
+2024-08-19,Apparel,West,138.36,7
+2024-10-12,Electronics,South,4260.47,11
+2023-11-22,Toys,East,2120.49,4
+2024-09-20,Furniture,North,4942.97,9
+2024-02-02,Electronics,East,3798.15,19
+2024-11-02,Furniture,North,1175.87,9
+2023-12-27,Apparel,West,1533.32,18
+2024-04-10,Toys,East,2743.36,7
+2024-08-16,Electronics,North,4921.5,19
+2024-06-19,Furniture,East,4639.08,1
+2024-05-31,Apparel,East,4722.25,17
+2024-06-09,Apparel,North,1259.64,4
+2024-05-04,Apparel,South,2312.39,10
+2024-04-11,Furniture,West,4468.92,1
+2024-02-01,Office Supplies,North,1905.05,7
+2024-04-25,Apparel,West,1689.52,10
+2024-04-19,Furniture,East,1912.89,16
+2024-10-21,Furniture,East,915.08,17
+2024-09-28,Electronics,West,4743.11,3
+2024-11-03,Electronics,West,1347.07,13
+2024-03-26,Apparel,East,2720.97,19
+2024-06-08,Office Supplies,East,4107.38,16
+2024-04-06,Toys,East,697.89,3
+2023-12-12,Furniture,West,2002.91,12
+2024-01-15,Furniture,South,729.9,3
+2024-10-30,Office Supplies,South,4434.15,4
+2024-09-24,Office Supplies,West,4028.52,1
+2024-05-25,Furniture,North,1880.38,4
+2024-06-11,Office Supplies,South,1977.54,9
+2024-08-14,Toys,East,4638.16,19
+2024-08-09,Apparel,West,3188.26,5
+2024-08-10,Apparel,West,2759.31,17
+2024-09-15,Office Supplies,East,1410.04,18
+2024-07-14,Apparel,North,1316.23,14
+2024-07-26,Electronics,North,1437.21,7
+2024-08-28,Office Supplies,East,2845.77,5
+2024-08-30,Apparel,North,4122.35,9
+2024-07-31,Office Supplies,East,4015.77,1
+2024-08-17,Office Supplies,East,4745.31,7
+2024-08-22,Furniture,South,487.7,8
+2024-05-14,Furniture,South,1323.98,5
+2024-10-03,Electronics,South,4477.11,1
+2023-11-26,Furniture,West,4444.56,9
+2024-06-08,Toys,West,1798.6,17
+2024-02-11,Office Supplies,North,489.82,3
+2024-06-02,Office Supplies,East,258.89,12
+2024-09-17,Furniture,South,1411.01,16
+2024-07-23,Office Supplies,East,2656.45,19
+2024-04-13,Furniture,South,1872.89,1
+2024-07-15,Toys,North,1948.4,4
+2024-06-13,Electronics,South,3232.52,9
+2024-03-14,Electronics,North,1068.24,11
+2024-03-02,Furniture,West,242.76,17
+2024-01-02,Furniture,North,4860.94,17
+2024-02-06,Furniture,North,2629.86,20
+2024-10-27,Furniture,South,2915.7,3
+2023-12-02,Office Supplies,South,480.71,13
+2024-06-06,Electronics,West,4164.57,12
+2024-02-22,Electronics,West,4873.23,20
+2024-04-07,Toys,East,3237.78,20
+2024-07-05,Apparel,East,3873.85,7
+2024-02-21,Electronics,West,4705.95,2
+2024-05-03,Furniture,North,3325.48,1
+2024-09-02,Office Supplies,North,4884.3,4
+2024-02-12,Furniture,North,1838.52,2
+2023-12-24,Office Supplies,North,3173.94,16
+2024-02-20,Toys,West,2483.54,7
+2024-03-14,Electronics,East,2912.38,3
+2024-02-19,Furniture,West,1853.11,4
+2024-10-31,Furniture,South,3858.32,13
+2024-06-18,Apparel,North,1547.78,20
+2024-01-01,Furniture,East,4405.3,9
+2024-01-21,Toys,West,1193.46,12
+2024-01-13,Toys,East,2408.35,17
+2024-03-08,Electronics,South,4442.08,2
+2024-05-20,Apparel,West,357.19,20
+2024-07-25,Toys,North,3477.05,3
+2023-12-14,Office Supplies,North,4379.96,15
+2024-08-30,Furniture,South,2720.46,7
+2023-12-28,Furniture,East,4190.6,6
+2024-08-30,Furniture,North,323.84,4
+2024-10-08,Electronics,North,2427.6,8
+2024-09-30,Toys,West,2215.73,8
+2024-09-02,Apparel,East,1457.91,16
+2023-11-28,Furniture,East,1583.59,18
+2024-09-08,Furniture,West,4063.91,4
+2024-02-07,Office Supplies,West,4446.77,7
+2024-08-24,Toys,East,4903.98,14
+2024-06-29,Electronics,East,1750.37,3
+2024-08-17,Toys,East,1715.04,8
+2024-06-17,Furniture,West,3883.82,15
+2023-12-01,Apparel,East,57.11,17
+2024-02-28,Apparel,East,3701.52,14
+2024-08-15,Office Supplies,West,4217.27,8
+2023-12-10,Furniture,South,4116.9,17
+2024-03-15,Toys,West,557.1,13
+2024-03-11,Office Supplies,East,2549.69,19
+2023-12-11,Electronics,South,2489.98,16
+2024-03-20,Office Supplies,South,2795.09,1
+2024-02-24,Apparel,North,1150.38,9
+2023-12-07,Electronics,South,4746.31,15
+2024-07-22,Electronics,North,2582.98,2
+2024-08-03,Office Supplies,West,3156.77,1
+2024-07-28,Furniture,East,3865.02,10
+2024-05-03,Electronics,East,223.96,4
+2024-07-03,Toys,West,3866.1,1
+2023-12-13,Office Supplies,South,3650.2,18
+2023-12-14,Furniture,North,2924.43,14
+2024-10-14,Toys,East,1481.77,9
+2024-02-07,Electronics,East,2522.35,10
+2024-10-22,Toys,West,2982.31,4
+2024-01-30,Apparel,West,289.54,2
+2024-11-08,Electronics,North,4920.33,10
+2024-05-14,Electronics,East,4926.05,15
+2023-12-21,Electronics,East,4335.68,7
+2024-06-02,Office Supplies,East,4729.5,4
+2024-06-11,Toys,South,4769.51,16
+2024-07-21,Furniture,West,3453.75,13
+2024-07-06,Office Supplies,North,4939.43,9
+2023-11-22,Electronics,South,1109.52,5
+2024-08-11,Electronics,North,3822.31,4
+2024-05-11,Toys,East,3376.52,19
+2024-10-26,Office Supplies,South,1002.89,6
+2024-02-27,Furniture,East,4836.64,9
+2023-11-20,Toys,South,2903.95,19
+2024-02-03,Electronics,East,4508.34,10
+2024-09-14,Apparel,East,696.5,12
+2024-05-26,Furniture,West,2590.25,9
+2024-08-09,Toys,South,4241.8,9
+2024-10-02,Electronics,South,4896.83,16
+2024-06-22,Toys,East,293.63,8
+2024-02-02,Electronics,North,4239.09,5
+2024-05-07,Apparel,West,496.2,7
+2024-05-06,Office Supplies,West,1442.7,9
+2024-01-22,Apparel,North,1862.15,8
+2024-10-04,Toys,South,249.94,10
+2024-07-15,Office Supplies,North,740.27,13
+2024-06-20,Furniture,South,2678.63,3
+2024-10-07,Electronics,North,1680.06,2
+2024-06-13,Apparel,South,3874.73,13
+2024-10-24,Electronics,East,4399.31,1
+2024-05-15,Electronics,East,4213.42,10
+2024-01-25,Electronics,East,3373.0,19
+2024-09-18,Toys,South,4526.73,8
+2023-12-16,Furniture,West,4121.56,7
+2024-07-12,Office Supplies,South,4754.67,20
+2024-06-27,Toys,East,350.16,19
+2024-11-09,Electronics,North,3307.2,9
+2024-07-13,Electronics,East,1524.64,13
+2024-05-27,Electronics,East,4934.66,19
+2024-08-16,Office Supplies,North,1134.74,9
+2024-03-19,Office Supplies,West,1476.32,1
+2024-04-30,Toys,West,995.0,16
+2024-09-28,Furniture,South,2798.93,7
+2023-12-01,Apparel,West,3997.39,8
+2024-11-09,Electronics,North,475.25,14
+2024-10-03,Toys,North,67.34,7
+2024-05-21,Electronics,East,2513.48,4
+2024-03-13,Furniture,East,3429.25,2
+2023-11-18,Office Supplies,East,1585.74,14
+2024-01-07,Apparel,East,2907.02,5
+2024-03-08,Office Supplies,North,340.43,12
+2024-05-19,Furniture,East,2988.74,10
+2024-07-07,Office Supplies,North,4955.18,15
+2024-05-02,Apparel,East,4561.95,16
+2024-07-24,Furniture,West,4326.17,1
+2023-11-19,Electronics,East,4360.21,9
+2024-06-06,Apparel,South,1170.61,12
+2024-06-27,Electronics,North,701.59,14
+2024-05-20,Apparel,West,4303.93,5
+2024-05-06,Toys,South,1628.97,5
+2024-04-23,Electronics,North,820.22,12
+2024-06-12,Electronics,West,1616.02,15
+2024-08-01,Furniture,South,566.52,11
+2024-05-21,Furniture,South,4642.68,20
+2024-03-08,Apparel,South,1393.46,2
+2023-12-15,Electronics,South,2062.31,13
+2023-11-23,Electronics,West,356.24,4
+2023-12-25,Electronics,West,414.8,10
+2024-11-07,Electronics,North,3070.58,8
+2024-08-03,Electronics,North,583.68,8
+2024-09-26,Furniture,West,362.27,1
+2024-04-14,Office Supplies,South,1995.49,3
+2023-12-26,Electronics,West,1634.34,16
+2024-05-19,Toys,West,2263.19,12
+2024-10-23,Office Supplies,South,1854.85,1
+2024-05-04,Toys,East,4968.23,18
+2023-12-16,Toys,North,3574.33,11
+2024-01-16,Furniture,East,3952.66,15
+2023-12-10,Electronics,West,4749.63,9
+2024-08-06,Office Supplies,East,120.05,18
+2024-01-14,Furniture,East,1125.6,19
+2024-09-05,Toys,East,337.27,10
+2024-02-14,Electronics,South,1229.74,13
+2024-05-23,Office Supplies,North,104.76,12
+2023-11-20,Apparel,East,840.06,16
+2024-07-22,Toys,South,1658.91,7
+2024-07-12,Furniture,West,3032.4,13
+2024-04-27,Furniture,South,2650.41,17
+2024-05-20,Apparel,North,1708.08,11
+2024-04-25,Toys,West,358.54,7
+2024-05-03,Furniture,South,3263.0,1
+2024-10-03,Office Supplies,North,186.04,3
+2024-03-16,Electronics,South,83.51,12
+2024-09-27,Apparel,North,1241.87,14
+2024-04-15,Toys,South,613.02,3
+2024-02-27,Office Supplies,South,3382.57,19
+2024-01-19,Apparel,East,1632.27,17
+2024-04-28,Office Supplies,East,1372.87,6
+2023-12-12,Furniture,North,4769.76,1
+2024-08-11,Furniture,West,2482.43,19
+2024-03-07,Toys,North,3820.53,7
+2024-02-29,Furniture,West,2878.83,20
+2023-12-09,Furniture,West,3362.01,19
+2024-06-29,Office Supplies,South,2034.54,8
+2023-11-21,Apparel,East,644.19,15
+2023-12-10,Office Supplies,South,2551.77,11
+2023-11-19,Apparel,North,2494.4,12
