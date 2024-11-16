@@ -1,0 +1,22 @@
+Testing Sqlite
+
+docker exec -it sku_db sqlite3 /data/sku.db
+
+SELECT * FROM sku;
+
+We should see the data by now.
+
+---
+
+Alternative way of Testing
+
+docker exec -it sku_db bash
+
+import sqlite3
+conn = sqlite3.connect('/data/sku.db')
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM sku;")
+print(cursor.fetchall())
+conn.close()
+
+We should be able to fetch the information now.
