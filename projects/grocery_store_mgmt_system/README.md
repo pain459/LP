@@ -134,4 +134,4 @@ Develop a fully functional Grocery Store Management System with features for SKU
 
 ---
 
-**Project Repository:** [Add your GitHub/GitLab link here]
+**Project Repository:** [https://github.com/pain459/LP/tree/main/projects/grocery_store_mgmt_system]
