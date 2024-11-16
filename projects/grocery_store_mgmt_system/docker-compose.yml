@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  sku_db:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/data
+    container_name: sku_db
+    restart: always
