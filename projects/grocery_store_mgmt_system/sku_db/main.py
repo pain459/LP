@@ -1,4 +1,5 @@
 import sqlite3
+import time
 
 DB_PATH = "/data/sku.db"
 
@@ -31,3 +32,11 @@ if __name__ == "__main__":
     create_table()
     # Example usage: Add an item
     add_item("Apple", "Fruit", 2.5, 100, "Fresh red apples")
+    
+    # Keep the script running to prevent container from exiting
+    print("Container is running. Press Ctrl+C to stop.")
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("Exiting container...")
