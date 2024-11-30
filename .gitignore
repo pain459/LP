@@ -363,3 +363,5 @@ cython_debug/
 *.wav
 trained_model_summarization
 final_trained_model
+final_model_archive.tar.gz
+extracted_model
