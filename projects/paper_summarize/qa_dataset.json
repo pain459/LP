@@ -1,0 +1,12 @@
+[
+    {
+        "context": "Kafka: a Distributed Messaging System for Log Processing Jay Kreps LinkedIn Corp.  jkreps@linkedin.comNeha Narkhede LinkedIn Corp.  nnarkhede@linkedin.comJun Rao LinkedIn Corp. jrao@linkedin.com   ABSTRACT Log processing has become a critical component of the data pipeline for consumer internet companies. We introduce Kafka, a distributed messaging system that we developed for collecting and delivering high volumes of log data with low latency. Our system incorporates ideas from existing log agg",
+        "question": "What is the main topic of the document?",
+        "answer": "Provide the primary topic."
+    },
+    {
+        "context": "Unikernels: Library Operating Systems for the Cloud\nAnil Madhavapeddy, Richard Mortier1, Charalampos Rotsos, David Scott2, Balraj Singh,\nThomas Gazagnaire3, Steven Smith, Steven Hand and Jon Crowcroft\nUniversity of Cambridge, University of Nottingham1, Citrix Systems Ltd2, OCamlPro SAS3\n\ufb01rst.last@cl.cam.ac.uk, \ufb01rst.last@nottingham.ac.uk, d ave.scott@citrix.com, \ufb01rst@ocamlpro.com\nAbstract\nWe present unikernels , a new approach to deploying cloud services\nvia applications written in high-level sou",
+        "question": "What is the main topic of the document?",
+        "answer": "Provide the primary topic."
+    }
+]

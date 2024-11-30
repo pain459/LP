@@ -1,0 +1,902 @@
+[
+    {
+        "input_text": "Kafka: a Distributed Messaging System for Log Processing Jay Kreps LinkedIn Corp.  jkreps@linkedin.comNeha Narkhede LinkedIn Corp.  nnarkhede@linkedin.comJun Rao LinkedIn Corp. jrao@linkedin.com   ABSTRACT Log processing has become a critical component of the data pipeline for consumer internet companies. We introduce Kafka, a distributed messaging system that we developed for collecting and delivering high volumes of log data with low latency. Our system incorporates ideas from existing log agg",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "regators and messaging systems, and is suitable for both offline and online message consumption. We made quite a few unconventional yet practical design choices in Kafka to make our system efficient and scalable. Our experimental results show that Kafka has superior performance when compared to two popular messaging systems. We have been using Kafka in production for some time and it is processing hundreds of gigabytes of new data each day. General Terms Management, Performance, Design, Experime",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ntation. Keywords messaging, distributed, log processing, throughput, online. 1. Introduction There is a large amount of \u201clog\u201d data generated at any sizable internet company. This data typically includes (1) user activity events corresponding to logins, pageviews, clicks, \u201clikes\u201d, sharing, comments, and search queries; (2) operational metrics such as service call stack, call latency, errors, and system metrics such as CPU, memory, network, or disk utilization on each machine. Log data has long b",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "een a component of analytics used to track user engagement, system utilization, and other metrics. However recent trends in internet applications have made activity data a part of the production data pipeline used directly in site features. These uses include (1) search relevance, (2) recommendations which may be driven by item popularity or co-occurrence in the activity stream, (3) ad targeting and reporting, and (4) security applications that protect against abusive behaviors such as spam or u",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "nauthorized data scraping, and (5) newsfeed features that aggregate user status updates or actions for their \u201cfriends\u201d or \u201cconnections\u201d to read. This production, real-time usage of log data creates new challenges for data systems because its volume is orders of magnitude larger than the \u201creal\u201d data. For example, search, recommendations, and advertising often require computing granular click-through rates, which generate log records not only for every user click, but also for dozens of items on e",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ach page that are not clicked. Every day, China Mobile collects 5\u20138TB of phone call records [11] and Facebook gathers almost 6TB of various user activity events [12].  Many early systems for processing this kind of data relied on physically scraping log files off production servers for analysis. In recent years, several specialized distributed log aggregators have been built, including Facebook\u2019s Scribe [6], Yahoo\u2019s Data Highway [4], and Cloudera\u2019s Flume [3]. Those systems are primarily designed",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " for collecting and loading the log data into a data warehouse or Hadoop [8] for offline consumption. At LinkedIn (a social network site), we found that in addition to traditional offline analytics, we needed to support most of the real-time applications mentioned above with delays of no more than a few seconds. We have built a novel messaging system for log processing called Kafka [18] that combines the benefits of traditional log aggregators and messaging systems. On the one hand, Kafka is dis",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "tributed and scalable, and offers high throughput. On the other hand, Kafka provides an API similar to a messaging system and allows applications to consume log events in real time. Kafka has been open sourced and used successfully in production at LinkedIn for more than 6 months. It greatly simplifies our infrastructure, since we can exploit a single piece of software for both online and offline consumption of the log data of all types. The rest of the paper is organized as follows. We revisit ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "traditional messaging systems and log aggregators in Section 2. In Section 3, we describe the architecture of Kafka and its key design principles. We describe our deployment of Kafka at LinkedIn in Section 4 and the performance results of Kafka in Section 5. We discuss future work and conclude in Section 6. 2. Related Work Traditional enterprise messaging systems [1][7][15][17] have existed for a long time and often play a critical role as an event bus for processing asynchronous data flows. How",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ever, there are a few reasons why they tend not to be a good fit for log processing. First, there is a mismatch in features offered by enterprise systems. Those systems often focus on offering a rich set of delivery guarantees. For example, IBM Websphere MQ [7] has transactional supports that allow an application to insert messages into multiple queues atomically. The JMS [14] specification allows each individual message to be acknowledged after consumption, potentially out of order. Such delive",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ry guarantees are often overkill for collecting log data. For instance, losing a few pageview events occasionally is certainly not the end of the world. Those unneeded features tend to increase the complexity of both the API and the underlying implementation of those systems. Second, many systems do not focus as strongly on throughput as their primary design constraint. For example, JMS has no API to allow the producer to explicitly batch multiple messages into a  Permission to make digital or h",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. To copy otherwise, or republish, to post on servers or to redistribute to lists, requires prior specific permission and/or a fee. NetDB'11, Jun. 12, 2011, Athens, Greece. Copyright 2011 ACM 978-1-4503-0652-2/11/06\u2026$10.00.  single request. This means ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "each message requires a full TCP/IP roundtrip, which is not feasible for the throughput requirements of our domain. Third, those systems are weak in distributed support. There is no easy way to partition and store messages on multiple machines. Finally, many messaging systems assume near immediate consumption of messages, so the queue of unconsumed messages is always fairly small. Their performance degrades significantly if messages are allowed to accumulate, as is the case for offline consumers",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " such as data warehousing applications that do periodic large loads rather than continuous consumption. A number of specialized log aggregators have been built over the last few years. Facebook uses a system called Scribe. Each front-end machine can send log data to a set of Scribe machines over sockets. Each Scribe machine aggregates the log entries and periodically dumps them to HDFS [9] or an NFS device. Yahoo\u2019s data highway project has a similar dataflow. A set of machines aggregate events f",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "rom the clients and roll out \u201cminute\u201d files, which are then added to HDFS. Flume is a relatively new log aggregator developed by Cloudera. It supports extensible \u201cpipes\u201d and \u201csinks\u201d, and makes streaming log data very flexible. It also has more integrated distributed support. However, most of those systems are built for consuming the log data offline, and often expose implementation details unnecessarily (e.g. \u201cminute files\u201d) to the consumer. Additionally, most of them use a \u201cpush\u201d model in which",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " the broker forwards data to consumers. At LinkedIn, we find the \u201cpull\u201d model more suitable for our applications since each consumer can retrieve the messages at the maximum rate it can sustain and avoid being flooded by messages pushed faster than it can handle. The pull model also makes it easy to rewind a consumer and we discuss this benefit at the end of Section 3.2. More recently, Yahoo! Research developed a new distributed pub/sub system called HedWig [13]. HedWig is highly scalable and av",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ailable, and offers strong durability guarantees. However, it is mainly intended for storing the commit log of a data store. 3. Kafka Architecture and Design Principles Because of limitations in existing systems, we developed a new messaging-based log aggregator Kafka. We first introduce the basic concepts in Kafka. A stream of messages of a particular type is defined by a topic. A producer can publish messages to a topic. The published messages are then stored at a set of servers called brokers",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": ". A consumer can subscribe to one or more topics from the brokers, and consume the subscribed messages by pulling data from the brokers. Messaging is conceptually simple, and we have tried to make the Kafka API equally simple to reflect this. Instead of showing the exact API, we present some sample code to show how the API is used. The sample code of the producer is given below. A message is defined to contain just a payload of bytes. A user can choose her favorite serialization method to encode",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " a message. For efficiency, the producer can send a set of messages in a single publish request. \nTo subscribe to a topic, a consumer first creates one or more message streams for the topic. The messages published to that topic will be evenly distributed into these sub-streams. The details about how Kafka distributes the messages are described later in Section 3.2. Each message stream provides an iterator interface over the continual stream of messages being produced. The consumer then iterates ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "over every message in the stream and processes the payload of the message. Unlike traditional iterators, the message stream iterator never terminates. If there are currently no more messages to consume, the iterator blocks until new messages are published to the topic. We support both the point-to-point delivery model in which multiple consumers jointly consume a single copy of all messages in a topic, as well as the publish/subscribe model in which multiple consumers each retrieve its own copy ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "of a topic.  \nThe overall architecture of Kafka is shown in Figure 1. Since Kafka is distributed in nature, an Kafka cluster typically consists of multiple brokers. To balance load, a topic is divided into multiple partitions and each broker stores one or more of those partitions. Multiple producers and consumers can publish and retrieve messages at the same time. In Section 3.1, we describe the layout of a single partition on a broker and a few design choices that we selected to make accessing ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "a partition efficient. In Section 3.2, we describe how the producer and the consumer interact with multiple brokers in a distributed setting. We discuss the delivery guarantees of Kafka in Section 3.3. \n3.1 Efficiency on a Single Partition We made a few decisions in Kafka to make the system efficient.  Simple storage: Kafka has a very simple storage layout. Each partition of a topic corresponds to a logical log. Physically, a log is implemented as a set of segment files of approximately the same",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " size (e.g., 1GB). Every time a producer publishes a message to a partition, the broker simply appends the message to the last segment file. For better performance, we flush the segment files to disk only after a configurable number of messages have been published or a certain amount of time has elapsed. A message is only exposed to the consumers after it is flushed.  Sample producer code:   producer = new Producer(\u2026);   message = new Message(\u201ctest message str\u201d.getBytes());   set = new MessageSe",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "t(message);   producer.send(\u201ctopic1\u201d, set);  Sample consumer code:    streams[] = Consumer.createMessageStreams(\u201ctopic1\u201d, 1)   for (message : streams[0]) {     bytes = message.payload();     // do something with the bytes    } \nBROKER 1 topic1/part1           /part2 topic2/part1 producer producer \nconsumer consumer Figure 1. Kafka Architecture BROKER 2 topic1/part1           /part2 topic2/part1 BROKER 3 topic1/part1           /part2 topic2/part1 Unlike typical messaging systems, a message stored",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " in Kafka doesn\u2019t have an explicit message id. Instead, each message is addressed by its logical offset in the log. This avoids the overhead of maintaining auxiliary, seek-intensive random-access index structures that map the message ids to the actual message locations. Note that our message ids are increasing but not consecutive. To compute the id of the next message, we have to add the length of the current message to its id. From now on, we will use message ids and offsets interchangeably. A ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "consumer always consumes messages from a particular partition sequentially. If the consumer acknowledges a particular message offset, it implies that the consumer has received all messages prior to that offset in the partition. Under the covers, the consumer is issuing asynchronous pull requests to the broker to have a buffer of data ready for the application to consume. Each pull request contains the offset of the message from which the consumption begins and an acceptable number of bytes to fe",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "tch. Each broker keeps in memory a sorted list of offsets, including the offset of the first message in every segment file. The broker locates the segment file where the requested message resides by searching the offset list, and sends the data back to the consumer. After a consumer receives a message, it computes the offset of the next message to consume and uses it in the next pull request. The layout of an Kafka log and the in-memory index is depicted in Figure 2. Each box shows the offset of",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " a message. \nEfficient transfer: We are very careful about transferring data in and out of Kafka. Earlier, we have shown that the producer can submit a set of messages in a single send request. Although the end consumer API iterates one message at a time, under the covers, each pull request from a consumer also retrieves multiple messages up to a certain size, typically hundreds of kilobytes. Another unconventional choice that we made is to avoid explicitly caching messages in memory at the Kafk",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "a layer. Instead, we rely on the underlying file system page cache. This has the main benefit of avoiding double buffering---messages are only cached in the page cache. This has the additional benefit of retaining warm cache even when a broker process is restarted. Since Kafka doesn\u2019t cache messages in process at all, it has very little overhead in garbage collecting its memory, making efficient implementation in a VM-based language feasible. Finally, since both the producer and the consumer acc",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ess the segment files sequentially, with the consumer often lagging the producer by a small amount, normal operating system caching heuristics are very effective (specifically write-through caching and read-ahead). We have found that both the production and the consumption have consistent performance linear to the data size, up to many terabytes of data. In addition we optimize the network access for consumers. Kafka is a multi-subscriber system and a single message may be consumed multiple time",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "s by different consumer applications. A typical approach to sending bytes from a local file to a remote socket involves the following steps: (1) read data from the storage media to the page cache in an OS, (2) copy data in the page cache to an application buffer, (3) copy application buffer to another kernel buffer, (4) send the kernel buffer to the socket. This includes 4 data copying and 2 system calls. On Linux and other Unix operating systems, there exists a sendfile API [5] that can directl",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "y transfer bytes from a file channel to a socket channel. This typically avoids 2 of the copies and 1 system call introduced in steps (2) and (3). Kafka exploits the sendfile API to efficiently deliver bytes in a log segment file from a broker to a consumer. Stateless broker: Unlike most other messaging systems, in Kafka, the information about how much each consumer has consumed is not maintained by the broker, but by the consumer itself. Such a design reduces a lot of the complexity and the ove",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "rhead on the broker. However, this makes it tricky to delete a message, since a broker doesn\u2019t know whether all subscribers have consumed the message. Kafka solves this problem by using a simple time-based SLA for the retention policy. A message is automatically deleted if it has been retained in the broker longer than a certain period, typically 7 days. This solution works well in practice. Most consumers, including the offline ones, finish consuming either daily, hourly, or in real-time. The f",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "act that the performance of Kafka doesn\u2019t degrade with a larger data size makes this long retention feasible. There is an important side benefit of this design. A consumer can deliberately rewind back to an old offset and re-consume data. This violates the common contract of a queue, but proves to be an essential feature for many consumers. For example, when there is an error in application logic in the consumer, the application can re-play certain messages after the error is fixed. This is part",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "icularly important to ETL data loads into our data warehouse or Hadoop system. As another example, the consumed data may be flushed to a persistent store only periodically (e.g, a full-text indexer). If the consumer crashes, the unflushed data is lost. In this case, the consumer can checkpoint the smallest offset of the unflushed messages and re-consume from that offset when it\u2019s restarted. We note that rewinding a consumer is much easier to support in the pull model than the push model. 3.2 Dis",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "tributed Coordination We now describe how the producers and the consumers behave in a distributed setting. Each producer can publish a message to either a randomly selected partition or a partition semantically determined by a partitioning key and a partitioning function. We will focus on how the consumers interact with the brokers. Kafka has the concept of consumer groups. Each consumer group consists of one or more consumers that jointly consume a set of subscribed topics, i.e., each message i",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "s delivered to only one of the consumers within the group. Different consumer groups each independently consume the full set of subscribed messages and no coordination is needed across consumer groups. The consumers \nFigure 2. Kafka log         .               msg-00000000000 msg-00000000215 msg-00014516809 msg-02050706778 msg-02050706945 msg-02614516809               msg-00000000000 msg-00014517018 msg-00030706778 msg-02050706778 delete append segment file 1 \nsegment file N reads in-memory inde",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "x        .        .        .        .        .        .        .        . \n       .        .        .        . within the same group can be in different processes or on different machines. Our goal is to divide the messages stored in the brokers evenly among the consumers, without introducing too much coordination overhead. Our first decision is to make a partition within a topic the smallest unit of parallelism. This means that at any given time, all messages from one partition are consumed onl",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "y by a single consumer within each consumer group. Had we allowed multiple consumers to simultaneously consume a single partition, they would have to coordinate who consumes what messages, which necessitates locking and state maintenance overhead. In contrast, in our design consuming processes only need co-ordinate when the consumers rebalance the load, an infrequent event. In order for the load to be truly balanced, we require many more partitions in a topic than the consumers in each group. We",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " can easily achieve this by over partitioning a topic. The second decision that we made is to not have a central \u201cmaster\u201d node, but instead let consumers coordinate among themselves in a decentralized fashion. Adding a master can complicate the system since we have to further worry about master failures. To facilitate the coordination, we employ a highly available consensus service Zookeeper [10].  Zookeeper has a very simple, file system like API. One can create a path, set the value of a path,",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " read the value of a path, delete a path, and list the children of a path. It does a few more interesting things: (a) one can register a watcher on a path and get notified when the children of a path or the value of a path has changed; (b) a path can be created as ephemeral (as oppose to persistent), which means that if the creating client is gone, the path is automatically removed by the Zookeeper server; (c) zookeeper replicates its data to multiple servers, which makes the data highly reliabl",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "e and available. Kafka uses Zookeeper for the following tasks: (1) detecting the addition and the removal of brokers and consumers, (2) triggering a rebalance process in each consumer when the above events happen, and (3) maintaining the consumption relationship and keeping track of the consumed offset of each partition. Specifically, when each broker or consumer starts up, it stores its information in a broker or consumer registry in Zookeeper. The broker registry contains the broker\u2019s host nam",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "e and port, and the set of topics and partitions stored on it. The consumer registry includes the consumer group to which a consumer belongs and the set of topics that it subscribes to. Each consumer group is associated with an ownership registry and an offset registry in Zookeeper. The ownership registry has one path for every subscribed partition and the path value is the id of the consumer currently consuming from this partition (we use the terminology that the consumer owns this partition). ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "The offset registry stores for each subscribed partition, the offset of the last consumed message in the partition.  The paths created in Zookeeper are ephemeral for the broker registry, the consumer registry and the ownership registry, and persistent for the offset registry. If a broker fails, all partitions on it are automatically removed from the broker registry. The failure of a consumer causes it to lose its entry in the consumer registry and all partitions that it owns in the ownership reg",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "istry. Each consumer registers a Zookeeper watcher on both the broker registry and the consumer registry, and will be notified whenever a change in the broker set or the consumer group occurs. During the initial startup of a consumer or when the consumer is notified about a broker/consumer change through the watcher, the consumer initiates a rebalance process to determine the new subset of partitions that it should consume from. The process is described in Algorithm 1. By reading the broker and ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "the consumer registry from Zookeeper, the consumer first computes the set (PT) of partitions available for each subscribed topic T and the set (CT) of consumers subscribing to T. It then range-partitions PT into |CT| chunks and deterministically picks one chunk to own. For each partition the consumer picks, it writes itself as the new owner of the partition in the ownership registry. Finally, the consumer begins a thread to pull data from each owned partition, starting from the offset stored in ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "the offset registry. As messages get pulled from a partition, the consumer periodically updates the latest consumed offset in the offset registry. When there are multiple consumers within a group, each of them will be notified of a broker or a consumer change. However, the notification may come at slightly different times at the consumers. So, it is possible that one consumer tries to take ownership of a partition still owned by another consumer. When this happens, the first consumer simply rele",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ases all the partitions that it currently owns, waits a bit and retries the rebalance process. In practice, the rebalance process often stabilizes after only a few retries. When a new consumer group is created, no offsets are available in the offset registry. In this case, the consumers will begin with either the smallest or the largest offset (depending on a configuration) available on each subscribed partition, using an API that we provide on the brokers. 3.3 Delivery Guarantees In general, Ka",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "fka only guarantees at-least-once delivery. Exactly-once delivery typically requires two-phase commits and is not necessary for our applications. Most of the time, a message is delivered exactly once to each consumer group. However, in the case when a consumer process crashes without a clean shutdown, the consumer process that takes over those partitions owned by the failed consumer may get some duplicate messages that are after the last offset successfully committed to zookeeper. If an applicat",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ion cares about duplicates, it must add its own de-duplication logic, either using the offsets that we return to the consumer or some unique key within the message. This is usually a more cost-effective approach than using two-phase commits. Kafka guarantees that messages from a single partition are delivered to a consumer in order. However, there is no guarantee on the ordering of messages coming from different partitions. Algorithm 1: rebalance process for consumer Ci in group G For each topic",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " T that Ci subscribes to {   remove partitions owned by Ci from the ownership registry    read the broker and the consumer registries from Zookeeper   compute PT = partitions available in all brokers under topic T   compute CT =  all consumers in G that subscribe to topic T       sort PT and CT   let j be the index position of Ci in CT and let N = |PT|/|CT|   assign partitions from j*N to (j+1)*N - 1 in PT to consumer Ci   for each assigned partition p {     set the owner of p to Ci in the owner",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ship registry     let Op = the offset of partition p stored in the offset registry     invoke a thread to pull data in partition p from offset Op   } } To avoid log corruption, Kafka stores a CRC for each message in the log. If there is any I/O error on the broker, Kafka runs a recovery process to remove those messages with inconsistent CRCs. Having the CRC at the message level also allows us to check network errors after a message is produced or consumed. If a broker goes down, any message stor",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ed on it not yet consumed becomes unavailable. If the storage system on a broker is permanently damaged, any unconsumed message is lost forever. In the future, we plan to add built-in replication in Kafka to redundantly store each message on multiple brokers. 4. Kafka Usage at LinkedIn In this section, we describe how we use Kafka at LinkedIn. Figure 3 shows a simplified version of our deployment. We have one Kafka cluster co-located with each datacenter where our user-facing services run. The f",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "rontend services generate various kinds of log data and publish it to the local Kafka brokers in batches. We rely on a hardware load-balancer to distribute the publish requests to the set of Kafka brokers evenly. The online consumers of Kafka run in services within the same datacenter. \nWe also deploy a cluster of Kafka in a separate datacenter for offline analysis, located geographically close to our Hadoop cluster and other data warehouse infrastructure. This instance of Kafka runs a set of em",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "bedded consumers to pull data from the Kafka instances in the live datacenters. We then run data load jobs to pull data from this replica cluster of Kafka into Hadoop and our data warehouse, where we run various reporting jobs and analytical process on the data. We also use this Kafka cluster for prototyping and have the ability to run simple scripts against the raw event streams for ad hoc querying. Without too much tuning, the end-to-end latency for the complete pipeline is about 10 seconds on",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " average, good enough for our requirements. Currently, Kafka accumulates hundreds of gigabytes of data and close to a billion messages per day, which we expect will grow significantly as we finish converting legacy systems to take advantage of Kafka. More types of messages will be added in the future. The rebalance process is able to automatically redirect the consumption when the operation staffs start or stop brokers for software or hardware maintenance. Our tracking also includes an auditing ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "system to verify that there is no data loss along the whole pipeline. To facilitate that, each message carries the timestamp and the server name when they are generated. We instrument each producer such that it periodically generates a monitoring event, which records the number of messages published by that producer for each topic within a fixed time window. The producer publishes the monitoring events to Kafka in a separate topic. The consumers can then count the number of messages that they ha",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ve received from a given topic and validate those counts with the monitoring events to validate the correctness of data. Loading into the Hadoop cluster is accomplished by implementing a special Kafka input format that allows MapReduce jobs to directly read data from Kafka. A MapReduce job loads the raw data and then groups and compresses it for efficient processing in the future. The stateless broker and client-side storage of message offsets again come into play here, allowing the MapReduce ta",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "sk management (which allows tasks to fail and be restarted) to handle the data load in a natural way without duplicating or losing messages in the event of a task restart. Both data and offsets are stored in HDFS only on the successful completion of the job. We chose to use Avro [2] as our serialization protocol since it is efficient and supports schema evolution. For each message, we store the id of its Avro schema and the serialized bytes in the payload. This schema allows us to enforce a cont",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ract to ensure compatibility between data producers and consumers. We use a lightweight schema registry service to map the schema id to the actual schema. When a consumer gets a message, it looks up in the schema registry to retrieve the schema, which is used to decode the bytes into an object (this lookup need only be done once per schema, since the values are immutable). 5. Experimental Results We conducted an experimental study, comparing the performance of Kafka with Apache ActiveMQ v5.4 [1]",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": ", a popular open-source implementation of JMS, and RabbitMQ v2.4 [16], a message system known for its performance. We used ActiveMQ\u2019s default persistent message store KahaDB. Although not presented here, we also tested an alternative AMQ message store and found its performance very similar to that of KahaDB. Whenever possible, we tried to use comparable settings in all systems.  We ran our experiments on 2 Linux machines, each with 8 2GHz cores, 16GB of memory, 6 disks with RAID 10. The two mach",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ines are connected with a 1Gb network link. One of the machines was used as the broker and the other machine was used as the producer or the consumer. Producer Test: We configured the broker in all systems to asynchronously flush messages to its persistence store. For each system, we ran a single producer to publish a total of 10 million messages, each of 200 bytes. We configured the Kafka producer to send messages in batches of size 1 and 50. ActiveMQ and RabbitMQ don\u2019t seem to have an easy way",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " to batch messages and we assume that it used a batch size of 1. The results are shown in Figure 4. The x-axis represents the amount of data sent to the broker over time in MB, and the y-axis corresponds to the producer throughput in messages per second. On average, Kafka can publish messages at the rate of 50,000 and 400,000 messages per second for batch size of 1 and 50, respectively. These numbers \nfrontend frontend frontend \n   Load balancer \nrealtime service realtime service      broker Had",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "oop DWH   broker main datacenter analysis datacenter \nFigure 3. Kafka Deployment are orders of magnitude higher than that of ActiveMQ, and at least 2 times higher than RabbitMQ. There are a few reasons why Kafka performed much better. First, the Kafka producer currently doesn\u2019t wait for acknowledgements from the broker and sends messages as faster as the broker can handle. This significantly increased the throughput of the publisher. With a batch size of 50, a single Kafka producer almost satura",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ted the 1Gb link between the producer and the broker. This is a valid optimization for the log aggregation case, as data must be sent asynchronously to avoid introducing any latency into the live serving of traffic. We note that without acknowledging the producer, there is no guarantee that every published message is actually received by the broker. For many types of log data, it is desirable to trade durability for throughput, as long as the number of dropped messages is relatively small. Howev",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "er, we do plan to address the durability issue for more critical data in the future. Second, Kafka has a more efficient storage format. On average, each message had an overhead of 9 bytes in Kafka, versus 144 bytes in ActiveMQ. This means that ActiveMQ was using 70% more space than Kafka to store the same set of 10 million messages. One overhead in ActiveMQ came from the heavy message header, required by JMS. Another overhead was the cost of maintaining various indexing structures. We observed t",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "hat one of the busiest threads in ActiveMQ spent most of its time accessing a B-Tree to maintain message metadata and state. Finally, batching greatly improved the throughput by amortizing the RPC overhead. In Kafka, a batch size of 50 messages improved the throughput by almost an order of magnitude.  Consumer Test: In the second experiment, we tested the performance of the consumer. Again, for all systems, we used a single consumer to retrieve a total of 10 millions messages. We configured all ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "systems so that each pull request should prefetch approximately the same amount data---up to 1000 messages or about 200KB. For both ActiveMQ and RabbitMQ, we set the consumer acknowledge mode to be automatic. Since all messages fit in memory, all systems were serving data from the page cache of the underlying file system or some in-memory buffers. The results are presented in Figure 5. On average, Kafka consumed 22,000 messages per second, more than 4 times that of ActiveMQ and RabbitMQ. We can ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "think of several reasons. First, since Kafka has a more efficient storage format, fewer bytes were transferred from the broker to the \nconsumer in Kafka. Second, the broker in both ActiveMQ and RabbitMQ had to maintain the delivery state of every message. We observed that one of the ActiveMQ threads was busy writing KahaDB pages to disks during this test. In contrast, there were no disk write activities on the Kafka broker. Finally, by using the sendfile API, Kafka reduces the transmission overh",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ead. We close the section by noting that the purpose of the experiment is not to show that other messaging systems are inferior to Kafka. After all, both ActiveMQ and RabbitMQ have more features than Kafka. The main point is to illustrate the potential performance gain that can be achieved by a specialized system. 6. Conclusion and Future Works We present a novel system called Kafka for processing huge volume of log data streams. Like a messaging system, Kafka employs a pull-based consumption mo",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "del that allows an application to consume data at its own rate and rewind the consumption whenever needed. By focusing on log processing applications, Kafka achieves much higher throughput than conventional messaging systems. It also provides integrated distributed support and can scale out. We have been using Kafka successfully at LinkedIn for both offline and online applications. There are a number of directions that we\u2019d like to pursue in the future. First, we plan to add built-in replication",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " of messages across multiple brokers to allow durability and data availability guarantees even in the case of unrecoverable machine failures. We\u2019d like to support both asynchronous and synchronous replication models to allow some tradeoff between producer latency and the strength of the guarantees provided. An application can choose the right level of redundancy based on its requirement on durability, availability and throughput. Second, we want to add some stream processing capability in Kafka.",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " After retrieving messages from Kafka, real time applications often perform similar operations such as window-based counting and joining each message with records in a secondary store or with messages in another stream. At the lowest level this is supported by semantically partitioning messages on the join key during publishing so that all messages sent with a particular key go to the same partition and hence arrive at a single consumer process. This provides the foundation for processing distri",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "buted streams across a cluster of consumer machines. On top of this we feel a library of helpful stream utilities, such as different windowing functions or join techniques will be beneficial to this kind of applications. Figure 4. Producer Performance Figure 5. Consumer Performance 7. REFERENCES  [1] http://activemq.apache.org/ [2] http://avro.apache.org/ [3] Cloudera\u2019s Flume, https://github.com/cloudera/flume [4] http://developer.yahoo.com/blogs/hadoop/posts/2010/06/enabling_hadoop_batch_proces",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "si_1/ [5] Efficient data transfer through zero copy: https://www.ibm.com/developerworks/linux/library/j-zerocopy/ [6] Facebook\u2019s Scribe, http://www.facebook.com/note.php?note_id=32008268919 [7] IBM Websphere MQ: http://www-01.ibm.com/software/integration/wmq/ [8] http://hadoop.apache.org/ [9] http://hadoop.apache.org/hdfs/ [10] http://hadoop.apache.org/zookeeper/ [11] http://www.slideshare.net/cloudera/hw09-hadoop-based- data-mining-platform-for-the-telecom-industry [12] http://www.slideshare.ne",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "t/prasadc/hive-percona-2009 [13] https://issues.apache.org/jira/browse/ZOOKEEPER-775 [14] JAVA Message Service: http://download.oracle.com/javaee/1.3/jms/tutorial/1_3_1-fcs/doc/jms_tutorialTOC.html. [15] Oracle Enterprise Messaging Service: http://www.oracle.com/technetwork/middleware/ias/index-093455.html [16] http://www.rabbitmq.com/ [17] TIBCO Enterprise Message Service: http://www.tibco.com/products/soa/messaging/ [18] Kafka, http://sna-projects.com/kafka/ ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "Unikernels: Library Operating Systems for the Cloud\nAnil Madhavapeddy, Richard Mortier1, Charalampos Rotsos, David Scott2, Balraj Singh,\nThomas Gazagnaire3, Steven Smith, Steven Hand and Jon Crowcroft\nUniversity of Cambridge, University of Nottingham1, Citrix Systems Ltd2, OCamlPro SAS3\n\ufb01rst.last@cl.cam.ac.uk, \ufb01rst.last@nottingham.ac.uk, d ave.scott@citrix.com, \ufb01rst@ocamlpro.com\nAbstract\nWe present unikernels , a new approach to deploying cloud services\nvia applications written in high-level sou",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "rce code. Unikernels are\nsingle-purpose appliances that are compile-time specialised into\nstandalone kernels, and sealed against modi\ufb01cation when deployed\nto a cloud platform. In return they offer signi\ufb01cant reduction in\nimage sizes, improved ef\ufb01ciency and security, and should reduce\noperational costs. Our Mirage prototype compiles OCaml code into\nunikernels that run on commodity clouds and offer an order of\nmagnitude reduction in code size without signi\ufb01cant performance\npenalty. The architectur",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "e combines static type-safety with a single\naddress-space layout that can be made immutable via a hypervisor\nextension. Mirage contributes a suite of type-safe protocol libraries,\nand our results demonstrate that the hypervisor is a platform that\novercomes the hardware compatibility issues that have made past\nlibrary operating systems impractical to deploy in the real-world.\nCategories and Subject Descriptors D.4 [ Operating Systems ]:\nOrganization and Design; D.1 [ Programming Techniques ]: Ap-",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "\nplicative (Functional) Programming\nGeneral Terms Experimentation, Performance\n1. Introduction\nOperating system virtualization has revolutionised the economics\nof large-scale computing by providing a platform on which cus-\ntomers rent resources to host virtual machines (VMs). Each VM\npresents as a self-contained computer, booting a standard OS kernel\nand running unmodi\ufb01ed application processes. Each VM is usually\nspecialised to a particular role, e.g., a database, a webserver, and\nscaling out in",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "volves cloning VMs from a template image.\nDespite this shift from applications running on multi-user op-\nerating systems to provisioning many instances of single-purpose\nVMs, there is little actual specialisation that occurs in the image\nthat is deployed to the cloud. We take an extreme position on spe-\ncialisation, treating the \ufb01nal VM image as a single-purpose appli-\nance rather than a general-purpose system by stripping away func-\ntionality at compile-time. Speci\ufb01cally, our contributions are:",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " ( i) the\nunikernel approach to providing sealed single-purpose appliances,\nparticularly suitable for providing cloud services; ( ii) evaluation of\na complete implementation of these techniques using a functional\nprogramming language (OCaml), showing that the bene\ufb01ts of type-\nPermission to make digital or hard copies of all or part of this work for personal or\nclassroom use is granted without fee provided that copies are not made or distributed\nfor pro\ufb01t or commercial advantage and that copies b",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ear this notice and the full citation\non the \ufb01rst page. To copy otherwise, to republish, to post on servers or to redistribute\nto lists, requires prior speci\ufb01c permission and/or a fee.\nASPLOS\u201913, March 16\u201320, 2013, Houston, Texas, USA.\nCopyright c/circlecopyrt2013 ACM 978-1-4503-1870-9/13/03. . . $15.00Mirage Compiler\nHardwareHypervisorOS KernelUser ProcessesLanguage Runtime\nParallel ThreadsApplication Binary\nMirage Runtime\nHardwareHypervisorApplication CodeCon\ufb01guration Files\napplication source ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "code\ncon\ufb01guration \ufb01les\nhardware architecture\nwhole-system optimisation\nspecialised\nunikernel}\nFigure 1: Contrasting software layers in existing VM appliances vs.\nunikernel\u2019s standalone kernel compilation approach.\nsafety need not damage performance; and ( iii) libraries and lan-\nguage extensions supporting systems programming in OCaml.\nThe unikernel approach builds on past work in library OSs [1\u2013\n3]. The entire software stack of system libraries, language runtime,\nand applications is compiled in",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "to a single bootable VM image that\nruns directly on a standard hypervisor (Figure 1). By targeting a\nstandard hypervisor, unikernels avoid the hardware compatibility\nproblems encountered by traditional library OSs such as Exoker-\nnel [1] and Nemesis [2]. By eschewing backward compatibility, in\ncontrast to Drawbridge [3], unikernels address cloud services rather\nthan desktop applications. By targeting the commodity cloud with\na library OS, unikernels can provide greater performance and im-\nproved",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " security compared to Singularity [4]. Finally, in contrast to\nLibra [5] which provides a libOS abstraction for the JVM over Xen\nbut relies on a separate Linux VM instance to provide networking\nand storage, unikernels are more highly-specialised single-purpose\nappliance VMs that directly integrate communication protocols.\nWe describe a complete unikernel prototype in the form of\nour OCaml-based Mirage implementation ( \u00a73). We evaluate it via\nmicro-benchmarks and appliances providing DNS, OpenFlo",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "w, and\nHTTP (\u00a74). We \ufb01nd sacri\ufb01cing source-level backward compatibil-\nity allows us to increase performance while signi\ufb01cantly improving\nthe security of external-facing cloud services. We retain compati-\nbility with external systems via standard network protocols such as\nTCP/IP, rather than attempting to support POSIX or other conven-\ntional standards for application construction. For example, the Mi-\nrage DNS server outperforms both BIND 9 (by 45%) and the high-\nperformance NSD server ( \u00a74.2), ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "while using very much smaller\nVM images: our unikernel appliance image was just 200 kB while\nthe BIND appliance was over 400 MB. We conclude by discussing\nour experiences building Mirage and its position within the state of\nthe art (\u00a75), and concluding ( \u00a76).2. Architecture of an Appliance\nVirtualisation is the enabling technology for the cloud, widely\ndeployed via hypervisors such as Xen [6]. VM appliances are built\nto provide a small, \ufb01xed set of services. Thus, datacenter appliances\ntypically",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " consist of a Linux or Windows VM booted over Xen\nwith loosely-coupled components: a guest OS kernel hosting a\nprimary application (e.g., MySQL, Apache) with other services\n(e.g., cron, NTP) running in parallel; and typically attaching an\nexternal storage device with con\ufb01guration \ufb01les and data.\nOur key insight is that the hypervisor provides a virtual hard-\nware abstraction that can be scaled dynamically \u2013 both vertically\nby adding memory and vCPUs, and horizontally by spawning more\nVMs. This pr",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ovides an excellent target for library operating sys-\ntems (libOSs), an old idea [1, 2] recently revisited to break up\nmonolithic OSs [3]. LibOSs have never been widely deployed due\nto the dif\ufb01culty of supporting a suf\ufb01cient range of real-world hard-\nware, but deploying on a hypervisor such as Xen allows us to by-\npass this issue by using the hypervisor\u2019s device drivers, affording\nthe opportunity to build a practical, clean-slate libOS that runs na-\ntively on cloud computing infrastructure.\nWe d",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ub these VMs unikernels : specialised, sealed, single-\npurpose libOS VMs that run directly on the hypervisor. A libOS\nis structured very differently from a conventional OS: all services,\nfrom the scheduler to the device drivers to the network stack, are\nimplemented as libraries linked directly with the application. Cou-\npled with the choice of a modern statically type-safe language for\nimplementation, this affords con\ufb01guration, performance and secu-\nrity bene\ufb01ts to unikernels.\n2.1 Con\ufb01guration a",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "nd Deployment\nCon\ufb01guration is a considerable overhead in managing the deploy-\nment of a large cloud-hosted service. Although there are (multiple)\nstandards for location and format of con\ufb01guration \ufb01les on Linux,\nand Windows has the Registry and Active Directory, there are no\nstandards for many aspects of application con\ufb01guration. To address\nthis, for example, Linux distributions typically resort to extensive\nshell scripting to glue packages together.\nUnikernels take a different approach, by integ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "rating con\ufb01gura-\ntion into the compilation process. Rather than treating the database,\nweb server, etc., as independent applications which must be con-\nnected together by con\ufb01guration \ufb01les, unikernels treat them as li-\nbraries within a single application, allowing the application devel-\noper to con\ufb01gure them using either simple library calls for dynamic\nparameters, or build system tools for static parameters. This has the\nuseful effect of making con\ufb01guration decisions explicit and pro-\ngrammable",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " in a host language rather than manipulating many ad-\nhoc text \ufb01les, and hence bene\ufb01ting from static analysis tools and\nthe compiler\u2019s type-checker. The end result is a big reduction in the\neffort needed to con\ufb01gure complex multi-service application VMs.\n2.2 Compactness and Optimisation\nResources in the cloud are rented, and minimising their use reduces\ncosts. At the same time, multi-tenant services suffer from high vari-\nability in load that incentivises rapid scaling of deployments to\nmeet cur",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "rent demand without wasting money. Unikernels link li-\nbraries that would normally be provided by the host OS, allowing\nthe Unikernel tools to produce highly compact binaries via the nor-\nmal linking mechanism. Features that are not used in a particular\ncompilation are not included and whole-system optimization tech-\nniques can be used. In the most specialised mode, all con\ufb01guration\n\ufb01les are statically evaluated, enabling extensive dead-code elimi-\nnation at the cost of having to recompile to re",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "con\ufb01gure the service.\nThe small binary size (on the order of kilobytes in many cases)\nmakes deployment to remote datacenters across the Internet much\nsmoother.2.3 Unikernel Threat Model and Implications\nBefore considering the security implications of the unikernel ab-\nstraction, we \ufb01rst state our context and threat model. We are\nconcerned with software that provides network-facing services in\nmulti-tenant datacenters. Customers of a cloud provider typically\nmust trust the provider not to be mali",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "cious. However, software run-\nning in such an environment is under constant threat of attack, from\nboth other tenants and Internet-connected hosts more generally.\nUnikernels run above a hypervisor layer and treat it and the\ncontrol domain as part of the trusted computing base (for now,\nsee\u00a75.3). However, rather than adopt a multi-user access control\nmechanism that is inordinately complex for a specialised appliance,\nunikernels use the hypervisor as the sole unit of isolation and let ap-\nplicatio",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ns trust external entities via protocol libraries such as SSL\nor SSH. Internally, unikernels adopt a defence in depth approach:\n\ufb01rstly by compile-time specialisation, then by pervasive type-safety\nin the running code, and \ufb01nally via hypervisor and toolchain exten-\nsions to protect against unforseen compiler or runtime bugs.\n2.3.1 Single Image Appliances\nThe usual need for backwards compatibility with existing applica-\ntions, e.g., the POSIX API, the OS kernel and the many userspace\nbinaries invo",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "lved mean that even the simplest appliance VM con-\ntains several hundred thousand, if not millions of, lines of ac-\ntive code that must be executed every time it boots ( \u00a74.5). Even\nwidely deployed codebases such as Samba and OpenSSL still con-\ntain remote code execution exploits published as recently as April\n2012 [7, 8], and serious data leaks have become all too common-\nplace in modern Internet services. A particularly insidious problem\nis that miscon\ufb01guring an image can leave unnecessary ser",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "vices run-\nning that can signi\ufb01cantly increase the remote attack surface.\nA unikernel toolchain performs as much compile-time work\nas possible to eliminate unnecessary features from the \ufb01nal VM.\nAll network services are available as libraries, so only modules\nexplicitly referenced in con\ufb01guration \ufb01les are linked in the output.\nThe module dependency graph can be easily statically veri\ufb01ed to\nonly contain the desired services. While there are some Linux\npackage managers that take this approach [9],",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " they are ultimately\nconstrained by having to support dynamic POSIX applications.\nThe trade-off with using too many static con\ufb01guration directives\nthat are compiled into the image is that VMs can no longer be\ncloned by taking a copy-on-write snapshot of an existing image. If\nthis is required, a dynamic con\ufb01guration directive can be used (e.g.,\nDHCP instead of a static IP). Our prototype Mirage unikernels\ncontain substantially fewer lines of code than the Linux equivalent,\nand the resulting image",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "s are signi\ufb01cantly smaller ( \u00a74.5).\n2.3.2 Pervasive Type-Safety\nThe requirement to be robust against remote attack strongly moti-\nvates use of a type-safe language. An important decision is whether\nto support multiple languages within the same unikernel. An argu-\nment for multiple languages is to improve backwards compatibility\nwith existing code, but at the cost of increasing the complexity of\na single-image system and dealing with interoperability between\nmultiple language runtimes.\nThe altern",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ative is to eschew source-level compatibility and\nrewrite system components entirely in one language and specialise\nthat toolchain as best as possible. Although it is a daunting en-\ngineering challenge to rewrite protocols such as TCP, this is pos-\nsible for an experimental system such as our Mirage prototype.\nIn choosing this path, we support interoperability at the network\nprotocol level: components communicate using type-safe, ef\ufb01cient\nimplementations of standard network protocols. The advant",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "age of\nrunning on a hypervisor is that the reverse is also possible: ex-\nisting non-OCaml code can be encapsulated in separate VMs andcommunicated with via message-passing, analogous to processes\nin a conventional OS ( \u00a75.2). Likewise, access control within the\nappliance no longer requires userspace processes, instead depend-\ning on the language\u2019s type-safety to enforce restrictions. the virtual\naddress space can be simpli\ufb01ed into a single-address space model.\nMirage\u2019s single-language focus ease",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "s the integration of security\ntechniques to protect the remaining non-type-safe components of\nthe system (notably, the garbage collector) and to provide defence-\nin-depth in case a compiler bug allows the type-safety property to\nbe violated. Some of these, such as stack canaries and guard pages,\nare straightforward translations of standard techniques and so we\ndo not discuss them further. However, two depend on the unique\nproperties of the unikernel environment and we describe these next.\n2.3.3 ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "Sealing and VM Privilege Dropping\nAs unikernels are single-image and single-address space, they ex-\nercise fewer aspects of the VM interface and can be sealed [10] at\nruntime to further defend against bugs in the runtime or compiler.\nThis means that any code not present in the unikernel at compile\ntime will never be run, completely preventing code injection at-\ntacks. Implementing this policy is very simple: as part of its start-\nof-day initialisation, the unikernel establishes a set of page tab",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "les\nin which no page is both writable and executable and then issues\na special seal hypercall which prevents further page table mod-\ni\ufb01cations. The memory access policy in effect when the VM is\nsealed will be preserved until it terminates. The hypervisor changes\nnecessary to implement the sealing operation are themselves very\nsimple;1by contrast, implementing an equivalent Write Xor Exe-\ncute [11] policy in a conventional operating system requires exten-\nsive modi\ufb01cations to libraries, runtimes,",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " and the OS kernel itself.\nThis approach does mean that a running VM cannot expand\nits heap, but must instead pre-allocate all the memory it needs at\nstartup (allocation within the heap is unaffected, and the hypervisor\ncan still overcommit memory between VMs). This is a reasonable\nconstraint on cloud infrastructures, where the memory allocated to\nthe VM has already been purchased. The prohibition on page table\nmodi\ufb01cation does not apply to I/O mappings, provided that they\nare themselves non-exe",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "cutable and do not replace any existing data,\ncode, or guard pages. This means that I/O is unaffected by sealing a\nVM, and does not inherently invalidate the memory access policy.\nThis optional facility is the only element of unikernels that\nrequires a patch to the hypervisor instead of running purely in\nthe guest. The privilege dropping patch is very simple and would\nbene\ufb01t any other single-address space operating system, and so it\nis being upstreamed to the main Xen distribution. Note that Mir",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "age\ncan run on unmodi\ufb01ed versions of Xen without this patch, albeit\nlosing this layer of the defence-in-depth security protections.\n2.3.4 Compile-Time Address Space Randomization\nWhile VM sealing prevents an attacker from introducing attack\ncode, it does not prevent them from executing code which is already\npresent. Although use of whole-system optimization can eliminate\nmany targets for such an attack, enough might be left to assem-\nble a viable exploit using return-oriented programming style t",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ech-\nniques. Conventionally, these would be protected against using run-\ntime address space randomization, but this requires runtime linker\ncode that would introduce signi\ufb01cant complexity into the running\nunikernel. Fortunately, it is also unnecessary. The unikernel model\nmeans that recon\ufb01guring an appliance means recompiling it, po-\ntentially for every deployment. We can thus perform address space\nrandomisation at compile time using a freshly generated linker\nscript, without impeding any compil",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "er optimisations and without\nadding any runtime complexity.\n1Including the API de\ufb01nition, our patch to Xen 4.1 added fewer than\n50 lines of code in total.3. Mirage Unikernels\nOur Mirage prototype produces unikernels by compiling and link-\ning OCaml code into a bootable Xen VM image. We implement\nall but the lowest-level features in OCaml and, to assist develop-\ners testing and debugging their code, provide the ability to produce\nPOSIX binaries that run Mirage services on UNIX, as well as Xen\nVM ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "images. We now discuss some of the key design decisions and\ncomponents of Mirage: use of OCaml ( \u00a73.1), the PVBoot library\nthat initialises a basic environment ( \u00a73.2), a modi\ufb01ed language run-\ntime library for heap management and concurrency ( \u00a73.3), and its\ntype-safe device drivers ( \u00a73.4) and I/O stack ( \u00a73.5).\n3.1 Why OCaml?\nWe chose to implement Mirage in OCaml for four key reasons.\nFirst, OCaml is a full-\ufb02edged systems programming language [12]\nwith a \ufb02exible programming model that supports",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " functional, im-\nperative and object-oriented programming, and its brevity re-\nduces lines-of-code (LoC) counts that are often considered cor-\nrelated with attack surface. Second, OCaml has a simple yet high-\nperformance runtime making it an ideal platform for experimenting\nwith the unikernel abstraction that interfaces the runtime with Xen.\nThird, its implementation of static typing eliminates type informa-\ntion at compile-time while retaining all the bene\ufb01ts of type-safety,\nanother example of ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "specialisation. Finally, the open-source Xen\nCloud Platform [12] and critical system components [13, 14] are\nimplemented in OCaml, making integration straightforward.\nHowever, this choice does impose tradeoffs. OCaml is still a rel-\natively esoteric language compared with other systems languages\nsuch as C/C++. Using OCaml also necessitated a signi\ufb01cant engi-\nneering effort to rebuild system components, particularly the stor-\nage and networking stacks. Given the other bene\ufb01ts of OCaml, we\ndo not ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "feel either of these are signi\ufb01cant impediments for a research\nprototype. One early decision decision we took is to adopt the mul-\ntikernel [15] philosophy of running a VM per core, and the single-\nthreaded OCaml runtime has fast sequential performance that is\nideal for this need. Each Mirage unikernel runs over Xen using a\nsingle virtual CPU, and multicore is supported via multiple com-\nmunicating unikernels over a single instance of Xen.\nWe did explore applying unikernel techniques in the trad",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "itional\nsystems language, C, linking application code with Xen MiniOS,\na cut-down libc, OpenBSD versions of libm andprintf , and the\nlwIP user-space network stack. However, we found that a DNS\nappliance constructed in this way from the high performance NSD\nDNS server performed considerably worse than the Mirage DNS\nserver, even after several rounds of optimisation (Figure 10). It\nseems likely that producing even a similarly performing prototype\nin C would still require very signi\ufb01cant engineerin",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "g effort and\nwould not achieve any of the type-safety bene\ufb01ts.\n3.2 PVBoot Library\nPVBoot provides start-of-day support to initialise a VM with one\nvirtual CPU and Xen event channels, and jump to an entry func-\ntion. Unlike a conventional OS, multiple processes and preemp-\ntive threading are not supported, and instead a single 64-bit ad-\ndress space is laid out for the language runtime to use. PVBoot\nprovides two memory page allocators, one slab and one extent. The\nslab allocator is used to suppo",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "rt the C code in the runtime; as most\ncode is in OCaml it is not heavily used. The extent allocator re-\nserves a contiguous area of virtual memory which it manipulates in\n2MB chunks, permitting the mapping of x86 64 superpages. Mem-\nory regions are statically assigned roles, e.g., the garbage collected\nheap or I/O data pages. PVBoot also has a domainpoll function that\nblocks the VM on a set of event channels and a timeout.!\"#!$%&'$\n'%!%\n()*\"+,&\n,*%&!-\n*\"-\"*.\"'\n/0$1\"&\n23%45\n4+&)*$6\"%7\n23%45\n4%8)*",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "$6\"%79:$6\"%'\"*\n;3:$6\"%'\"*\n!#$'%!%\n<=>?@A;> ?@B;>C<D/+!$.+*!E%5$%''*\"--$-7%F\"$9:$6\"%'\"*\n*#$'%!%;3:$6\"%'\"*\n<=> <=>\nBGH?@=>\n-\"F!)*-\nFigure 2: Specialised virtual memory layout of a 64-bit Mirage\nunikernel running on Xen.\nPVBoot provides minimal support for an asynchronous, event-\ndriven VM that sleeps until I/O is available or times out. Device\ndrivers are allprovided outside PVBoot in type-safe OCaml ( \u00a73.4).\n3.3 Language Runtime\nMirage executes OCaml code over a specialised language runtime\nmodi\ufb01",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ed in two key areas: memory management and concurrency.\nFigure 2 shows the memory layout of a Mirage unikernel, divided\ninto three regions: text and data; external I/O pages; and the OCaml\nheaps. The text and data segments contain the OCaml runtime,\nlinked against PVBoot. This is the only address space available in\nthe kernel. The application\u2019s main thread is launched immediately\nafter boot and the VM shuts down when it returns.\nThe OCaml garbage collector splits the heap into two regions:\na fas",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "t minor heap for short-lived values, and a large major heap to\nwhich longer-lived values are promoted on each minor heap col-\nlection. These areas are allocated below the low virtual address\nspace reserved by Xen: the minor heap has a single 2 MB extent\nthat grows in 4 kB chunks, and the major heap has the remainder\nof virtual memory, growing in 2 MB superpage chunks using the\nextent allocator. Memory mapping large contiguous areas is usu-\nally discouraged to allow Address Space Randomization (A",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "SR) to\nprotect against buffer over\ufb02ows [16], and so a normal userspace\ngarbage collector maintains a page table to track allocated heap\nchunks. Mirage unikernels avoid ASR at runtime in favour of a\nmore specialised security model ( \u00a72.3), and guarantee a contiguous\nvirtual address space, simplifying runtime memory management.\nVMs communicate directly by having the local VM grant mem-\nory page access rights to the remote VM via the hypervisor [17].\nPVBoot allocates external memory pages from a re",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "served area of\nvirtual memory, and allocates a small proxy value in the small,\nfast OCaml minor heap. Mirage provides a library to reference that\ndata from OCaml without requiring a data copy ( \u00a73.4). Specialis-\ning memory layout to distinguish I/O pages in this way signi\ufb01cantly\nreduces the amount of data that the garbage collector has to scan.\nThis reduced garbage collector pressure is one of two key factors\nthat let the Mirage network stack exhibit predictable performance;\nthe other is pervasi",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ve library support for zero-copy I/O ( \u00a73.4.1).\nTo provide concurrency beyond PVBoot\u2019s simple domain-\npoll function, Mirage integrates the Lwt cooperative threading li-\nbrary [18]. This internally evaluates blocking functions into event\ndescriptors to provide straight-line control \ufb02ow for the developer.\nWritten in pure OCaml, Lwtthreads are heap-allocated values, with\nonly the thread main loop requiring a C binding to poll for externalcstructringhdr{ auto-generates these functions:\nuint32t reqpr",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "od; setreqprod : buf \u2192uint32\u2192unit\nuint32t reqevent; getreqprod : buf \u2192uint32\nuint32t rspprod; ...\nuint32t rspevent; setstu\ufb00 : buf \u2192uint64\u2192unit\nuint64t stu\ufb00 getstu\ufb00 : buf \u2192uint64\n}as littleendian\nFigure 3: Syntax extension mapping C structs (left) to OCaml\nvalues by autogenerating ef\ufb01cient accessor functions (right).\nevents. Mirage provides an evaluator that uses domainpoll to listen\nfor events and wake up lightweight threads. The VM is thus either\nexecuting OCaml code or blocked, with no interna",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "l preemption or\nasynchronous interrupts. The main thread repeatedly executes until\nit completes or throws an exception, and the domain subsequently\nshuts down with the VM exit code matching the thread return value.\nA useful consequence is that most scheduling and thread logic\nis contained in an application library, and can thus be modi\ufb01ed by\nthe developer as they see \ufb01t. For example, threads can be tagged\nwith local keys for debugging, statistics or prioritisation, depending\non application needs",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": ". Thread scheduling is platform-independent\nwith timers stored in a heap-allocated OCaml priority queue, and\ncan be overridden by the application (e.g. we have previously\ndemonstrated the bene\ufb01t of custom scheduling for the Sqlite library\ndatabase in an earlier prototype [19]). Only the run-loop is Xen-\nspeci\ufb01c, to interface with PVBoot.\n3.4 Device Drivers\nMirage drivers interface to the device abstraction provided by Xen.\nXen devices consist of a frontend driver in the guest VM, and a\nbackend d",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "river that multiplexes frontend requests, typically to a\nreal physical device [20]. These are connected by an event chan-\nnel to signal the other side, and a single memory page divided into\n\ufb01xed-size request slots tracked by producer/consumer pointers. Re-\nsponses are written into the same slots as the requests, with the\nfrontend implementing \ufb02ow control to avoid over\ufb02owing the ring.\nXen device classes using this model include Ethernet, block stor-\nage, virtual framebuffer, USB and PCI.\nManipula",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ting these shared memory rings is the base abstrac-\ntion for all I/O throughout Mirage. The shared page is mapped\ninto OCaml using the built-in Bigarray module, which wraps ex-\nternally allocated memory safely into the OCaml heap and makes\nit available as an array. Reading and writing into the shared page\nmust precisely match the C semantics, and is a relatively slow op-\neration in OCaml since \ufb01xed-size integers are boxed values that\nare heap-allocated before being copied into the shared page.2W",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "e\nusedcamlp4 to add a new cstruct keyword to OCaml to directly\nmap C structures (Figure 3). Declaring a cstruct generates accessor\nfunctions for directly manipulating the external memory array. The\nextension also handles endian conversion, and is used extensively\nthrough the network stack for header parsing [22].\nThis approach permits Mirage drivers to be implemented as pure\nOCaml libraries relying on just two extra intrinsics: inline assem-\nbly providing read and write memory barriers. The Ring",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " module\nimplements the base protocol and adds an asynchronous thread-\ning interface to push requests and wait for responses. Higher-level\nmodules such as Netif andBlkif implement networking and block\ndrivers, and interoperate with unmodi\ufb01ed Xen hosts. A bene\ufb01cial\nside-effect of our re-implementation of these protocols was to fuzz-\ntest the existing code, and we discovered and reported several edge-\ncase bugs in Linux/Xen as a result, including an important security\nissue (XSA-39).\n2The FoxNet ne",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "twork stack also reported this issue in SML [21].IO Page Pool\nApp\nGrant Table\nRingGET\nreference\nrequest responseTCP/IP\nHTTPEthernet\nTCP/IP\nHTTP HTTPsuccessgarbage collection\nalloc\nsend\nFigure 4: Example zero-copy write for an HTTP GET . The appli-\ncation writes its request into an I/O page, and the network stack\nsegments it into fragments to write to the device ring. When a re-\nsponse arrives the pages are collected and the write thread noti\ufb01ed.\n3.4.1 Zero-Copy Device I/O\nThe Xen device protocol",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " does not write data directly into the shared\nmemory page, but rather uses it to coordinate passing 4 kB memory\npages by reference. Two communicating VMs share a grant table\nthat maps pages to an integer offset (called a grant ) in this table,\nwith updates checked and enforced by the hypervisor. The grant\nis exchanged over the device driver shared ring, and looked up\nby the remote VM to map or copy that page into its own address\nspace. Once within the remote (non-Mirage) VM, the data must be\ntra",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "nsferred into the application. As POSIX APIs do not support\nzero-copy sockets, this usually entails a second copy from the\nreceiving VM\u2019s kernel into the appropriate userspace process.\nMirage unikernels do not have a userspace, so received pages\nare passed directly to the application without requiring copying.\nThecstruct library avoids incurring copying overhead by slicing\nthe underlying array into smaller views; once views are all garbage-\ncollected, the array is returned to the free page pool.",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " The network\nstack can thus safely re-use fragments of incoming network traf\ufb01c\nand proxy it directly into another device (e.g., an HTTP proxy)\nwhile avoiding having to manage the page manually.\nHowever, there are still a few resources that must be manually\ntracked and freed, e.g., the contents of the shared grant table be-\ntween VMs. Mirage uses the OCaml type system to enforce in-\nvariants that ensure resources are correctly freed, via higher-order\nfunctions that wrap any use of a given resourc",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "e such as a grant ref-\nerence. When the function terminates, whether normally via time-\nout or an unknown exception, the grant reference is freed. As well\nas preventing resource leaks, particularly on error paths, this allows\nthe scheduler to free resources by cancelling light-weight threads.\nThese composable higher-order functions, also known as combi-\nnators , are used throughout Mirage to safely expose system re-\nsources. Note that these combinators do not entirely eliminate re-\nsource leaks,",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " since references that are held in data structures and\nnever removed will remain forever, but the OCaml programming\nstyle encourages the use of many small data structures and re-\nusable utility libraries that help prevent such problems.\n3.5 Type-Safe Protocol I/O\nMirage implements protocol libraries in OCaml to ensure that\nallexternal I/O handling is type-safe, making unikernels ro-\nbust against memory over\ufb02ows. Protocols are structured as non-\nblocking parsing libraries with separate client/ser",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ver logic that\nspawns lightweight threads. Libraries are accessed via preemptive\nstate handles, enabling multiple protocol stacks within the same\nunikernel. Table 1 lists the protocols currently implemented in Mi-Subsystem Implemented Protocols\nCore Lwt, Cstruct, Regexp, UTF8, Cryptokit\nNetwork Ethernet, ARP, DHCP, IPv4, ICMP,\nUDP, TCP, OpenFlow\nStorage Simple key-value, FAT-32, Append B-\nTree, Memcache\nApplication DNS, SSH, HTTP, XMPP, SMTP\nFormats JSON, XML, CSS, S-Expressions\nTable 1: System ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "facilities provided as Mirage libraries.\nrage, suf\ufb01cient to self-host our website3infrastructure, including\nwiki, blog and DNS servers on the Amazon EC2 public cloud.\nData arrives to both the network and storage stacks as a stream\nof discrete packets. Mirage bridges the gap between packets and\nstreams by using channel iteratees [23] that map functions over\nin\ufb01nite streams of packets to produce a typed stream. Iterators\neliminate many of the \ufb01xed-size buffers that are often used in a less\ntightly",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " coupled conventional kernel/userspace. Chained iterators\nroute traf\ufb01c directly to the relevant application thread, blocking\non intermediate system events if necessary. We now describe the\nspeci\ufb01cs of networking ( \u00a73.5.1) and storage ( \u00a73.5.2).\n3.5.1 Network Processing\nThe Mirage network stack emphasises application-level control\nover strict modularity, exposing most details of the underlying pro-\ntocol to application control. It provides two communication meth-\nods: a fast on-host inter-VM vcha",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "n transport, and an Ethernet trans-\nport for external communication. vchan is a fast shared memory\ninterconnect through which data is tracked via producer/consumer\npointers. It allocates multiple contiguous pages for the ring to en-\nsure it has a reasonable buffer and once connected, communicating\nVMs can exchange data directly via shared memory without further\nintervention from the hypervisor other than interrupt noti\ufb01cations.4\nvchan is present in upstream Linux 3.3.0 onwards, enabling easy\nint",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "eraction between Mirage unikernels and Linux VMs.\nInternet connectivity is more complex: an application links to\na protocol library such as HTTP, which links with a TCP/IP net-\nwork stack, which in turns links to the network device driver.\nThe application reads and writes I/O pages with the protocol li-\nbrary so they can be transmitted directly. When reading packets,\nthe network stack splits out headers and data using cstruct sub-\nviews (\u00a73.4.1). Writing data requires more processing as the stac",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "k\nmust prepend variable-length protocol headers for TCP, IP and Eth-\nernet before the data payload, and sometimes segment large pay-\nloads into smaller fragments for transmission. This is solved via\nscatter-gather I/O: the network stack allocates a header page for\nevery write, and the network libraries rearrange incoming payloads\ninto sub-views as needed, before writing all the fragments into the\ndevice ring as one packet. Figure 4 illustrates this write path.\n3.5.2 Storage\nTraditional OS kernel",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "s layer \ufb01lesystems over block devices ac-\ncessed via POSIX sockets or mmap , and coalesce writes into a\nkernel buffer cache [24]. Applications needing precise control over\nwhen a write is actually persisted must either invoke the fsync\nsyscall or explicitly request non-buffered direct access and issue\nsector-aligned requests. Modern Linux kernels provide libaio for\nasynchronous block requests only, forcing applications to use dif-\nferent APIs for networking and storage.\nIn contrast, Mirage block",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " devices share the same Ring abstrac-\ntion as network devices, using the same I/O pages to provide ef\ufb01-\n3http://openmirage.org/\n4When data is continuously \ufb02owing between VMs, each side checks for\noutstanding data before blocking, reducing the number of hypervisor calls. 0 1 2 3\n8 16 32 64 128 256 512 1024 20483072Time (s)\nMemory size (MiB)Linux PV+Apache\nLinux PVMirage\nFigure 5: Domain boot time comparison.\ncient block-level access, with \ufb01lesystems and caching provided as\nOCaml libraries. This g",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ives control to the application over caching\npolicy rather than providing only one default cache policy. Differ-\nent caching policies can be provided as libraries (OCaml modules)\nto be linked at build time, with the only built-in policy being that\nall writes are guaranteed to be direct.\nFor example, we ported a third-party copy-on-write binary tree\nstorage library5to Mirage. This can be used as a storage backend\nby applications, with caching policy and buffer management be-\ning explicitly manage",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "d within in the library. Our FAT-32 storage\nlibrary also implements its own buffer management policy where\ndata reads are returned as iterators supplying one sector at a time.\nThis avoids building large lists in the heap while permitting internal\nbuffering within the library by having it request larger sector ex-\ntents from the block driver. Finally, we found that our DNS server\ngained a dramatic speed increase by applying a memoization li-\nbrary to network responses ( \u00a74); this technique could ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "also be used\nto implement persistent self-paging of very large datasets [25].\n4. Evaluation\nAs Mirage is a clean-slate implementation of many OS compo-\nnents, we evaluate it against more conventional deployments in\nstages. We \ufb01rst examine micro-benchmarks ( \u00a74.1) to establish\nbaseline performance of key components, followed by more re-\nalistic appliances: a DNS server, showing performance of our safe\nnetwork stack ( \u00a74.2); an OpenFlow controller appliance ( \u00a74.3);\nand an integrated web server an",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "d database, combining storage and\nnetworking ( \u00a74.4). Finally, we examine the differences in active\nLoC and binaries in these appliances, and the impact of dead-code\nelimination ( \u00a74.5).\n4.1 Microbenchmarks\nThese microbenchmarks demonstrate the potential bene\ufb01ts of\nunikernel specialisation by examining performance in simple, con-\ntrolled scenarios. Evaluations are composed of identical OCaml\ncode executing in different hosting environments: linux-native , a\nLinux kernel running directly on the b",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "are metal with an ELF bi-\nnary version of the application; linux-pv , a Linux kernel running\nas a paravirtualised Xen domU with an ELF binary version of\nthe application; and xen-direct , the application built as a type-safe\nunikernel, running directly over Xen. We veri\ufb01ed that CPU-bound\napplications are unaffected by unikernel compilation as expected,\nas the hypervisor architecture only affects memory and I/O.\n4.1.1 Boot Time\nUnikernels are compact enough to boot and respond to\nnetwork traf\ufb01c in",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " real-time.\nMirage generates compact VMs which boot very quickly. Fig-\nure 5 compares boot times for a Mirage webserver against a mini-\n5https://github.com/Incubaid/baardskeerder 0 0.2 0.4 0.6\n64 128 256 512 1024 2048Time (s)\nMemory size (MiB)Mirage Linux PV\nFigure 6: Boot time using an asynchronous Xen toolstack.\nmal Linux kernel, and a more realistic linux-pv Debian Linux run-\nning Apache2. Time is measured from startup to the point where\nboot is complete, signalled by the VM sending a special",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " UDP\npacket to the control domain. The minimal Linux kernel measures\nthis \u201ctime-to-userspace\u201d via an initrd that calls the ifconfig ioctls\ndirectly to bring up a network interface before explicitly transmit-\nting a single UDP packet. The more realistic Debian Linux running\nApache2 uses the standard Debian boot scripts and measures time-\nto-userspace by waiting until Apache2 startup returns before trans-\nmitting the single UDP packet. The Mirage unikernel transmits the\nUDP packet as soon as the n",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "etwork interface is ready. As the mem-\nory size increases, the proportion of Mirage boot time due to build-\ning the domain also increases to approximately 60% for memory\nsize 3072 MiB. Mirage matches the minimal Linux kernel, booting\nin slightly under half the time of the Debian Linux.\nIt is dif\ufb01cult to distinguish between the minimal Linux VM and\nMirage in Figure 5. The boot time is skewed by the Xen control\nstack synchronously building domains, since latency isn\u2019t normally\na prime concern for ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "VM construction. We modi\ufb01ed the Xen tool-\nstack to support parallel domain construction, and isolate the VM\nstartup time in Figure 6. This clearly distinguishes the differences\nbetween the Mirage unikernel and Linux: Mirage boots in under\n50 milliseconds . Such fast reboot times mitigate the concern that re-\ndeployment by recon\ufb01guration is too heavyweight, as well as open-\ning up the possibility of regular micro-reboots [14].\n4.1.2 Threading\nGarbage collected heap management is more ef\ufb01cient in ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "a\nsingle address-space environment. Thread latency can be\nreduced by eliminating multiple levels of scheduling.\nFigure 7a benchmarks thread construction time, showing the\ntime to construct millions of threads in parallel where each thread\nsleeps for between 0.5\u20131.5 seconds and then terminates. The linux-\npvuserspace target, which most closely mirrors a conventional\ncloud application, is slowest with the same binary running on native\nLinux coming in next. The two xen- targets using the different\n",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "memory allocators perform notably better due to the test being\nlimited by the GC speed: thread construction occurs on the OCaml\nheap so creating millions of threads triggers regular compaction\nand scanning. The xen- runtime is faster due to the specialised\naddress space layout described earlier ( \u00a72). There is little extra\nbene\ufb01t to using superpages ( xen-extent cf.xen-malloc ), as the heap\ngrows once to its maximum size and never subsequently shrinks.\nWe also evaluated the precision of thread t",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "imers: a thread\nrecords the domain wallclock time, sleeps for 1\u20134 seconds and\nrecords the difference between the wallclock time and its expected\nwakeup time. Figure 7b plots the CDF of the jitter, and shows\nthat the unikernel target provides both lower and more predictable\nlatency when waking up millions of parallel threads. This is due\nsimply to the lack of userspace/kernel boundary eliding Linux\u2019s\nsyscall overhead. 0 1 2 3 4\n 0  5  10  15  20Execution time (s)\nNumber of threads (millions)Linux",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " PV\nLinux native\nMirage (malloc)\nMirage (extent)\n(a) Creation times.\n 0 20 40 60 80 100\n 0  0.05  0.1  0.15  0.2Cumulative frequency (%)\nJitter (ms)Mirage\nLinux native\nLinux PV\n(b) Jitter for 106parallel threads sleeping and waking after a \ufb01xed period.\nFigure 7: Mirage thread performance.\n4.1.3 Networking and Storage\nUnikernel low-level networking performs competitively to\nconventional OSs, despite being fully type-safe. Library-\nbased block management performs on par with a conven-\ntional layer",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ed storage stack.\nAs a simple latency test against the Linux stack we \ufb02ooded\n106pings from the Linux ping client running in its own VM\nto two targets: a standard Linux VM, and a Mirage unikernel\nwith the Ethernet, ARP, IPv4 and ICMP libraries. This stress tests\npure header parsing without introducing any userspace element for\nLinux. As expected, Mirage suffered a small (4\u201310%) increase in\nlatency compared to Linux due to the slight overhead of type-safety,\nbut both survived a 72-hour \ufb02ood ping t",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "est.\nWe compared the performance of Mirage\u2019s TCPv4 stack, im-\nplementing the full connection lifecycle, fast retransmit and recov-\nery, New Reno congestion control, and window scaling, against\nthe Linux 3.7 TCPv4 stack using iperf . All hardware of\ufb02oad\nwas disabled to provide the most stringent test of Mirage: the nat-\nurally higher overheads of implementing low-level operations in\nOCaml rather than C mean that hardware of\ufb02oad (particularly TCP\nsegmentation) disproportionately improves Mirage\u2019s ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "performance\ncompared to Linux. Performance is on par with Linux: Mirage\u2019s\nreceive throughput is slightly higher due to the lack of a userspace\ncopy, while its transmit performance is lower due to higher CPU\nusage. Both Linux and Mirage can saturate a gigabit network con-\nnection, and we expect that adding transmit hardware of\ufb02oad sup-\nport will allow even our experimental TCP stack to 10 Gb/s perfor-\nmance.\nCon\ufb01gurationThroughput [ std. dev. ] (Mbps)\n1 \ufb02ow 10 \ufb02ows\nLinux to Linux 1590 [ 9.1 ] 153",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "4 [ 74.2 ]\nLinux to Mirage 1742 [ 18.2 ] 1710 [ 15.1 ]\nMirage to Linux 975 [ 7.0 ] 952 [ 16.8 ]\nFigure 8: Comparative TCP throughput performance with all hard-\nware of\ufb02oad disabled. 0 200 400 600 800 1000 1200 1400 1600\n 1 2 4 8 16 32 64 128 256 512 1024 2048 4096Throughput (MiB/s)\nBlock size (KiB)Mirage\nLinux PV, direct I/O\nLinux PV, buffered I/O\nFigure 9: Random block read throughput, +/- 1 std. dev.\n 0 10 20 30 40 50 60 70 80\n 100  1000  10000Throughput (reqs/s x 103)\nZone size (entries)Bind9",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": ", Linux\nNSD, Linux\nNSD, MiniOS -O\nNSD, MiniOS -O3\nMirage (no memo)\nMirage (memo)\nFigure 10: DNS performance with increasing zone size.\nFigure 9 shows a simple random read throughput test using\n\ufb01oof a fast PCI-express SSD storage device, comparing a Mirage\nxen-direct appliance against a Linux RHEL5 kernel (2.6.18) using\nbuffered and direct I/O. Again, as expected, the Linux direct I/O\nand Mirage lines are effectively the same: both use direct I/O and\nso impose very little overhead on the raw hard",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ware performance.\nHowever, the performance impact of the Linux buffer cache is\nnotable: it causes performance to plateau at around 300 MB/s in\ncontrast to the 1.6 GB/s achieved if the buffer cache is avoided.\nThe lack of a buffer cache is not signi\ufb01cant for the appliances we\ntarget: such applications already manage their own storage.\n4.2 DNS Server Appliance\nThe Mirage DNS Server appliance contains the core libraries, the\nEthernet, ARP, IP, DHCP and UDP libraries from the network\nstack, and a si",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "mple in-memory \ufb01lesystem storing the zone in stan-\ndard Bind9 format. Figure 10 compares the throughput of the Mi-\nrage appliance on Xen against two best-of-breed nameservers: Bind\n9.9.0, a mature and widely used DNS server; and NSD 3.2.10, a re-\ncent high performance implementation.\nBind achieves 55 kqueries/s for reasonable zone \ufb01le sizes.6As\na more recent rewrite focused on performance, NSD does better,\nachieving around 70 kqueries/s. The Mirage appliance initially per-\nformed very poorly, bu",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "t dramatically improved when we introduced\nmemoization of responses to avoid repeated computation. A simple\n20 line patch, this increased performance from around 40 kqueries/s\nto 75\u201380 kqueries/s. Errorbars indicate unbiased estimates of \u00b5\u00b1\u03c3\nacross 10 runs.\nThere is other evidence [26] that algorithmic performance im-\nprovements substantially exceed those due only to machine-level\noptimization, and Mirage\u2019s use of functional programming pro-\nvides an effective platform for further experimentatio",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "n in this re-\ngard. A further example is DNS label compression, notoriously\n6We were unable to determine the cause of Bind\u2019s poor performance with\nsmall zone sizes, but the results are consistently reproducible.tricky to get right as previously seen label fragments must be care-\nfully tracked. Our initial implementation used a naive mutable\nhashtable, which we then replaced with a functional map using a\ncustomised ordering function that \ufb01rst tests the size of the labels be-\nfore comparing their ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "contents. This gave around a 20% speedup, as\nwell as securing against the denial-of-service attack where clients\ndeliberately cause hash collisions.\nDNS also provides a good example where Mirage type-safety\nshould bring signi\ufb01cant security bene\ufb01ts. For example, in the last\n10 years the Internet Systems Consortium has reported 40 vulner-\nabilities in the Bind software.7Of these, 25% were due to mem-\nory management errors, 15% to poor handling of exceptional data\nstates, and 10% to faulty packet p",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "arsing code, allof which would\nbe mitigated by Mirage\u2019s type-safety.\nFinally, the other main bene\ufb01t of Mirage is shown by comparing\nthe size of the Linux and Mirage appliances: the Mirage appliance\nis 183.5 kB in size compared with 462 MB in-use for the Linux\nVM image. While some of this difference can be accounted to\nthe fact that our libraries do not implement the complete feature-\nset of BIND9 or NSD, we do include all features required by the\nqueryperf test suite and the Mirage appliance is ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "suf\ufb01cient to self-\nhost the project infrastructure online.\nWe also tested both NSD and BIND compiled in libOS mode\nwith the newlib-1.16 embedded libc, the lwIP-1.3.0 network stack\nand the standard Xen-4.1 MiniOS device drivers. Performance was\nsigni\ufb01cantly lower than expected with further benchmarking re-\nvealing that this is due to unexpected interactions between MiniOS\nselect(2) scheduling and the netfront driver. Our experiences with\nthe C libOS libraries reinforced our notion that such progr",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "amming\nis rather fragile \u2013 using embedded systems libraries often means\ngiving up performance (e.g., optimised libcassembly is replaced by\ncommon calls) \u2013 and a more fruitful approach would be to break the\nLinux kernel into a libOS as Drawbridge does for Windows 7 [3].\n4.3 OpenFlow Controller Appliance\nOpenFlow is a software-de\ufb01ned networking standard for Ethernet\nswitches [27]. It de\ufb01nes an architecture and a protocol by which the\ncontroller can manipulate \ufb02ow tables in Ethernet switches, terme",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "d\ndatapaths . Mirage provides libraries implementing an OpenFlow\nprotocol parser, controller, and switch. By linking against the con-\ntroller library, appliances can exercise direct control over hardware\nand software OpenFlow switches, subject to any network adminis-\ntration policies in place. Conversely, by linking against the switch\nlibrary, an appliance can be controlled as if it were an OpenFlow\nswitch, useful in scenarios where the appliance provides network\nlayer functionality, e.g., acts ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "as a router, switch, \ufb01rewall, proxy or\nother middlebox. As software implementations, these libraries can\nbe extended according to speci\ufb01c appliance needs, e.g., to enable\n\ufb02ows to be identi\ufb01ed by the DNS domain of either endpoint, or\nde\ufb01ned in terms of HTTP URLs.\nWe benchmark our OpenFlow implementation using the OFlops\nplatform [28]. For the controller benchmark we use cbench to em-\nulate 16 switches concurrently connected to the controller, each\nserving 100 distinct MAC addresses. Experiments r",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "un on a 16-core\nAMD server with 40 GB RAM, and each controller is con\ufb01gured to\nuse a single thread. We measure throughput in requests processed\nper second in response to a stream of packet-in messages produced\nby each emulated switch under two scenarios: batch , where each\nswitch maintains a full 64 kB buffer of outgoing packet-in mes-\nsages; and single , where only one packet-in message is in \ufb02ight\nfrom each switch. The \ufb01rst measures the absolute throughput when\nservicing requests, and the seco",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "nd measures throughput of the con-\ntroller when serving connected switches fairly.\n7http://www.isc.org/advisories/bind 0 20 40 60 80 100 120 140 160 180\nBatch SingleRequests/s (x 103)Maestro\nNOX destiny-fast\nMirage\nFigure 11: OpenFlow controller performance ( \u00b5\u00b1\u03c3).\n 0 200 400 600 800 1000\n 0  10  20  30  40  50  60  70  80  90  100Reply rate (/s)\nSession creation rate (/s)Mirage\nLinux PV\nFigure 12: Simple dynamic web appliance performance.\nFigure 11 compares the xen-direct Mirage controller agai",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "nst two\nexisting OpenFlow controllers: Maestro [29], an optimised Java-\nbased controller; and the optimised C++ destiny-fast branch of\nNOX [30], one of the earliest and most mature publicly available\nOpenFlow controllers. Unsurprisingly, the optimised NOX branch\nhas the highest performance in both experiments, although it does\nexhibit extreme short-term unfairness in the batch test. Maestro is\nfairer but suffers signi\ufb01cantly reduced performance, particularly on\nthe \u201csingle\u201d test, presumably due ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "to JVM overheads. Performance\nof the Mirage appliance falls between NOX and Maestro, showing\nthat Mirage manages to achieve most of the performance bene\ufb01ts\nof optimised C++ which retaining the high-level language features\nsuch as type-safety.\n4.4 Dynamic Web Server Appliance\nOur \ufb01nal appliance implements a simple \u201cTwitter-like\u201d service.\nIt maintains an in-memory database of tweets and is exercised\nthrough two API calls: one to GET the last 100 tweets for an\nindividual, and the other to POST a tw",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "eet to an individual. The\nMirage implementation integrates the third-party Baardskeerder B-\ntree storage library, ported to Mirage with only a small patch to\nuse theBlock APIs instead of UNIX I/O. We compare the Mirage\nunikernel implementation against a Linux-based appliance running\nnginx ,fastCGI andweb.py . We used the httperf benchmark tool as\na client on the same physical box with separate dedicated cores,\nconnecting over the local bridge to avoid the possibility of the\nEthernet becoming the",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " bottleneck. Each httperf session issues 10\nrequests: 1 tweet and 9 \u2018get last 100 tweets\u2019.\nFigure 12 shows the results. The unikernel implementation\nclearly scales much better: scaling is linear up to around 80 ses-\nsions (800 requests \u2013 each session consists of 10 HTTP requests,\n9 GETs and 1 POST) before it becomes CPU bound. In contrast,\nLinux VM performance is much worse, reaching its limit at around\n20 sessions. For comparison, the same Linux VM serving two\nclients just a single static page ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "via nginx achieves up to 5,000 re-\nquests/s before hitting CPU and fdlimits. Although substantially\nhigher than the (unoptimised) Mirage implementation, there are\nother bene\ufb01ts to Mirage discussed earlier: smaller memory foot-\nprint (32 MB against 256 MB), type-safety and security. 0 500 1000 1500 2000 2500Throughput (conns/s)Linux (1 host, 6 vcpus)\nLinux (2 hosts, 3 vcpus)\nLinux (6 hosts, 1 vcpu)\nMirage (6 unikernels)\nFigure 13: Static page serving performance, comparing Mirage and\nApache2 runn",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ing on Linux.\nFigure 13 compares performance of the Mirage web appliance\nagainst a standard Linux VM running Apache2 using the mpm-\nworker backend with the number of workers sized to the number of\nvCPUs, serving a single static page. The Linux VM was run in three\ncon\ufb01gurations: a single VM given 6 vCPUs, two VMs each given\n3 vCPUs and \ufb01nally 6 VMs each given a single vCPU. As Mirage\nunikernels do not support multi-core, only one con\ufb01guration was\nrun of 6 unikernels each with a single vCPU. The r",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "esults show\n\ufb01rst, that scaling out appears to improve the Apache2 appliance\nperformance more than having multiple cores and second, that the\nMirage unikernels exceed the Apache2 appliance in all cases.\n4.5 Code and Binary Size\nDirect comparison of lines-of-code (LoC) is rarely meaningful\ndue to factors including widespread use of conditional compila-\ntion and complex build systems. We attempt to control for these\neffects by con\ufb01guring according to reasonable defaults, and then\npre-processing to ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "remove unused macros, comments and whites-\npace. In addition, to attempt a fair comparison against the 7 million\nLoC left in the Linux tree after pre-processing, we ignore kernel\ncode associated with components for which we have no analogue,\ne.g., the many architectures, network protocols, and \ufb01lesystems that\nLinux supports. As we are concerned with network-facing guest\nVMs that share the underlying hypervisor, we do not include LoC\nfor Xen and its management domains; these can be separately dis",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "-\naggregated as desired [14, 31].\nFigure 14a shows LoC for several popular server components,\ncomputed by the cloc utility. Even after removing irrelevant code,\na Linux appliance involves at least 4\u20135x more LoC than a Mirage\nappliance. Note that, although the Mirage libraries are not yet as\nfeature-rich as the industry-standard C applications, their library\nstructure ensures that unused dependencies can be shed at compile-\ntime even as features continue to be added. For example, if no\n\ufb01lesystem ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "is used, then the entire set of block drivers are auto-\nmatically elided. Performing such dependency analysis across the\nkernel and userspace is non-trivial in a Linux distribution.\nCompiled binary size is another effective illustration of this,\nand Table 2 gives binary sizes for the benchmark appliances. The\n\ufb01rst column used the default OCaml dead-code elimination which\ndrops unused modules, and the second uses ocamlclean ,8a more\nextensive custom tool which performs data\ufb02ow analysis to drop\nun",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "used functions within a module if not otherwise referenced; this\nis safe due to the lack of dynamic linking in Mirage [32]. Either\nway, all Mirage kernels are signi\ufb01cantly more compact than even a\ncut-down embedded Linux distribution, without requiring any work\non the part of the programmer beyond using the Mirage APIs to\nbuild their application.\n8http://github.com/avsm/ocamlcleanApplianceBinary size (MB)\nStandard build Dead code elimination\nDNS 0.449 0.184\nWeb Server 0.673 0.172\nOpenFlow switch",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " 0.393 0.164\nOpenFlow controller 0.392 0.168\nTable 2: Sizes of Mirage unikernels, before and after dead-code\nelimination. Con\ufb01guration and data are compiled directly into the\nunikernel.\n5. Discussion & Related Work\nWe next discuss the relationship of both unikernels and Mirage to\nthe previous work on which they build, from \ufb01elds such as type-\nsafety, library OSs and security.\n5.1 Type-safe and library OSs\nThe desire to apply type-safety in the OS is not new: type-safe OSs\nhave been built in a ra",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "nge of languages including Haskell [33, 34],\nJava [35], Standard ML [21], C#/.Net [4], and Modula-3 [36]. The\nlast of these, SPIN [36], is perhaps the closest in nature to Mirage:\nSPIN is an extensible OS that relies on Modula-3 type-safety to\ndynamically link extensions into the kernel. More recently, Singu-\nlarity [4] restructured the OS to sit above the Common Language\nRuntime, achieving many similar type-safety bene\ufb01ts. The uniker-\nnel approach is somewhat orthogonal: it proposes a restructu",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ring\nof the OS to speci\ufb01cally target services hosted on the public cloud,\nwhich bene\ufb01ts from but does not mandate type-safety. The particu-\nlar implementation presented here, Mirage, also uses an extremely\nportable functional language which means the Mirage core and net-\nwork stack can even be compiled to JavaScript for execution on\nnode.js ;9and ports to ARM and a FreeBSD kernel module are func-\ntional in an alpha state.\nRestructuring the OS into a set of libraries that are linked\ninto the appl",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ication has been explored extensively. Exokernel [1],\nNemesis [2], and Scout [37] all pursued this approach with con-\nsiderable success. Indeed, the speci\ufb01c technique of page re-use\nfor ef\ufb01cient network I/O ( \u00a73.5.1) is directly inspired by the high-\nperformance Cheetah web server for the Exokernel [38]. More\nrecently, Drawbridge [3] adapts Windows to be a library operating\nsystem where applications communicate via networking protocols,\nshowing that this approach scales to real commercial operat",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ing\nsystems. However, previous library OSs suffered from poor hard-\nware support with device drivers either needing to be written from\nscratch or wrapped in a compatibility layer [39]. Unikernels use\nsimilar libOS techniques but targets the cloud as a deployment\nplatform, with our Mirage implementation using the Xen hypervi-\nsor as a low-level common hardware interface.\nFinally, Libra [5] adapts the JVM to sit directly above Xen, tar-\ngeting Java workloads speci\ufb01cally. In particular, Libra uses ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "a gate-\nway server running in a standard Linux VM to provide access to\nstandard OS services such as a networking stack and \ufb01lesystem IO.\nApplication-hosting VMs access these services by communicating\nwith the other VM via the gateway process. In contrast, Uniker-\nnels are more highly-specialised but also more complete, providing\nsingle-purpose appliance VMs that directly support standard net-\nwork and \ufb01lesystem protocols.\n5.2 Legacy Support\nPerhaps the most obvious potential problem with the uni",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "kernel ap-\nproach is how best to support legacy systems. The extreme position\nwe take does appear to require a great deal of re-implementation,\n9Admittedly without a speci\ufb01c purpose in mind, though it is useful for\neducational purposes and ensuring portability.target, which links in the bytecode interpreter, makes use of the host\nkernel\u2019s networking stack, and maps keys in the k/v store to local\n\ufb01les. This provides a familiar development environment in which to\ndebug and pro\ufb01le application logic",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": ". Next, the developer applies the\n\ufb01rst specialisation step, building for the posix-direct target. This\nremoves dependency on the standard OS sockets implementation,\ninstead linking in the unikernel network stack ( \u00a73.5), and generat-\ning a native-code binary that uses tuntap to handle Ethernet traf\ufb01c,\nand compile con\ufb01guration \ufb01les directly into the binary. The result\nis that I/O processing is performed within the application, albeit\ninef\ufb01ciently due to the data copying induced by tuntap . This a",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "l-\nlows testing of the unikernel locally using UNIX development tools\nrather than the sparse facilities available when debugging micro-\nkernels, facilitating isolation of bugs in application logic, Mirage\nlibraries, or due to interactions between the two.\nFinally, the developer further specialises via the xen-direct tar-\nget, generating a standalone unikernel. Application code is cross-\ncompiled and linked with the safe Mirage device drivers, and dead-\ncode elimination: if the application doesn\u2019",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "t use a component, e.g.,\nTCP, it will not be compiled in. The result is a VM image bootable\non Xen locally or via a public cloud service.10The image is much\nsmaller than an equivalent Linux-based distribution (Figure 14),\nand crucially, allI/O traf\ufb01c is processed by type-safe code, with\nthe performance and security bene\ufb01ts of the specialised runtime.\n6. Conclusions\nWe presented the unikernel approach to signi\ufb01cantly improving\nthe safety and ef\ufb01ciency of building and deploying appliances for\nthe ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "cloud. Building on earlier work in library operating systems,\nwe contribute the design and evaluation of a statically type-safe\nOCaml prototype for a libOS, including a complete clean-slate\nset of protocol libraries which ensure that deployed unikernels are\nmemory-safe from the ground-up. Our approach also optionally\nextends the hypervisor with special support for such dedicated VMs\nto improve runtime security and boot latency.\nThrough our experimental implementation, we showed how se-\ncurity an",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "d ef\ufb01ciency bene\ufb01ts can be achieved by relaxing source-\nlevel backwards compatibility requirements by switching to novel\nprogramming styles such as those afforded by OCaml. Our eval-\nuation showed that these bene\ufb01ts come at little to no cost to per-\nformance in all cases, and can actually improve performance in\nsome. Overall we have demonstrated that the marriage of com-\nmodity cloud computing platforms with modern language runtimes\nis fruitful. Unikernels can serve as a platform for a range of ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "fu-\nture research exploring how to better take advantage of plenti-\nful cloud computing resources, particularly for distributed appli-\ncations that bene\ufb01t from horizontal scaling across cores and hosts.\nCode for the Mirage prototype and our experiment scripts are open-\nsource, available for download under a BSD-style license from\nhttp://openmirage.org .\nAcknowledgments\nWe thank Pierre Chambart and Fabrice Le Fessant for contribut-\ning OCaml compiler optimizations, and Raphael Proust and Gabor\nPa",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "li for the Javascript and kFreeBSD targets. Malte Schwarzkopf,\nDerek Murray, Robert Watson, Jonathan Ludlam, Derek McAuley,\nPeter G. Neumann, Ewan Mellor, Fernando Ramos, Tim Harris, Pe-\nter Sewell, Andrew Moore, Tom Kelly, David Chisnall, Jon Howell,\nStephen Kell, Yaron Minsky, Marius A. Eriksen, Tim Deegan, Alex\nHo and the anonymous ASPLOS reviewers all contributed valu-\nable feedback. This work was primarily supported by Horizon Dig-\nital Economy Research, RCUK grant EP/G065802/1, and a porti",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "on\nwas sponsored by the Defense Advanced Research Projects Agency\n10Mirage currently automates this process for Amazon EC2, wrapping\ncustom kernels in a block device and registering them as AMIs.(DARPA) and the Air Force Research Laboratory (AFRL), under\ncontract FA8750-11-C-0249. The views, opinions, and/or \ufb01ndings\ncontained in this report are those of the authors and should not\nbe interpreted as representing the of\ufb01cial views or policies, either\nexpressed or implied, of the Defense Advanced Re",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "search Projects\nAgency or the Department of Defense.\nReferences\n[1] D. R. Engler, M. F. Kaashoek, and J. O\u2019Toole, Jr. Exokernel: an operat-\ning system architecture for application-level resource management. In\nProc. 15th ACM Symposium on Operating Systems Principles (SOSP) ,\npages 251\u2013266, Copper Mountain, CO, USA, December 3\u20136 1995.\n[2] Ian M. Leslie, Derek McAuley, Richard Black, Timothy Roscoe,\nPaul T. Barham, David Evers, Robin Fairbairns, and Eoin Hyden.\nThe design and implementation of an ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "operating system to support dis-\ntributed multimedia applications. IEEE Journal of Selected Areas in\nCommunications , 14(7):1280\u20131297, 1996.\n[3] Donald E. Porter, Silas Boyd-Wickizer, Jon Howell, Reuben Olinsky,\nand Galen C. Hunt. Rethinking the library OS from the top down.\nInProc. 16th International Conference on Architectural Support for\nProgramming Languages and Operating Systems (ASPLOS) , pages\n291\u2013304, Newport Beach, CA, USA, March 5\u201311 2011.\n[4] Galen C. Hunt and James R. Larus. Singular",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ity: rethinking the soft-\nware stack. SIGOPS Operating Systems Review , 41(2):37\u201349, 2007.\n[5] Glenn Ammons, Jonathan Appavoo, Maria Butrico, Dilma Da Silva,\nDavid Grove, Kiyokuni Kawachiya, Orran Krieger, Bryan Rosenburg,\nEric Van Hensbergen, and Robert W. Wisniewski. Libra: a library\noperating system for a JVM in a virtualized execution environment.\nInProc. 3rd International Conf. on Virtual Execution Environments\n(VEE) , pages 44\u201354, San Diego, CA, USA, June 13\u201315 2007. ACM.\n[6] Paul Barham, ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "Boris Dragovic, Keir Fraser, Steven Hand, Tim Harris,\nAlex Ho, Rolf Neugebauer, Ian Pratt, and Andrew War\ufb01eld. Xen and\nthe Art of Virtualization. In Proc. 19th ACM Symposium on Operat-\ning Systems Principles (SOSP) , pages 164\u2013177, Bolton Landing, NY ,\nUSA, October 19\u201322 2003.\n[7] US-CERT/NIST. CVE-2012-1182, February 2012.\n[8] US-CERT/NIST. CVE-2012-2110, April 2012.\n[9] Eelco Dolstra, Andres L \u00a8Oh, and Nicolas Pierron. Nixos: A purely\nfunctional Linux distribution. J. Funct. Program. , 20(5-6)",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": ":577\u2013615,\nNovember 2010.\n[10] Galen Hunt, Mark Aiken, Manuel F \u00a8ahndrich, Chris Hawblitzel, Orion\nHodson, James Larus, Steven Levi, Bjarne Steensgaard, David Tarditi,\nand Ted Wobber. Sealing OS processes to improve dependability and\nsafety. SIGOPS Operating Systems Review , 41(3):341\u2013354, March\n2007.\n[11] Theo De Raadt. Exploit mitigation techniques. http://www.\nopenbsd.org/papers/auug04 , 2004.\n[12] David Scott, Richard Sharp, Thomas Gazagnaire, and Anil Mad-\nhavapeddy. Using functional program",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ming within an industrial prod-\nuct group: perspectives and perceptions. In Proc. 15th ACM SIGPLAN\nInternational Conference on Functional Programming (ICFP) , pages\n87\u201392, Baltimore, Maryland, USA, September 27\u201329 2010.\n[13] Thomas Gazagnaire and Vincent Hanquez. Oxenstored: an ef\ufb01cient\nhierarchical and transactional database using functional programming\nwith reference cell comparisons. SIGPLAN Notices , 44(9):203\u2013214,\nAugust 2009.\n[14] Patrick Colp, Mihir Nanavati, Jun Zhu, William Aiello, Geor",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ge Coker,\nTim Deegan, Peter Loscocco, and Andrew War\ufb01eld. Breaking up is\nhard to do: security and functionality in a commodity hypervisor. In\nProc. 23rd ACM Symposium on Operating Systems Principles (SOSP) ,\npages 189\u2013202, Cascais, Portugal, October 23\u201326 2011.\n[15] A. Baumann, P. Barham, P. Dagand, T. Harris, R. Isaacs, S. Peter,\nT. Roscoe, A. Sch \u00a8upbach, and A. Singhania. The multikernel: a new\nOS architecture for scalable multicore systems. In Proc. 22nd ACM\nSymposium on Operating Systems Pr",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "inciples (SOSP) , pages 29\u201344,\nBig Sky, MT, USA, October 11\u201314 2009.[16] Hovav Shacham, Matthew Page, Ben Pfaff, Eu-Jin Goh, Nagendra\nModadugu, and Dan Boneh. On the effectiveness of address-space\nrandomization. In Proc. 11th ACM Conference on Computer and\nCommunications Security (CCS) , pages 298\u2013307, Washington DC,\nUSA, October 25\u201329 2004.\n[17] Keir Fraser, Steven Hand, Rolf Neugebauer, Ian Pratt, Andrew\nWar\ufb01eld, and Mark Williamson. Safe hardware access with the Xen\nvirtual machine monitor. I",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "n Proc. 1st Workshop on Operating System\nand Architectural Support for the on demand IT InfraStructure (OA-\nSIS), Boston, MA, USA, October 7\u201313 2004.\n[18] J \u00b4er\u02c6ome V ouillon. Lwt: a cooperative thread library. In Proc. 2008\nACM SIGPLAN workshop on ML , pages 3\u201312, Victoria, BC, Canada,\nSeptember 21 2008.\n[19] Anil Madhavapeddy, Richard Mortier, Ripduman Sohan, Thomas\nGazagnaire, Steven Hand, Tim Deegan, Derek McAuley, and Jon\nCrowcroft. Turning down the LAMP: Software specialisation for the\nclo",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "ud. In 2nd USENIX Workshop on Hot Topics in Cloud Computing ,\nJune 2010.\n[20] Andrew War\ufb01eld, Keir Fraser, Steven Hand, and Tim Deegan. Fa-\ncilitating the development of soft devices. In Proc. USENIX Annual\nTechnical Conference , pages 379\u2013382, April 10\u201315 2005.\n[21] Edoardo Biagioni. A Structured TCP in Standard ML. In Proc. ACM\nSIGCOMM , pages 36\u201345, London, UK, Aug. 31\u2013Sep. 02 1994.\n[22] Anil Madhavapeddy, Alex Ho, Tim Deegan, David Scott, and Rip-\nduman Sohan. Melange: creating a \u201cfunctional",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "\u201d Internet. SIGOPS\nOperating Systems Review , 41(3):101\u2013114, 2007.\n[23] Oleg Kiselyov. Iteratee IO: safe, practical, declarative input process-\ning.http://okmij.org/ftp/Streams.html , 2008.\n[24] Chuck Silvers. UBC: an ef\ufb01cient uni\ufb01ed I/O and memory caching sub-\nsystem for NetBSD. In Proc. USENIX Annual Technical Conference ,\npages 285\u2013290, San Diego, CA, USA, June 18\u201323 2000.\n[25] Steven M. Hand. Self-paging in the Nemesis operating system. In\nProc. 3rd USENIX Symposium on Operating Systems Desi",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "gn and\nImplementation (OSDI) , pages 73\u201386, February 22\u201325 1999.\n[26] President\u2019s Council of Advisors on Science and Technology. Report\nto the President and Congress: Designing a Digital Future: Federally\nFunded R&D in Networking and IT, December 2010.\n[27] OpenFlow Consortium. OpenFlow. http://openflow.org/ .\n[28] Charalampos Rotsos, Nadi Sarrar, Steve Uhlig, Rob Sherwood, and\nAndrew W. Moore. OFLOPS: An open framework for OpenFlow\nswitch evaluation. In Proc. Passive and Active Measurements Con",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "-\nference (PAM) , Vienna, Austria, March 12\u201314 2012.\n[29] Zheng Cai, Alan L. Cox, and T. S. Eugene Ng. Maestro: A system\nfor scalable OpenFlow control. Technical Report TR-10-11, Rice\nUniversity.\n[30] N. Gude, T. Koponen, J. Pettit, B. Pfaff, M. Casado, N. McKeown, and\nS. Shenker. NOX: towards an operating system for networks. SIG-\nCOMM Computer Communications Review , 38:105\u2013110, July 2008.\n[31] Derek Gordon Murray, Grzegorz Milos, and Steven Hand. Improv-\ning Xen security through disaggregatio",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "n. In Proc. 4th ACM SIG-\nPLAN/SIGOPS International Conference on Virtual Execution Envi-\nronments (VEE) , pages 151\u2013160, Seattle, WA, USA, March 5\u20137 2008.\n[32] B. Vaugon, Philippe Wang, and Emmanuel Chailloux. Les micro-\ncontr \u02c6oleurs pic programm \u00b4es en Objective Caml. In Vingt-deuxi `emes\nJourn \u00b4ees Francophones des Langages Applicatifs (JFLA 2011) , vol-\nume Studia Informatica Universalis, pages 177\u2013207. Hermann, 2011.\n[33] T. Hallgren, M. P. Jones, R. Leslie, and A. Tolmach. A Principled\nApp",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "roach to Operating System construction in Haskell. SIGPLAN\nNotices , 40(9):116\u2013128, 2005.\n[34] Galois Inc. HalVM. http://halvm.org/ .\n[35] Oracle. GuestVM. http://labs.oracle.com/projects/\nguestvm/shared/guestvm/guestvm/index.html .\n[36] B. N. Bershad, S. Savage, P. Pardyak, E. G. Sirer, M. E. Fiuczynski,\nD. Becker, C. Chambers, and S. Eggers. Extensibility, safety and per-\nformance in the SPIN operating system. SIGOPS Operating Systems\nReview , 29(5):267\u2013283, December 1995.[37] David Mosberger ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "and Larry L. Peterson. Making paths explicit in\nthe Scout operating system. In Proc. 2nd USENIX Symposium on\nOperating Systems Design and Implementation (OSDI) , pages 153\u2013\n167, Seattle, WA, United States, October 28\u201331 1996.\n[38] F. Kaashoek, D. Engler, G. Ganger, H. Brice no, R. Hunt, D. Mazi `eres,\nT. Pinckney, R. Grimm, J. Jannotti, and K. Mackenzie. Application\nperformance and \ufb02exibility on exokernel systems. In Proc. 16th ACM\nSymposium on Operating Systems Principles (SOSP) , pages 52\u201365,\n",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "Saint Malo, France, October 5\u20138 1997.\n[39] Bryan Ford, Godmar Back, Greg Benson, Jay Lepreau, Albert Lin,\nand Olin Shivers. The Flux OSKit: a substrate for kernel and language\nresearch. In Proc. 16th ACM Symposium on Operating Systems Prin-\nciples (SOSP) , pages 38\u201351, Saint Malo, France, October 5\u20138 1997.\n[40] The OpenSSL Project. OpenSSL. http://openssl.org/ .\n[41] Martin Georgiev, Subodh Iyengar, Suman Jana, Rishita Anubhai, Dan\nBoneh, and Vitaly Shmatikov. The most dangerous code in the worl",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "d:\nvalidating SSL certi\ufb01cates in non-browser software. In Proc. 19th\nACM Conference on Computer and Communications Security (CCS) ,\npages 38\u201349, Raleigh, NC, USA, October 16\u201318 2012.\n[42] George C. Necula, Scott McPeak, Shree Prakash Rahul, and Westley\nWeimer. CIL: Intermediate language and tools for analysis and trans-\nformation of C programs. In Proc. 11th International Conference on\nCompiler Construction (CC) , LNCS 2304, pages 213\u2013228, Grenoble,\nFrance, April 8\u201312 2002.\n[43] George C. Necula",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": ", Scott McPeak, and Westley Weimer. Ccured: type-\nsafe retro\ufb01tting of legacy code. In Proc. 29th ACM SIGPLAN-SIGACT\nSymposium on Principles of Programming Languages (POPL) , pages\n128\u2013139, January 16\u201318 2002.\n[44] Facebook. HipHop for PHP. https://github.com/facebook/\nhiphop-php/wiki/ , February 2010.\n[45] Jeffrey Dean and Sanjay Ghemawat. MapReduce: simpli\ufb01ed data\nprocessing on large clusters. In Proc. 6th USENIX Symposium on\nOperating Systems Design & Implementation (OSDI) , pages 137\u2013150,\nSan",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " Francisco, CA, USA, December 6\u20138 2004.\n[46] Apache. Hadoop. http://hadoop.apache.org , April 2012.\n[47] Michael Isard, Mihai Budiu, Yuan Yu, Andrew Birrell, and Dennis\nFetterly. Dryad: distributed data-parallel programs from sequential\nbuilding blocks. In Proc. 2nd ACM SIGOPS/EuroSys European Con-\nference on Computer Systems (EuroSys) , pages 59\u201372, Lisbon, Portu-\ngal, March 21\u201323 2007.\n[48] Niels Provos, Markus Friedl, and Peter Honeyman. Preventing privi-\nlege escalation. In Proc. 12th USENIX",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": " Security Symposium (SSYM) ,\npages 231\u2013242, Washington DC, USA, August 4\u20138 2003.\n[49] Bill Childers. Build your own cloud with Eucalyptus. Linux J. ,\n2010(195), July 2010.\n[50] Jeff Lewis. Cryptol: speci\ufb01cation, implementation and veri\ufb01cation of\nhigh-grade cryptographic applications. In Proc. ACM Workshop on\nFormal Methods in Security Engineering (FMSE) , page 41, Fairfax,\nVirginia, USA, November 2 2007.\n[51] Reynald Affeldt, David Nowak, and Yutaka Oiwa. Formal network\npacket processing with mi",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "nimal fuss: invertible syntax descriptions\nat work. In Proc. 6th Workshop on Programming Languages meets\nProgram Veri\ufb01cation (PLPV) , pages 27\u201336, January 24 2012.\n[52] Nicolas Oury. Observational equivalence and program extraction in\nthe Coq proof assistant. In Proc. 6th International Conference on\nTyped Lambda Calculi and Applications (TLCA) , LNCS 2701, pages\n271\u2013285, Valencia, Spain, June 10\u201312 2003.\n[53] Xavier Leroy. Formal certi\ufb01cation of a compiler back-end, or: pro-\ngramming a compiler ",
+        "summary": "Provide a concise summary of the above text."
+    },
+    {
+        "input_text": "with a proof assistant. In Proc. 33rd ACM Sym-\nposium on Principles of Programming Languages (POPL) , pages 42\u2013\n54, Charleston, SC, USA, January 11\u201313 2006.\n[54] G. Klein, K. Elphinstone, G. Heiser, J. Andronick, D. Cock, P. Derrin,\nD. Elkaduwe, K. Engelhardt, R. Kolanski, M. Norrish, T. Sewell,\nH. Tuch, and S. Winwood. seL4: formal veri\ufb01cation of an OS kernel.\nInProc. 22nd ACM Symposium on Operating Systems Principles\n(SOSP) , pages 207\u2013220, Big Sky, MT, USA, October 11\u201314 2009.",
+        "summary": "Provide a concise summary of the above text."
+    }
+]

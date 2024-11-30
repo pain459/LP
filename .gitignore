@@ -361,3 +361,4 @@ cython_debug/
 /quick_demos/data_lake_demo/brazil_data_lake
 *.mp4
 *.wav
+trained_model_summarization
