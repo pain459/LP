@@ -1,1 +1,2 @@
 # sqlite3  # This is part of the standard library and don't need to be installed exclusively.
+prompt_toolkit

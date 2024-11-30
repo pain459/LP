@@ -1,20 +1,12 @@
-# Use an official Python image
 FROM python:3.10-slim
 
-# Set working directory
 WORKDIR /sku_db
 
-# Install SQLite CLI and Python dependencies
-RUN apt-get update && apt-get install -y sqlite3 && rm -rf /var/lib/apt/lists/*
-
-# Copy application files
 COPY ./sku_db /sku_db
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir fastapi uvicorn
+# no need to install sqlite3 seperately.
 
-# Create volume for SQLite persistence
-VOLUME /data
+EXPOSE 8000
 
-# Run the Python app
-CMD ["python", "main.py"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

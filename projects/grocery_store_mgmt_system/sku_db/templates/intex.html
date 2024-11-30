@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKU Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>SKU Management System</h1>
+
+    <h2>Add SKU Entry</h2>
+    <form id="add-sku-form">
+        <label>SKU ID: <input type="number" id="sku-id" required></label><br>
+        <label>Quantity: <input type="number" id="quantity" required></label><br>
+        <label>Price (Optional): <input type="number" id="price"></label><br>
+        <button type="submit">Add SKU</button>
+    </form>
+
+    <h2>Stock Report</h2>
+    <button id="view-report">View Stock Report</button>
+    <pre id="stock-report"></pre>
+
+    <script>
+        document.getElementById("add-sku-form").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const skuId = document.getElementById("sku-id").value;
+            const quantity = document.getElementById("quantity").value;
+            const price = document.getElementById("price").value;
+
+            try {
+                const response = await axios.post("http://localhost:8000/sku/add/", {
+                    sku_id: parseInt(skuId),
+                    quantity: parseInt(quantity),
+                    price: price ? parseFloat(price) : null
+                });
+                alert(response.data.message);
+            } catch (error) {
+                alert(error.response.data.detail);
+            }
+        });
+
+        document.getElementById("view-report").addEventListener("click", async () => {
+            try {
+                const response = await axios.get("http://localhost:8000/stock-report/");
+                document.getElementById("stock-report").textContent = JSON.stringify(response.data, null, 2);
+            } catch (error) {
+                alert("Failed to fetch stock report.");
+            }
+        });
+    </script>
+</body>
+</html>
