@@ -362,3 +362,4 @@ cython_debug/
 *.mp4
 *.wav
 trained_model_summarization
+final_trained_model
