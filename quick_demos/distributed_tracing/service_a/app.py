@@ -1,5 +1,5 @@
-from flask import Flask, jsonify
 import requests
+from flask import Flask, jsonify
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
 from opentelemetry.sdk.trace import TracerProvider
@@ -18,9 +18,14 @@ jaeger_exporter = JaegerExporter(
 )
 tracer_provider.add_span_processor(BatchSpanProcessor(jaeger_exporter))
 
-@app.route("/")
+@app.route("/", methods=["GET"])
 def index():
-    response = requests.get("http://service_b:5001/process")
+    data = {"data": "test_string"}
+    response = requests.post("http://service_b:5001/process", json=data)
+
+    if response.status_code != 200:
+        return jsonify({"error": "Service B failed", "details": response.json()}), response.status_code
+
     return jsonify({"message": "Request completed", "service_b_response": response.json()})
 
 if __name__ == "__main__":

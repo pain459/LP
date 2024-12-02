@@ -8,13 +8,24 @@ services:
     depends_on:
       - service_b
       - jaeger
+
   service_b:
     build:
       context: ./service_b
     ports:
       - "5001:5001"
     depends_on:
+      - service_c
       - jaeger
+
+  service_c:
+    build:
+      context: ./service_c
+    ports:
+      - "5002:5002"
+    depends_on:
+      - jaeger
+
   jaeger:
     image: jaegertracing/all-in-one:latest
     ports:
