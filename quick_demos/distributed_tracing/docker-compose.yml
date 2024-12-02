@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  service_a:
+    build:
+      context: ./service_a
+    ports:
+      - "5000:5000"
+    depends_on:
+      - service_b
+      - jaeger
+  service_b:
+    build:
+      context: ./service_b
+    ports:
+      - "5001:5001"
+    depends_on:
+      - jaeger
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "16686:16686"
+      - "6831:6831/udp"
