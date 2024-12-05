@@ -1,7 +1,0 @@
-    002 Design and implement a trie for efficient prefix-based search.
-            Description: Create a trie data structure to efficiently store and retrieve strings based on their prefixes.
-            Success Criteria: Supports insertion, deletion, and prefix-based search operations efficiently.
-
-resources
-https://www.cs.usfca.edu/~galles/visualization/Trie.html
-https://en.wikipedia.org/wiki/Trie

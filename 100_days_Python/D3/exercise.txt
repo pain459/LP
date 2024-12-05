@@ -1,3 +1,0 @@
-    003 Create a custom hash table with open addressing and linear probing.
-            Description: Implement a hash table that uses open addressing and linear probing to handle collisions.
-            Success Criteria: Efficiently supports insertion, search, and deletion with appropriate handling of collisions.
