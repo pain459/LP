@@ -2,6 +2,8 @@ import spacy
 from transformers import pipeline
 
 # Load a SpaCy model (e.g., English Core Web)
+# install the lib
+# python -m spacy download en_core_web_sm
 nlp = spacy.load("en_core_web_sm")
 
 # Read your input file
