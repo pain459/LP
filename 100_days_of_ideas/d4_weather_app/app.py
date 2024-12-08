@@ -7,7 +7,12 @@ load_dotenv()
 
 app = Flask(__name__)
 
-# Store recent searches as a list of dicts: [{city, temperature, url}, ...]
+# Store recent searches as a list of dicts. Each dict will have:
+# {
+#   'display_name': string,
+#   'temperature': float,
+#   'url': string   # either /search?city=... or /search?lat=...&lon=...
+# }
 recent_searches = []
 
 @app.route('/', methods=['GET'])
@@ -34,12 +39,16 @@ def home_post():
 @app.route('/search')
 def search():
     city = request.args.get('city', '').strip()
-    # This direct search route currently only supports city re-searches
-    # If you want to support lat/lon from recent searches, you'd need to store them and handle here as well.
+    lat = request.args.get('lat', '').strip()
+    lon = request.args.get('lon', '').strip()
+
     if city:
         return handle_search_by_city(city)
-    error = "No city provided."
-    return render_template('index.html', recent_searches=recent_searches, error=error)
+    elif lat and lon:
+        return handle_search_by_coords(lat, lon)
+    else:
+        error = "No valid search parameters provided."
+        return render_template('index.html', recent_searches=recent_searches, error=error)
 
 def handle_search_by_city(city):
     api_key = os.getenv('OPENWEATHER_API_KEY')
@@ -70,8 +79,7 @@ def handle_search_by_city(city):
         error_message = "Couldn't retrieve coordinates for the given city."
         return render_template('result.html', recent_searches=recent_searches, error=error_message)
 
-    return fetch_weather_and_render(api_key, lat, lon, city_name, state, country)
-
+    return fetch_weather_and_render(api_key, lat, lon, city_name, state, country, search_type='city')
 
 def handle_search_by_coords(lat, lon):
     api_key = os.getenv('OPENWEATHER_API_KEY')
@@ -98,25 +106,24 @@ def handle_search_by_coords(lat, lon):
     rev_geo_response = requests.get(rev_geo_url, params=rev_geo_params)
     if rev_geo_response.status_code != 200:
         # If reverse geocoding fails, we can still proceed with just coords
-        city_name = f"({lat}, {lon})"
+        city_name = f"{lat},{lon}"
         state = ""
         country = ""
     else:
         rev_geo_data = rev_geo_response.json()
         if rev_geo_data:
-            city_name = rev_geo_data[0].get('name', f"({lat}, {lon})")
+            city_name = rev_geo_data[0].get('name', f"{lat},{lon}")
             state = rev_geo_data[0].get('state', '')
             country = rev_geo_data[0].get('country', '')
         else:
             # No reverse geocode data found
-            city_name = f"({lat}, {lon})"
+            city_name = f"{lat},{lon}"
             state = ""
             country = ""
 
-    return fetch_weather_and_render(api_key, lat_f, lon_f, city_name, state, country)
+    return fetch_weather_and_render(api_key, lat_f, lon_f, city_name, state, country, search_type='coords')
 
-
-def fetch_weather_and_render(api_key, lat, lon, city_name, state, country):
+def fetch_weather_and_render(api_key, lat, lon, city_name, state, country, search_type='city'):
     # Fetch weather for given coords
     weather_url = "https://api.openweathermap.org/data/2.5/weather"
     weather_params = {
@@ -142,14 +149,19 @@ def fetch_weather_and_render(api_key, lat, lon, city_name, state, country):
     else:
         timezone_str = f"UTC{offset_hours:.1f}"
 
-    # Create a direct search URL for city re-search
-    # If city_name comes from coords and is something like (lat, lon), that might not geocode back.
-    # But we will provide the link anyway.
-    direct_search_url = f"/search?city={city_name}"
+    # Create direct search URL based on search type
+    if search_type == 'city':
+        direct_search_url = f"/search?city={city_name}"
+        display_name = city_name
+    else:
+        direct_search_url = f"/search?lat={lat}&lon={lon}"
+        # display_name should be something user-friendly.
+        # If reverse geocode gave us a city name, use it. Otherwise lat,lon is fine.
+        display_name = city_name
 
     # Add to recent searches
     recent_searches.append({
-        'city': city_name,
+        'display_name': display_name,
         'temperature': temperature,
         'url': direct_search_url
     })

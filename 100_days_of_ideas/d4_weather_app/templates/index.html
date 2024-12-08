@@ -28,7 +28,7 @@
     <ul>
         {% for search in recent_searches %}
         <li>
-            <a href="{{ search.url }}">{{ search.city }}</a> - {{ search.temperature }}°C
+            <a href="{{ search.url }}">{{ search.display_name }}</a> - {{ search.temperature }}°C
         </li>
         {% endfor %}
     </ul>
