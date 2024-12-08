@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Weather Result</title>
+</head>
+<body>
+    {% if error %}
+        <h1>Error: {{ error }}</h1>
+        <a href="/">Try another city</a>
+    {% else %}
+        <h1>The temperature in {{ city }} is {{ temperature }}°C</h1>
+        <a href="/">Check another city</a>
+    {% endif %}
+</body>
+</html>
