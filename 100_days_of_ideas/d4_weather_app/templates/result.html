@@ -7,17 +7,25 @@
 <body>
     {% if error %}
         <h1>Error: {{ error }}</h1>
+        <a href="/">Back to Home</a>
     {% else %}
-        <h1>The temperature in {{ city }} is {{ temperature }}°C</h1>
-    {% endif %}
+        <h1>Weather for {{ city }}</h1>
+        <p><strong>State:</strong> {{ state }}</p>
+        <p><strong>Country:</strong> {{ country }}</p>
+        <p><strong>Timezone:</strong> {{ timezone }}</p>
+        <p><strong>Coordinates:</strong> ({{ latitude }}, {{ longitude }})</p>
+        <p><strong>Temperature:</strong> {{ temperature }}°C</p>
 
-    <a href="/">Back to Home</a>
+        <a href="/">Back to Home</a>
+    {% endif %}
 
     {% if recent_searches and recent_searches|length > 0 %}
     <h2>Recent Searches:</h2>
     <ul>
         {% for search in recent_searches %}
-        <li>{{ search }}</li>
+        <li>
+            <a href="{{ search.url }}">{{ search.city }}</a> - {{ search.temperature }}°C
+        </li>
         {% endfor %}
     </ul>
     {% endif %}

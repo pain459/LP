@@ -9,14 +9,20 @@
     <h1>Welcome to the Weather App</h1>
     <form method="POST" action="/">
         <input type="text" name="city" placeholder="Enter city name" required>
-        <button type="submit">Get Temperature</button>
+        <button type="submit">Get Weather</button>
     </form>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
 
     {% if recent_searches and recent_searches|length > 0 %}
     <h2>Recent Searches:</h2>
     <ul>
         {% for search in recent_searches %}
-        <li>{{ search }}</li>
+        <li>
+            <a href="{{ search.url }}">{{ search.city }}</a> - {{ search.temperature }}°C
+        </li>
         {% endfor %}
     </ul>
     {% endif %}
