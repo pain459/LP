@@ -6,10 +6,19 @@
     <title>Weather App</title>
 </head>
 <body>
-    <h1>Check the Weather</h1>
+    <h1>Welcome to the Weather App</h1>
     <form method="POST" action="/">
         <input type="text" name="city" placeholder="Enter city name" required>
         <button type="submit">Get Temperature</button>
     </form>
+
+    {% if recent_searches and recent_searches|length > 0 %}
+    <h2>Recent Searches:</h2>
+    <ul>
+        {% for search in recent_searches %}
+        <li>{{ search }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
 </body>
 </html>

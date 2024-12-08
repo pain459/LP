@@ -7,10 +7,19 @@
 <body>
     {% if error %}
         <h1>Error: {{ error }}</h1>
-        <a href="/">Try another city</a>
     {% else %}
         <h1>The temperature in {{ city }} is {{ temperature }}°C</h1>
-        <a href="/">Check another city</a>
+    {% endif %}
+
+    <a href="/">Back to Home</a>
+
+    {% if recent_searches and recent_searches|length > 0 %}
+    <h2>Recent Searches:</h2>
+    <ul>
+        {% for search in recent_searches %}
+        <li>{{ search }}</li>
+        {% endfor %}
+    </ul>
     {% endif %}
 </body>
 </html>
