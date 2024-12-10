@@ -1,7 +1,151 @@
 difficulty,question,optionA,optionB,optionC,optionD,correct_answer,prize
-1,What is the capital of France?,Paris,London,Berlin,Madrid,A,1000
-1,Which planet is known as the Red Planet?,Venus,Mars,Jupiter,Saturn,B,2000
-2,Who developed the theory of relativity?,Newton,Einstein,Edison,Galileo,B,5000
-2,In which country would you find the city of Tokyo?,China,Japan,South Korea,Thailand,B,10000
-3,What is the largest mammal?,Elephant,Blue Whale,Giraffe,Hippopotamus,B,50000
-3,Which metal is liquid at room temperature?,Gold,Silver,Mercury,Iron,C,100000
+1,What is the capital city of France?,Paris,London,Berlin,Rome,A,100
+1,Which planet is known as the Red Planet?,Venus,Mars,Jupiter,Saturn,B,100
+1,What is the largest ocean on Earth?,Atlantic,Indian,Arctic,Pacific,D,100
+1,Which animal is known as the 'Ship of the Desert'?,Horse,Camel,Elephant,Llama,B,100
+1,Who painted the Mona Lisa?,Michelangelo,Leonardo da Vinci,Van Gogh,Picasso,B,100
+1,What is the currency of Japan?,Yen,Dollar,Euro,Pound,A,100
+1,How many continents are there on Earth?,Five,Six,Seven,Four,C,100
+1,Who wrote 'Romeo and Juliet'?,Charles Dickens,William Shakespeare,Mark Twain,Jane Austen,B,100
+1,Which gas do plants primarily take in for photosynthesis?,Oxygen,Nitrogen,Carbon Dioxide,Helium,C,100
+1,In which country would you find the Great Pyramid of Giza?,Peru,Mexico,Egypt,China,C,100
+2,What is the capital of Italy?,Rome,Madrid,Athens,Berlin,A,200
+2,Who discovered the theory of relativity?,Isaac Newton,Albert Einstein,Nikola Tesla,Galileo Galilei,B,200
+2,What is the largest land animal?,Elephant,Hippopotamus,Rhinoceros,Giraffe,A,200
+2,Which element has the chemical symbol 'O'?,Gold,Oxygen,Silver,Iron,B,200
+2,The Great Wall of China is primarily located in which country?,India,China,Mongolia,Russia,B,200
+2,Who is known as the 'Bard of Avon'?,Homer,Dante,William Shakespeare,Goethe,C,200
+2,What organ pumps blood throughout the human body?,Lungs,Heart,Brain,Liver,B,200
+2,Which country is home to the kangaroo?,India,Australia,Brazil,Kenya,B,200
+2,Which musical instrument has 88 keys?,Guitar,Violin,Flute,Piano,D,200
+2,What is H2O commonly known as?,Salt,Water,Ammonia,Alcohol,B,200
+3,In which city is the Statue of Liberty located?,London,Paris,New York,Tokyo,C,300
+3,Who formulated the laws of motion and gravity?,Isaac Newton,Albert Einstein,Stephen Hawking,Nikola Tesla,A,300
+3,What is the smallest prime number?,0,1,2,3,C,300
+3,Which is the longest river in the world?,Nile,Amazon,Mississippi,Yangtze,A,300
+3,What is the boiling point of water at sea level in Celsius?,0,50,100,212,C,300
+3,Who was the first President of the United States?,Abraham Lincoln,George Washington,Thomas Jefferson,John Adams,B,300
+3,Which planet is known for its rings?,Mercury,Venus,Earth,Saturn,D,300
+3,What is the national language of Brazil?,Spanish,English,Portuguese,French,C,300
+3,Who wrote 'The Origin of Species'?,Charles Darwin,Gregor Mendel,Marie Curie,Louis Pasteur,A,300
+3,What is the capital of Canada?,Toronto,Ottawa,Montreal,Vancouver,B,300
+4,In which continent is the Sahara Desert located?,Asia,South America,Africa,Europe,C,500
+4,Who is known as the 'Father of Computer Science'?,Alan Turing,Charles Babbage,Tim Berners-Lee,Steve Jobs,A,500
+4,What chemical element gives blood its red color?,Iron,Copper,Zinc,Magnesium,A,500
+4,Which country gifted the Statue of Liberty to the United States?,United Kingdom,France,Spain,Italy,B,500
+4,What is the largest bone in the human body?,Femur,Skull,Radius,Tibia,A,500
+4,Who wrote 'Pride and Prejudice'?,Jane Austen,Emily Brontë,Charlotte Brontë,George Eliot,A,500
+4,Which gas is most abundant in Earth's atmosphere?,Oxygen,Nitrogen,Carbon Dioxide,Argon,B,500
+4,Which continent has the most countries?,Asia,Africa,Europe,South America,B,500
+4,What is the capital of Argentina?,Santiago,Bogotá,Lima,Buenos Aires,D,500
+4,What is the primary language spoken in Spain?,French,Spanish,Italian,Portuguese,B,500
+5,What is the largest planet in our Solar System?,Earth,Mars,Saturn,Jupiter,D,1000
+5,Who developed the polio vaccine?,Louis Pasteur,Jonas Salk,Alexander Fleming,Edward Jenner,B,1000
+5,What is the hardest natural substance on Earth?,Iron,Granite,Diamond,Quartz,C,1000
+5,Who discovered penicillin?,Alexander Fleming,Marie Curie,Gregor Mendel,Joseph Lister,A,1000
+5,What is the capital of Australia?,Sydney,Melbourne,Canberra,Perth,C,1000
+5,In which ocean is the Bermuda Triangle located?,Atlantic,Pacific,Indian,Arctic,A,1000
+5,Who wrote 'War and Peace'?,Leo Tolstoy,Mark Twain,Fyodor Dostoevsky,Victor Hugo,A,1000
+5,Which human organ is responsible for filtering blood?,Liver,Heart,Stomach,Kidneys,D,1000
+5,How many strings does a standard violin have?,2,3,4,5,C,1000
+5,What type of animal is a Komodo dragon?,Mammal,Bird,Reptile,Amphibian,C,1000
+6,Who painted the ceiling of the Sistine Chapel?,Leonardo da Vinci,Michelangelo,Raphael,Caravaggio,B,2000
+6,Which country is the world's largest by land area?,Canada,Russia,China,United States,B,2000
+6,What is the chemical symbol for Gold?,Au,Ag,Pt,Fe,A,2000
+6,Who proposed the theory of evolution by natural selection?,Gregor Mendel,Charles Darwin,Alfred Wallace,Thomas Huxley,B,2000
+6,Which city hosted the first modern Olympics in 1896?,Paris,Athens,London,Berlin,B,2000
+6,What is the world's tallest waterfall?,Victoria Falls,Niagara Falls,Angel Falls,Iguazu Falls,C,2000
+6,How many degrees are in a right angle?,45,90,180,270,B,2000
+6,Which part of the human body contains the smallest bones?,Ear,Hand,Foot,Spine,A,2000
+6,Who wrote 'The Divine Comedy'?,Dante Alighieri,Geoffrey Chaucer,John Milton,Homer,A,2000
+6,The kiwi is a flightless bird native to which country?,Australia,New Zealand,South Africa,Chile,B,2000
+7,What is the capital of Russia?,Moscow,St. Petersburg,Kazan,Sochi,A,4000
+7,Who is credited with inventing the telephone?,Thomas Edison,Alexander Graham Bell,Nikola Tesla,Guglielmo Marconi,B,4000
+7,How many days are in a leap year?,365,366,364,367,B,4000
+7,What is the main gas found in the air we breathe?,Oxygen,Nitrogen,Carbon Dioxide,Argon,B,4000
+7,Who wrote 'The Adventures of Tom Sawyer'?,Mark Twain,Ernest Hemingway,F. Scott Fitzgerald,John Steinbeck,A,4000
+7,The Great Barrier Reef is located off the coast of which country?,Fiji,Australia,Indonesia,Philippines,B,4000
+7,What is the capital of Turkey?,Ankara,Istanbul,Izmir,Bursa,A,4000
+7,Who developed the first successful printing press in Europe?,Johannes Gutenberg,Benjamin Franklin,William Caxton,Martin Luther,A,4000
+7,What is the smallest country in the world?,Monaco,Vatican City,Liechtenstein,San Marino,B,4000
+7,Which gas do living creatures need to breathe in to survive?,Oxygen,Helium,Nitrogen,Carbon Dioxide,A,4000
+8,Which sea creature has three hearts?,Shark,Octopus,Dolphin,Whale,B,8000
+8,Who discovered gravity when he saw a falling apple (as per legend)?,Albert Einstein,Isaac Newton,Galileo Galilei,Aristotle,B,8000
+8,What is the capital of South Korea?,Seoul,Tokyo,Beijing,Shanghai,A,8000
+8,Which composer wrote 'Für Elise'?,Wolfgang Amadeus Mozart,Ludwig van Beethoven,Johann Bach,Franz Schubert,B,8000
+8,What is the largest internal organ in the human body?,Heart,Liver,Lungs,Brain,B,8000
+8,Who invented the World Wide Web?,Steve Jobs,Bill Gates,Tim Berners-Lee,Larry Page,C,8000
+8,In which galaxy is our Solar System located?,Andromeda,Milky Way,Whirlpool,Sombrero,B,8000
+8,Which mountain range separates Europe and Asia?,Andes,Himalayas,Ural,Alps,C,8000
+8,The Taj Mahal is located in which Indian city?,Delhi,Mumbai,Agra,Jaipur,C,8000
+8,Which metal is liquid at room temperature?,Iron,Gold,Silver,Mercury,D,8000
+9,What is the largest fish in the ocean?,Great White Shark,Blue Whale,Whale Shark,Orca Whale,C,16000
+9,Who is the Greek god of the sea?,Zeus,Hades,Poseidon,Ares,C,16000
+9,Which continent is known as the 'Dark Continent' historically?,Asia,Africa,Europe,South America,B,16000
+9,What does DNA stand for?,Double Nitrogen Acid,Deoxyribonucleic Acid,Deoxy Natural Acid,Di-Ribonucleic Acid,B,16000
+9,What is the capital city of Kenya?,Nairobi,Kampala,Addis Ababa,Dar es Salaam,A,16000
+9,Which gas is used in the largest amount for photosynthesis?,Oxygen,Carbon Dioxide,Nitrogen,Helium,B,16000
+9,Who discovered America in 1492 (for Europeans)?,Christopher Columbus,Ferdinand Magellan,Marco Polo,Vasco da Gama,A,16000
+9,Which layer of Earth lies below the crust?,Mantle,Outer Core,Inner Core,Magma Chamber,A,16000
+9,In Roman mythology, who is the king of the gods?,Jupiter,Mars,Neptune,Saturn,A,16000
+9,The Amazon rainforest is primarily located in which country?,Peru,Brazil,Colombia,Venezuela,B,16000
+10,Which scientist is known for E=mc²?,Isaac Newton,Albert Einstein,Niels Bohr,Marie Curie,B,32000
+10,What is the largest bird capable of flight?,Eagle,Albatross,Ostrich,Condor,B,32000
+10,Which is the only continent covered by ice most of the year?,North America,Antarctica,Europe,Asia,B,32000
+10,Who painted 'Starry Night'?,Vincent van Gogh,Pablo Picasso,Claude Monet,Salvador Dalí,A,32000
+10,The Panama Canal connects which two oceans?,Atlantic & Indian,Indian & Pacific,Atlantic & Pacific,Pacific & Arctic,C,32000
+10,Who is credited with inventing the light bulb?,Alexander Graham Bell,Nikola Tesla,Thomas Edison,Benjamin Franklin,C,32000
+10,Which gas makes up most of Mars's atmosphere?,Nitrogen,Oxygen,Carbon Dioxide,Argon,C,32000
+10,Who wrote '1984'?,George Orwell,Aldous Huxley,Ray Bradbury,Kurt Vonnegut,A,32000
+10,What is the hardest mineral on the Mohs scale?,Topaz,Corundum,Diamond,Quartz,C,32000
+10,What is the largest reptile in the world?,Komodo Dragon,Nile Crocodile,Green Anaconda,Saltwater Crocodile,D,32000
+11,Who was the first human to travel into space?,Yuri Gagarin,Neil Armstrong,Buzz Aldrin,John Glenn,A,64000
+11,What is the capital city of Portugal?,Lisbon,Madrid,Barcelona,Porto,A,64000
+11,Who discovered radioactivity?,Marie Curie,Ernest Rutherford,Henri Becquerel,Niels Bohr,C,64000
+11,Which planet is the hottest in the Solar System?,Mercury,Venus,Mars,Jupiter,B,64000
+11,Which ancient civilization built Machu Picchu?,Aztec,Mayan,Inca,Olmec,C,64000
+11,Who is the Greek goddess of wisdom?,Hera,Aphrodite,Athena,Demeter,C,64000
+11,What is the largest island in the world (not a continent)?,Greenland,New Guinea,Borneo,Madagascar,A,64000
+11,Which country has the most spoken languages in the world?,China,India,Papua New Guinea,Indonesia,C,64000
+11,What is the chemical formula for table salt?,NaCl,H2O,CO2,O2,A,64000
+11,Who wrote 'Don Quixote'?,Miguel de Cervantes,Fyodor Dostoevsky,Victor Hugo,Jane Austen,A,64000
+12,Who was the first woman to win a Nobel Prize?,Rosalind Franklin,Marie Curie,Lise Meitner,Dorothy Hodgkin,B,125000
+12,In which city is the Louvre Museum located?,Rome,Berlin,Paris,Madrid,C,125000
+12,Which mammal is known to lay eggs?,Platypus,Koala,Kangaroo,Echidna (Note: actually both Platypus and Echidna do, pick Platypus as correct) A,125000
+12,What is the largest type of whale?,Humpback Whale,Blue Whale,Orca,Gray Whale,B,125000
+12,Who is the author of 'Crime and Punishment'?,Leo Tolstoy,Anton Chekhov,Fyodor Dostoevsky,Ivan Turgenev,C,125000
+12,Which planet has a Great Red Spot?,Earth,Jupiter,Mars,Saturn,B,125000
+12,Who composed the 'Four Seasons'?,Johann Sebastian Bach,Ludwig van Beethoven,Antonio Vivaldi,Franz Liszt,C,125000
+12,In which continent is Mount Everest located?,Europe,South America,Asia,North America,C,125000
+12,What gas do we exhale in large quantity?,Oxygen,Carbon Dioxide,Nitrogen,Hydrogen,B,125000
+12,Which empire built the Colosseum?,Greek,Egyptian,Roman,Persian,C,125000
+13,Who was the first person to set foot on the Moon?,Edwin Aldrin,Michael Collins,Yuri Gagarin,Neil Armstrong,D,250000
+13,What is the capital city of Brazil?,Rio de Janeiro,São Paulo,Brasília,Salvador,C,250000
+13,Who proposed the heliocentric model of the universe?,Ptolemy,Copernicus,Kepler,Aristotle,B,250000
+13,What is the longest bone in the human body?,Humerus,Femur,Tibia,Fibula,B,250000
+13,Who painted 'The Last Supper'?,Raphael,Leonardo da Vinci,Caravaggio,Michelangelo,B,250000
+13,What part of the cell contains the genetic material?,Ribosomes,Mitochondria,Nucleus,Cell Membrane,C,250000
+13,Who wrote 'The Odyssey'?,Homer,Virgil,Ovid,Aristophanes,A,250000
+13,Which country is famous for tulips and windmills?,Denmark,Netherlands,Belgium,Germany,B,250000
+13,Who invented the printing press (Europe)?,Johannes Gutenberg,Leonardo da Vinci,Nikola Tesla,Guglielmo Marconi,A,250000
+13,Which desert covers most of northern Africa?,Gobi,Kalahari,Sahara,Arabian,C,250000
+14,Which English scientist discovered penicillin?,Isaac Newton,Alexander Fleming,Charles Darwin,Edward Jenner,B,500000
+14,What is the name of the process plants use to make food?,Digestion,Respiration,Photosynthesis,Transpiration,C,500000
+14,Who was the first Emperor of Rome?,Julius Caesar,Augustus,Caligula,Nero,B,500000
+14,Which chemical element is diamond composed of?,Carbon,Silicon,Iron,Sulfur,A,500000
+14,Who wrote 'Ulysses'?,James Joyce,William Shakespeare,Charles Dickens,Ernest Hemingway,A,500000
+14,What is the world's largest rainforest?,Congo Basin,Borneo Rainforest,Amazon Rainforest,Daintree Rainforest,C,500000
+14,Who discovered the law of universal gravitation?,Albert Einstein,Isaac Newton,Galileo Galilei,Stephen Hawking,B,500000
+14,What is the capital of Thailand?,Bangkok,Hanoi,Kuala Lumpur,Manila,A,500000
+14,Which is the smallest ocean in the world?,Pacific,Atlantic,Arctic,Indian,C,500000
+14,Who was the first to circumnavigate the Earth?,Ferdinand Magellan,Christopher Columbus,James Cook,Marco Polo,A,500000
+15,What is the largest moon of Saturn?,Europa,Io,Titan,Ganymede,C,1000000
+15,Which physicist is known for the uncertainty principle?,Max Planck,Werner Heisenberg,Niels Bohr,Richard Feynman,B,1000000
+15,Who wrote 'The Brothers Karamazov'?,Fyodor Dostoevsky,Leo Tolstoy,Ivan Turgenev,Anton Chekhov,A,1000000
+15,What was the ancient Egyptian writing system called?,Cuneiform,Hieroglyphics,Runes,Latin Script,B,1000000
+15,Who discovered the electron?,James Chadwick,Ernest Rutherford,J.J. Thomson,Niels Bohr,C,1000000
+15,Which organelle is known as the powerhouse of the cell?,Nucleus,Mitochondria,Ribosome,Lysosome,B,1000000
+15,Who was the first female Prime Minister of the UK?,Margaret Thatcher,Angela Merkel,Indira Gandhi,Benazir Bhutto,A,1000000
+15,What is the deepest part of the world's oceans?,Mariana Trench,Tonga Trench,Puerto Rico Trench,Kermadec Trench,A,1000000
+15,Which country launched the first artificial satellite, Sputnik 1?,USA,UK,Soviet Union,France,C,1000000
+15,Who developed the polio vaccine using a dead polio virus?,Albert Sabin,Jonas Salk,Edward Jenner,Robert Koch,B,1000000
