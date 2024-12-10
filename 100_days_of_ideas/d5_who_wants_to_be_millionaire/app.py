@@ -12,11 +12,11 @@ app.secret_key = 'your_secret_key'  # Replace with a secure key
 DB_NAME = 'millionaire_game.db'
 CSV_FILE = 'questions.csv'
 
-# We will have 15 questions in the game (1 per difficulty level from 1 to 15)
+# We plan for a total of 15 questions in the game
 TOTAL_QUESTIONS = 15
 
 # Global dictionary to store questions by difficulty
-# Format: {difficulty_number: [ {question_data}, ... ] }
+# {difficulty_number: [ {question_data}, ... ] }
 QUESTIONS_BY_DIFF = {}
 
 def setup_database():
@@ -128,7 +128,7 @@ def index():
             # Pick the first question now
             question = pick_question_for_current_difficulty()
             if question is None:
-                # No questions available for difficulty 1 - end game immediately
+                # No questions available for difficulty 1
                 return render_template('game.html', game_over=True, total_prize=0, done=False)
             session['current_question'] = question
             return redirect(url_for('game'))
@@ -145,31 +145,27 @@ def game():
     milestone_prize = session.get('milestone_prize', 0)
     question = session.get('current_question', None)
 
-    # Check if we reached end of game (answered all 15 questions)
+    # Check if user completed all questions
     if current_index >= TOTAL_QUESTIONS:
-        # All questions answered correctly
-        # The last milestone (Q15) prize is guaranteed.
-        # Q15 = index 14
-        final_prize = session['milestone_prize']
+        # Completed all 15 questions
+        final_prize = milestone_prize
         if unique_id:
             update_final_prize(unique_id, final_prize)
         return render_template('game.html', done=True, total_prize=final_prize, game_over=False)
 
-    # If we have no question loaded in session, try to pick one
+    # If we don't have a current question in session, try to pick one
     if question is None:
-        # Pick a question for current difficulty
         question = pick_question_for_current_difficulty()
         if question is None:
-            # No questions available - end game (though this shouldn't happen if CSV is large enough)
-            final_prize = milestone_prize
+            # No questions available for this difficulty
             if unique_id:
-                update_final_prize(unique_id, final_prize)
-            return render_template('game.html', game_over=True, total_prize=final_prize, done=False)
+                update_final_prize(unique_id, milestone_prize)
+            return render_template('game.html', game_over=True, total_prize=milestone_prize, done=False)
         session['current_question'] = question
 
     if request.method == 'POST':
         if 'fifty_fifty' in request.form and not fifty_fifty_used:
-            # Use 50:50 lifeline
+            # Use 50:50
             correct = question['correct']
             all_opts = ['A','B','C','D']
             all_opts.remove(correct)
@@ -179,29 +175,26 @@ def game():
             session['fifty_fifty_used'] = True
             session['current_question'] = question
         else:
-            # User selected an answer
             chosen = request.form.get('answer')
             if chosen == question['correct']:
                 # Correct answer
-                # Check if we hit a milestone: Q5, Q10, Q15
+                # Check milestones:
                 # Q5 = index 4, Q10 = index 9, Q15 = index 14
-                if current_index == 4:   # just answered Q5
+                if current_index == 4:
                     milestone_prize = question['prize']
-                elif current_index == 9: # just answered Q10
+                elif current_index == 9:
                     milestone_prize = question['prize']
-                elif current_index == 14: # just answered Q15
+                elif current_index == 14:
                     milestone_prize = question['prize']
 
                 session['milestone_prize'] = milestone_prize
-
                 session['current_question_index'] = current_index + 1
                 session['fifty_fifty_used'] = False
-                session.pop('current_question', None)  # Clear current question to pick next one
+                session.pop('current_question', None)  # Clear for next pick
 
-                # If all questions answered:
                 if session['current_question_index'] >= TOTAL_QUESTIONS:
-                    # Completed all 15 questions correctly
-                    final_prize = milestone_prize  # Q15 prize
+                    # All questions answered
+                    final_prize = milestone_prize
                     if unique_id:
                         update_final_prize(unique_id, final_prize)
                     return render_template('game.html', done=True, total_prize=final_prize, game_over=False)
@@ -209,7 +202,7 @@ def game():
                 # Pick next question
                 next_question = pick_question_for_current_difficulty()
                 if next_question is None:
-                    # No questions available for next difficulty - end game but award milestone
+                    # No questions available for next difficulty
                     if unique_id:
                         update_final_prize(unique_id, milestone_prize)
                     return render_template('game.html', done=True, total_prize=milestone_prize, game_over=False)
@@ -217,20 +210,22 @@ def game():
                 return redirect(url_for('game'))
             else:
                 # Wrong answer
-                # User gets the last milestone_prize
                 if unique_id:
                     update_final_prize(unique_id, milestone_prize)
                 return render_template('game.html', game_over=True, total_prize=milestone_prize, done=False)
 
     # Filter out None options if 50:50 used
-    filtered_options = {k: v for k,v in question['options'].items() if v is not None}
+    filtered_options = {k: v for k, v in question['options'].items() if v is not None}
+    current_question_prize = question['prize']
 
     return render_template('game.html',
                            question=question,
                            options=filtered_options,
                            fifty_fifty_used=fifty_fifty_used,
                            done=False,
-                           game_over=False)
+                           game_over=False,
+                           milestone_prize=milestone_prize,
+                           current_question_prize=current_question_prize)
 
 if __name__ == '__main__':
     setup_database()
