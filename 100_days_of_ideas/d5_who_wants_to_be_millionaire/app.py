@@ -1,15 +1,22 @@
+from flask import Flask, render_template, request, redirect, url_for, session
 import sqlite3
-import csv
 import datetime
 import secrets
+import csv
+import os
 
-# ------------------------------------------------------------
-# Database Setup
-# ------------------------------------------------------------
-def setup_database(db_name="millionaire_game.db"):
-    conn = sqlite3.connect(db_name)
+app = Flask(__name__)
+app.secret_key = 'your_secret_key'  # Replace with a secure key
+
+DB_NAME = 'millionaire_game.db'
+CSV_FILE = 'questions.csv'
+
+# Global variable to store questions (not in session)
+QUESTIONS = []
+
+def setup_database():
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    # Create a table for user sessions if not exists
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS user_game (
             unique_id TEXT PRIMARY KEY,
@@ -22,13 +29,10 @@ def setup_database(db_name="millionaire_game.db"):
     conn.commit()
     conn.close()
 
-
-def insert_user(db_name, user_name):
-    conn = sqlite3.connect(db_name)
+def insert_user(user_name):
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
 
-    # Generate a unique ID
-    # Format: <date+name+random_6_digit_hex>
     date_str = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
     random_hex = secrets.token_hex(3)  # 6 hex digits
     unique_id = f"{date_str}_{user_name}_{random_hex}"
@@ -40,9 +44,8 @@ def insert_user(db_name, user_name):
     conn.close()
     return unique_id
 
-
-def update_final_prize(db_name, unique_id, prize):
-    conn = sqlite3.connect(db_name)
+def update_final_prize(unique_id, prize):
+    conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
     end_time = datetime.datetime.now().isoformat()
     cursor.execute("UPDATE user_game SET final_prize = ?, end_time = ? WHERE unique_id = ?",
@@ -50,21 +53,25 @@ def update_final_prize(db_name, unique_id, prize):
     conn.commit()
     conn.close()
 
-
-# ------------------------------------------------------------
-# Questions Handling
-# ------------------------------------------------------------
 def load_questions(csv_file):
-    """Load questions from CSV into a dictionary keyed by difficulty."""
-    questions_by_difficulty = {}
+    questions = []
+    if not os.path.exists(csv_file):
+        print(f"CSV file {csv_file} not found.")
+        return questions
+
     with open(csv_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            # print(row)
-            difficulty = int(row['difficulty'])
-            if difficulty not in questions_by_difficulty:
-                questions_by_difficulty[difficulty] = []
-            questions_by_difficulty[difficulty].append({
+            # Ensure prize and difficulty are integers
+            try:
+                difficulty = int(row['difficulty'])
+                prize = int(row['prize'])
+            except ValueError:
+                # Skip rows that have invalid integer fields
+                continue
+
+            question = {
+                'difficulty': difficulty,
                 'question': row['question'],
                 'options': {
                     'A': row['optionA'],
@@ -73,121 +80,89 @@ def load_questions(csv_file):
                     'D': row['optionD']
                 },
                 'correct': row['correct_answer'].strip().upper(),
-                'prize': int(row['prize'])
-            })
-    return questions_by_difficulty
+                'prize': prize
+            }
+            questions.append(question)
 
+    print("Total questions loaded:", len(questions))
+    return questions
 
-def get_question(questions_by_difficulty, difficulty):
-    """Get the next question for a given difficulty. 
-    If no question of that difficulty is left, return None."""
-    if difficulty not in questions_by_difficulty or not questions_by_difficulty[difficulty]:
-        return None
-    return questions_by_difficulty[difficulty].pop(0)
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    if request.method == 'POST':
+        user_name = request.form.get('username')
+        if user_name:
+            unique_id = insert_user(user_name)
+            session['user_name'] = user_name
+            session['unique_id'] = unique_id
+            session['current_question_index'] = 0
+            session['fifty_fifty_used'] = False
+            return redirect(url_for('game'))
+    return render_template('index.html')
 
+@app.route('/game', methods=['GET', 'POST'])
+def game():
+    if 'user_name' not in session:
+        return redirect(url_for('index'))
 
-# ------------------------------------------------------------
-# Game Logic
-# ------------------------------------------------------------
-def fifty_fifty_lifeline(question_data):
-    """Apply 50:50 lifeline to remove two incorrect options."""
-    correct = question_data['correct']
-    all_options = ['A', 'B', 'C', 'D']
-    all_options.remove(correct)  # remove correct answer from the pool
-    # randomly pick two incorrect to remove
-    to_remove = all_options[:2]  # simplified: just pick the first two incorrect
-    # Actually remove them from the question data's options
-    for opt in to_remove:
-        question_data['options'][opt] = None
-    return question_data
+    current_index = session.get('current_question_index', 0)
+    fifty_fifty_used = session.get('fifty_fifty_used', False)
+    unique_id = session.get('unique_id', None)
 
+    # If no questions loaded or no more questions
+    if current_index >= len(QUESTIONS) or len(QUESTIONS) == 0:
+        # No more questions or empty CSV
+        total_prize = QUESTIONS[-1]['prize'] if QUESTIONS else 0
+        if unique_id:
+            update_final_prize(unique_id, total_prize)
+        return render_template('game.html', done=True, total_prize=total_prize, game_over=False)
 
-def play_game(db_name, csv_file):
-    # Setup DB and load questions
-    setup_database(db_name)
-    questions_by_difficulty = load_questions(csv_file)
+    question = QUESTIONS[current_index]
 
-    # Get user name
-    user_name = input("Enter your name: ")
-    unique_id = insert_user(db_name, user_name)
-    print(f"Welcome, {user_name}! Your game ID is {unique_id}.")
-
-    # Initialize game state
-    current_difficulty = 1
-    total_prize = 0
-    fifty_fifty_available = True
-
-    print("Game Started! Let's play 'Who Wants to be a Millionaire?'")
-    print("You have one 50:50 lifeline available to remove two incorrect options.\n")
-
-    while True:
-        question_data = get_question(questions_by_difficulty, current_difficulty)
-        if not question_data:
-            # No more questions at this difficulty, increase difficulty
-            # If still no questions, end the game.
-            current_difficulty += 1
-            question_data = get_question(questions_by_difficulty, current_difficulty)
-            if not question_data:
-                # We ran out of questions entirely
-                print("Congratulations! You've answered all available questions.")
-                print(f"You leave with a total prize of {total_prize}.")
-                update_final_prize(db_name, unique_id, total_prize)
-                break
-
-        # Display the question
-        print(f"Difficulty {current_difficulty} Question:")
-        print(question_data['question'])
-
-        # Display options
-        for opt, val in question_data['options'].items():
-            if val is not None:
-                print(f"  {opt}: {val}")
-
-        # Ask if the user wants to use 50:50 if available
-        if fifty_fifty_available:
-            use_ff = input("Do you want to use 50:50 lifeline? (y/n): ").strip().lower()
-            if use_ff == 'y':
-                question_data = fifty_fifty_lifeline(question_data)
-                fifty_fifty_available = False
-                # Display options again after 50:50
-                print("\nAfter using 50:50, remaining options:")
-                for opt, val in question_data['options'].items():
-                    if val is not None:
-                        print(f"  {opt}: {val}")
-
-        # Get user answer
-        user_answer = input("Your answer (A/B/C/D) or type Q to quit: ").strip().upper()
-
-        if user_answer == 'Q':
-            print(f"You chose to quit. You leave with a total prize of {total_prize}.")
-            update_final_prize(db_name, unique_id, total_prize)
-            break
-
-        # Validate input
-        if user_answer not in ['A', 'B', 'C', 'D']:
-            print("Invalid choice. Game ends.")
-            print(f"You leave with a total prize of {total_prize}.")
-            update_final_prize(db_name, unique_id, total_prize)
-            break
-
-        # Check answer
-        if user_answer == question_data['correct']:
-            # Correct answer
-            total_prize = question_data['prize']
-            print("Correct Answer!")
-            print(f"You have won {total_prize} so far.\n")
-            # Increase difficulty after a correct answer
-            current_difficulty += 1
+    if request.method == 'POST':
+        if 'fifty_fifty' in request.form and not fifty_fifty_used:
+            # Use 50:50 lifeline
+            correct = question['correct']
+            all_opts = ['A','B','C','D']
+            all_opts.remove(correct)
+            to_remove = all_opts[:2]
+            for opt in to_remove:
+                question['options'][opt] = None
+            session['fifty_fifty_used'] = True
         else:
-            # Wrong answer
-            print("Wrong Answer!")
-            print(f"Game Over. You leave with {total_prize}.")
-            update_final_prize(db_name, unique_id, total_prize)
-            break
+            # User selected an answer
+            chosen = request.form.get('answer')
+            if chosen == question['correct']:
+                # Correct answer
+                session['current_question_index'] = current_index + 1
+                # If this was the last question, game ends
+                if session['current_question_index'] >= len(QUESTIONS):
+                    # All questions answered
+                    total_prize = question['prize']
+                    if unique_id:
+                        update_final_prize(unique_id, total_prize)
+                    return render_template('game.html', done=True, total_prize=total_prize, game_over=False)
+                return redirect(url_for('game'))
+            else:
+                # Wrong answer
+                last_prize = 0
+                if current_index > 0:
+                    last_prize = QUESTIONS[current_index - 1]['prize']
+                if unique_id:
+                    update_final_prize(unique_id, last_prize)
+                return render_template('game.html', game_over=True, total_prize=last_prize, done=False)
 
+    # Filter out None options if 50:50 used
+    filtered_options = {k: v for k,v in question['options'].items() if v is not None}
 
-if __name__ == "__main__":
-    # Example usage
-    db_name = "millionaire_game.db"
-    csv_file = "questions.csv"
-    play_game(db_name, csv_file)
+    return render_template('game.html',
+                           question=question,
+                           options=filtered_options,
+                           fifty_fifty_used=fifty_fifty_used,
+                           done=False,
+                           game_over=False)
+
+if __name__ == '__main__':
+    setup_database()
+    QUESTIONS = load_questions(CSV_FILE)  # Load questions once globally
+    app.run(debug=True)

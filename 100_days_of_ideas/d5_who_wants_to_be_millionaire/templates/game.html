@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Who Wants to Be a Millionaire?</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    {% if game_over %}
+        <div class="card">
+            <h2>Game Over!</h2>
+            <p>You leave with ${{ total_prize }}</p>
+            <a href="{{ url_for('index') }}" class="btn">Play Again</a>
+        </div>
+    {% elif done %}
+        <div class="card">
+            <h2>Congratulations!</h2>
+            <p>You completed all questions and won ${{ total_prize }}!</p>
+            <a href="{{ url_for('index') }}" class="btn">Play Again</a>
+        </div>
+    {% else %}
+        <div class="card">
+            <h2>{{ question.question }}</h2>
+            <form method="post">
+                <div class="options">
+                    {% for key, val in options.items() %}
+                        <label class="option">
+                            <input type="radio" name="answer" value="{{ key }}" required>
+                            <span>{{ key }}: {{ val }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                <div class="actions">
+                    {% if not fifty_fifty_used %}
+                    <button name="fifty_fifty" value="true" class="btn lifeline-btn">Use 50:50</button>
+                    {% endif %}
+                    <button type="submit" class="btn submit-btn">Submit</button>
+                </div>
+            </form>
+        </div>
+    {% endif %}
+</div>
+</body>
+</html>
