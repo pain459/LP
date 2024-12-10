@@ -87,7 +87,7 @@ difficulty,question,optionA,optionB,optionC,optionD,correct_answer,prize
 9,Which gas is used in the largest amount for photosynthesis?,Oxygen,Carbon Dioxide,Nitrogen,Helium,B,16000
 9,Who discovered America in 1492 (for Europeans)?,Christopher Columbus,Ferdinand Magellan,Marco Polo,Vasco da Gama,A,16000
 9,Which layer of Earth lies below the crust?,Mantle,Outer Core,Inner Core,Magma Chamber,A,16000
-9,In Roman mythology, who is the king of the gods?,Jupiter,Mars,Neptune,Saturn,A,16000
+9,In Roman mythology who is the king of the gods?,Jupiter,Mars,Neptune,Saturn,A,16000
 9,The Amazon rainforest is primarily located in which country?,Peru,Brazil,Colombia,Venezuela,B,16000
 10,Which scientist is known for E=mc²?,Isaac Newton,Albert Einstein,Niels Bohr,Marie Curie,B,32000
 10,What is the largest bird capable of flight?,Eagle,Albatross,Ostrich,Condor,B,32000
@@ -147,5 +147,5 @@ difficulty,question,optionA,optionB,optionC,optionD,correct_answer,prize
 15,Which organelle is known as the powerhouse of the cell?,Nucleus,Mitochondria,Ribosome,Lysosome,B,1000000
 15,Who was the first female Prime Minister of the UK?,Margaret Thatcher,Angela Merkel,Indira Gandhi,Benazir Bhutto,A,1000000
 15,What is the deepest part of the world's oceans?,Mariana Trench,Tonga Trench,Puerto Rico Trench,Kermadec Trench,A,1000000
-15,Which country launched the first artificial satellite, Sputnik 1?,USA,UK,Soviet Union,France,C,1000000
+15,Which country launched the first artificial satellite Sputnik 1?,USA,UK,Soviet Union,France,C,1000000
 15,Who developed the polio vaccine using a dead polio virus?,Albert Sabin,Jonas Salk,Edward Jenner,Robert Koch,B,1000000

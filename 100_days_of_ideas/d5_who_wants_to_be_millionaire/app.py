@@ -60,6 +60,7 @@ def load_questions(csv_file):
     with open(csv_file, 'r', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
+            # print(row)
             difficulty = int(row['difficulty'])
             if difficulty not in questions_by_difficulty:
                 questions_by_difficulty[difficulty] = []
