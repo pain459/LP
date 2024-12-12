@@ -15,6 +15,7 @@ if not os.path.exists(DATALAKE_DIR):
 def log_metric():
     # Generate a random metric: "up" or "down"
     metric_status = random.choice(["up", "down"])
+    # time.sleep(5)
     timestamp = int(time.time())
 
     # Create a metric record
