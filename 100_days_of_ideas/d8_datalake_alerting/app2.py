@@ -10,7 +10,7 @@ period = 60  # total minutes in an hour
 timestamps = [base_time + timedelta(minutes=i) for i in range(period)]
 
 # Simulate a status metric: 1 = Up, 0 = Down
-# We’ll have a certain probability of being down to mimic noise.
+# Introduce a certain probability of being down
 status = np.random.choice([1, 0], size=period, p=[0.9, 0.1])
 
 df = pd.DataFrame({
@@ -18,48 +18,49 @@ df = pd.DataFrame({
     'status': status
 })
 
-# Sort by timestamp just to ensure proper ordering
+# Sort by timestamp to ensure proper ordering
 df = df.sort_values('timestamp')
+
+# Write the original data to a CSV file for comparison
+df.to_csv('original_metrics.csv', index=False)
+print("Original metrics stored in 'original_metrics.csv'")
 
 # -------------------------
 # Step 2: Analyze Data in 7-Minute Intervals
 # -------------------------
-# We want to check metrics continuously every 7 minutes. One approach:
-# - Consider a rolling window of 7 minutes and analyze the sub-period.
-# - A “rolling” or “sliding” window can help detect short-term trends like consecutive downs.
-
-# First, set the timestamp as an index to resample and manage time-based operations easily.
+# Set timestamp as index
 df = df.set_index('timestamp')
+df = df.sort_index()
 
-# The frequency of the data is every 1 minute. We can now create a rolling window of 7 minutes.
-# One subtlety: When using rolling windows on time-indexed data, ensure the data is properly
-# sorted and has a proper frequency set. Pandas can use time-based offsets like '7min'.
-
-df = df.sort_index()  # Just to ensure correct order by time.
-
-# For each minute, consider the last 7 minutes of data and check conditions.
-# Example condition: If the system has been down for more than half of the last 7 minutes,
-# we trigger an alert.
-
+# Compute a rolling sum of downs over a 7-minute window
 window = '7min'
-
-# Compute a rolling sum of downs over a 7-minute window.
 df['down_count_7min'] = df['status'].rolling(window=window).apply(lambda x: (x == 0).sum(), raw=False)
 
-# Let's define a condition:
-# Alert if, within any 7-minute window, the system was down >= 3 times (for instance).
-alert_condition = df['down_count_7min'] >= 3
-
-alerts = df[alert_condition]
+# Define alert condition: if down_count_7min >= 3 at any given minute
+df['alert_triggered'] = df['down_count_7min'] >= 3
 
 # -------------------------
-# Step 3: Report Alerts
+# Step 3: Write Aggregated Data and Alerts to CSV
 # -------------------------
+# Reset index so timestamp is a column again
+df_aggregated = df.reset_index()
+
+df_aggregated.to_csv('aggregated_alerts.csv', index=False)
+print("Aggregated results (with rolling 7-minute down counts) stored in 'aggregated_alerts.csv'")
+
+# -------------------------
+# Step 4: Print Summary / Comparison
+# -------------------------
+alerts = df_aggregated[df_aggregated['alert_triggered'] == True]
+
 if not alerts.empty:
     print("ALERTS TRIGGERED:")
-    # Each row indicates a point in time where the last 7 minutes had 3 or more downs.
-    # You may want to deduplicate or refine logic to trigger only once per event.
-    for ts, row in alerts.iterrows():
-        print(f"ALERT: At {ts}, {int(row['down_count_7min'])} downs in the last 7 minutes.")
+    for _, row in alerts.iterrows():
+        print(f"ALERT: At {row['timestamp']}, {int(row['down_count_7min'])} downs in the last 7 minutes.")
 else:
-    print("No alerts triggered in this time period.")
+    print("No alerts triggered in this period.")
+
+# Additional Comparison:
+# Just printing how many times the system was down in total
+total_downs = (df_aggregated['status'] == 0).sum()
+print(f"Total downs in the hour: {total_downs}")
