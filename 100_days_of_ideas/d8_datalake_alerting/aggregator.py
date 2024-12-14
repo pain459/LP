@@ -19,7 +19,7 @@ df_aggregated = df.reset_index()
 
 # Write the aggregated results to a new CSV file
 df_aggregated.to_csv('aggregated_alerts.csv', index=False)
-print("Aggregated alert results stored in 'aggregated_alerts.csv'.")
+print("Aggregated alert results stored in 'aggregated_alerts_1.csv'.")
 
 # Print a summary of alerts
 alerts = df_aggregated[df_aggregated['alert_triggered'] == True]

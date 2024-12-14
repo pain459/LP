@@ -9,7 +9,7 @@ timestamps = [base_time + timedelta(minutes=i) for i in range(period)]
 
 # Simulate status: 1 = Up, 0 = Down
 # Let's say there's a 10% chance of being down to mimic noise.
-status = np.random.choice([1, 0], size=period, p=[0.9, 0.1])
+status = np.random.choice([1, 0], size=period, p=[0.95, 0.05])
 
 df = pd.DataFrame({
     'timestamp': timestamps,
