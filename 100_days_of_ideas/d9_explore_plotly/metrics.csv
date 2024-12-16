@@ -1,0 +1,13 @@
+client,triggered_count,total_retriggers,total_notifications,point1,point2,point3
+client1,2,0,2,0,0,1
+client2,22,6,28,10,0,18
+client3,4,0,4,4,0,0
+client4,13,9,22,0,0,19
+client5,5,2,7,0,0,6
+client6,1,43,44,0,0,0
+client7,18,4,22,0,0,21
+client8,6,3,9,0,0,9
+client9,1,1,2,0,0,0
+client10,2,0,2,0,0,2
+client11,65,157,222,1,0,163
+client12,32,36,68,1,0,63
