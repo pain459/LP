@@ -1,0 +1,80 @@
+Launch docker container
+docker run --name treenode-db -e MYSQL_ROOT_PASSWORD=rootpwd -e MYSQL_DATABASE=treenode_db -p 3306:3306 -d mysql:8
+
+connect to container
+docker exec -it treenode-db mysql -u root -p
+
+use rootpwd when prompted and use the database we created.
+USE treenode_db;
+
+create a table
+CREATE TABLE TreeNodes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    parent_id INT,
+    FOREIGN KEY (parent_id) REFERENCES TreeNodes(id)
+);
+
+Insert sample data
+-- Root nodes:
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Books', NULL);
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Magazines', NULL);
+
+-- For reference, let's find out what IDs we got:
+SELECT * FROM TreeNodes;
+
+
+Assume Books is id=1 and Magazines is id=2. Continue inserting children:
+
+-- Children of "Books" (id=1):
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Fiction', 1);
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Non-Fiction', 1);
+
+-- Find their IDs:
+SELECT * FROM TreeNodes;
+
+-- Suppose Fiction = 3, Non-Fiction = 4
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Sci-Fi', 3);
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Fantasy', 3);
+INSERT INTO TreeNodes (name, parent_id) VALUES ('History', 4);
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Science', 4);
+
+-- Children of "Magazines" (id=2)
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Fashion', 2);
+INSERT INTO TreeNodes (name, parent_id) VALUES ('Technology', 2);
+
+
+Verify the data
+
+SELECT * FROM TreeNodes;
+
+
+Run queries
+
+Find all children of "Fiction" (id=3):
+
+SELECT * FROM TreeNodes WHERE parent_id = 3;
+
+
+This should return Sci-Fi and Fantasy.
+
+Join to find a node's parent, for example, "Fantasy" (id=6):
+
+SELECT p.* 
+FROM TreeNodes AS c 
+JOIN TreeNodes AS p ON c.parent_id = p.id
+WHERE c.id = 6;
+
+
+Experimental with recursive queries
+
+WITH RECURSIVE all_descendants AS (
+    SELECT id, name, parent_id
+    FROM TreeNodes
+    WHERE id = 1  -- Start at "Books"
+    UNION ALL
+    SELECT t.id, t.name, t.parent_id
+    FROM TreeNodes t
+    INNER JOIN all_descendants ad ON t.parent_id = ad.id
+)
+SELECT * FROM all_descendants;
