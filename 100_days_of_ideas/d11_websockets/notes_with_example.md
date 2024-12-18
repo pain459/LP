@@ -37,3 +37,68 @@ A common pattern to solve this problem is:
 
 **In Summary:**  
 WebSockets allow you to maintain a steady, outbound-initiated communication channel that Slack can indirectly use to trigger actions inside your private network. This setup avoids initiating inbound connections from outside, increases security, and simplifies the communication model by leveraging a single persistent connection.
+
+**Overview**  
+When integrating a Slack-based application with an internal WebSocket-connected service, you need to ensure that every message passing through your setup is authenticated and trustworthy. Authentication in this scenario involves validating two layers:
+
+1. **External Layer (Slack to Relay Service):** Confirm that incoming requests from Slack are legitimate Slack events.
+2. **Internal Layer (Relay Service to Internal Service Over WebSocket):** Ensure that the messages you send through the WebSocket are authenticated so that your internal service trusts them, and that messages can’t be injected or tampered with en route.
+
+**Slack Authentication (External Layer)**  
+Slack provides a mechanism to authenticate requests using a "signing secret." Each request from Slack includes a signature in the `X-Slack-Signature` header and a timestamp in the `X-Slack-Request-Timestamp` header. Your relay (the publicly accessible endpoint) should:
+
+1. **Verify Slack Signatures:**  
+   - Extract the `X-Slack-Signature` and `X-Slack-Request-Timestamp` from the headers.
+   - Compute the expected signature by concatenating `v0:` with the timestamp, a colon, and the raw request body, then hashing it with HMAC-SHA256 using the Slack signing secret.
+   - Compare the computed hash with the `X-Slack-Signature`. If they match, the request is authentic.
+
+2. **Check Timestamp Freshness:**  
+   - Ensure that the timestamp isn’t too old (e.g., older than 5 minutes) to avoid replay attacks.
+
+3. **If Verification Succeeds:**  
+   - You know that Slack is the legitimate source of this request and you can trust the payload.  
+   
+   If verification fails, immediately return an unauthorized response and do not forward anything downstream.
+
+**Internal WebSocket Authentication (Internal Layer)**  
+Once the relay service has verified that an incoming event or command is authentic from Slack, it must now ensure that the internal service trusts the messages sent over the WebSocket. Here are some strategies:
+
+1. **Secure WebSocket Connection Establishment:**  
+   - **mTLS (Mutual TLS):** Use a Transport Layer Security connection between the relay and the internal service. Both sides present certificates (client and server certs), ensuring a secure, cryptographically verified tunnel. Even if someone tries to impersonate the relay, they won’t have the proper certificate to complete the handshake.
+   - **Token-Based Authentication on the WebSocket Handshake:**  
+     - During the initial WebSocket handshake (an HTTP Upgrade request), the internal service can require a short-lived bearer token or signed JWT.  
+     - The relay obtains this token from a secure token service or has it pre-configured. On handshake, the relay includes the token in the request headers.  
+     - The internal service verifies the token’s validity, origin, expiration, and signature before upgrading the connection.  
+     - Once established, the connection is considered authenticated for all future messages until the connection closes.
+
+2. **Signed Payloads:**  
+   Even if the WebSocket connection is authenticated at the start, you might want to ensure each payload is also cryptographically signed:
+   - **HMAC Signatures:** Before sending a message over the WebSocket, the relay could attach a signature. The internal service (which shares a secret key) verifies this signature before processing the message. If a message arrives without a correct signature, it’s rejected.
+   - **JWT-Payload per Message:** For each message, embed a JWT or a signed token that asserts who the sender is and what the message represents. The internal service verifies the JWT signature using a known public key or secret.
+
+3. **Role-Based Access Control (RBAC) & Claims:**  
+   Use claims within the JWT or embedded metadata to specify what actions are permitted. This way, even if the relay is compromised, actions are restricted to what the token allows.
+
+4. **Short-Lived Sessions & Rotation:**  
+   Limit how long a WebSocket session can remain open, or periodically rotate credentials:
+   - After a certain period, the relay must re-authenticate or re-establish the connection with a fresh token.
+   - If suspicious activity is detected, invalidate the token on the internal service and force a new handshake.
+
+**Bringing It All Together:**
+
+1. **From Slack to Relay:**  
+   - Slack sends a `/command` request. The relay checks the Slack signing secret. If valid, the relay now “trusts” the request.
+
+2. **Relay to Internal Service Over WebSocket:**  
+   - The relay initially established a secure WebSocket session using mTLS or a trusted JWT at handshake.
+   - For each Slack-initiated message, the relay signs the payload or includes a secure token.
+   - The internal service verifies the token/signature before acting on it, ensuring messages can’t be forged mid-stream.
+
+3. **Response Path:**  
+   - If the internal service sends data back through the WebSocket, it may also sign or secure its responses to maintain trust in both directions.
+   - The relay then safely returns the response to Slack, knowing it came from a trusted and authenticated source.
+
+**In Summary:**  
+- **Externally:** Verify Slack requests with Slack signing secrets.
+- **Internally:** Authenticate the initial WebSocket handshake with strong credentials (mTLS, JWT) and consider signing or tokenizing each message payload.
+- **Continuous Verification:** Employ timestamps, short-lived tokens, and rolling credentials to minimize the risk if any credential is ever compromised.
