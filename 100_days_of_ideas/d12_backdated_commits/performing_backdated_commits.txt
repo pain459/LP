@@ -1,0 +1,15 @@
+1. stage changes
+
+git add <file_name>
+or 
+git add .  # for all changes.
+
+2. perform a commit with a backdated timestamp.
+
+git commit --date="YYYY-MM-DD HH:MM:SS" -m "message"
+
+git commit --date="2024-12-25 15:30:00" -m "backdated commit"
+
+3. verify the commit
+
+git log --pretty=fuller
