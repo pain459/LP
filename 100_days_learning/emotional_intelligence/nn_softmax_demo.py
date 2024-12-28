@@ -25,7 +25,8 @@ num_classes = 3  # Output layer for 3 classes (postive, neutral, negative)
 model = SimpleNN(input_size, hidden_size, num_classes)
 
 # Step 3: Enable input Tensor
-
+# Simulate input data (embeddings for 5 tokens)
+example_input = torch.tensor([[0.5, 1.0, -0.5, 2.0, -1.0]])  # shape: (1, 5)
 
 # Step 4: Forward pass through network
 
