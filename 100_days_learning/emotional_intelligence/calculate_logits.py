@@ -14,3 +14,6 @@ outputs = model(**inputs)
 logits = outputs.logits
 
 print(logits) # Raw scores for each class
+
+# Expecting the output
+# tensor([[-3.3285,  3.5351]], grad_fn=<AddmmBackward0>)
