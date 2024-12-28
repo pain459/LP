@@ -29,9 +29,15 @@ model = SimpleNN(input_size, hidden_size, num_classes)
 example_input = torch.tensor([[0.5, 1.0, -0.5, 2.0, -1.0]])  # shape: (1, 5)
 
 # Step 4: Forward pass through network
-
+logits = model(example_input)  # raw logits
+print("Logits (Raw Outputs):")
+print(logits)
 
 # Step 5: Apply Softmax to Convert Logits to probabilities
-
+probabilities = F.softmax(logits, dim=1)
+print("\nProbabilities (After Softmax):")
+print(probabilities)
 
 # Step 6: Predicted Class
+predicted_class = torch.argmax(probabilities, dim=1)
+print("\nPredicted Class:", predicted_class.item())
