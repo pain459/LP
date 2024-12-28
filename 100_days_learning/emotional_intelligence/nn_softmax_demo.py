@@ -19,7 +19,10 @@ class SimpleNN(nn.Module):
 
 
 # Step 2: Instantiate the network
-
+input_size = 5  # Example input size (5 tokens represented as numbers)
+hidden_size = 3  # Hidden layer has 3 neurons
+num_classes = 3  # Output layer for 3 classes (postive, neutral, negative)
+model = SimpleNN(input_size, hidden_size, num_classes)
 
 # Step 3: Enable input Tensor
 
