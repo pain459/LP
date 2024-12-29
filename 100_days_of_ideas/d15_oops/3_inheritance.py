@@ -1,3 +1,7 @@
+'''
+Inheritance allows a class (child) to inherit attributes and methods from another class (parent).
+'''
+
 class Animal:
     def __init__(self, name):
         self.name = name

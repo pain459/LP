@@ -1,3 +1,11 @@
+'''
+Encapsulation bundles the data (attributes) and methods (functions) into a single unit. Access to the data can be controlled using access specifiers:
+
+Public: Accessible from anywhere.
+Private: Accessible only within the class (prefix with _ or __).
+
+'''
+
 class Person:
     def __init__(self, name, age):
         self.name = name  # Public attribute
