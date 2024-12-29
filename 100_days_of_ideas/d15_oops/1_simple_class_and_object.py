@@ -13,6 +13,7 @@ class Dog:
 # create an object (instance of the class)
 my_dog = Dog("Buddy", "Doberman")
 my_dog2 = Dog("Labrador", "Jackie")
+my_dog3 = Dog(breed="Indie", name="Robin")
 
 
 
@@ -22,5 +23,12 @@ print(my_dog.bark())
 print(my_dog.breed)
 
 # Access in reverse. Testing positional arguments
+print("\n")
 print(my_dog2.name)  # Should print Labrador
 print(my_dog2.breed)  # Should print Jackie
+
+
+# Access the named attributes
+print("\n")
+print(my_dog3.name)
+print(my_dog3.breed)
