@@ -1,0 +1,11 @@
+
+In Python, a lambda function is a small, anonymous function defined with the keyword lambda. Unlike regular functions created using def, lambda functions are limited to a single expression and can have multiple arguments. The result of the expression is automatically returned without needing an explicit return statement.
+
+
+Syntax:
+lambda arguments: expression
+
+Key Points:
+lambda functions are typically used for short, simple operations.
+They are often used when you need a function for a short period and don't want to define it using def.
+lambda functions can be passed as arguments to higher-order functions like map, filter, and reduce.
