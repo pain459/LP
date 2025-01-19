@@ -12,7 +12,7 @@ date,day,working_day
 2025-01-11,Saturday,0
 2025-01-12,Sunday,0
 2025-01-13,Monday,1
-2025-01-14,Tuesday,1
+2025-01-14,Tuesday,0
 2025-01-15,Wednesday,1
 2025-01-16,Thursday,1
 2025-01-17,Friday,1
@@ -74,7 +74,7 @@ date,day,working_day
 2025-03-14,Friday,1
 2025-03-15,Saturday,0
 2025-03-16,Sunday,0
-2025-03-17,Monday,1
+2025-03-17,Monday,0
 2025-03-18,Tuesday,1
 2025-03-19,Wednesday,1
 2025-03-20,Thursday,1
@@ -102,11 +102,11 @@ date,day,working_day
 2025-04-11,Friday,1
 2025-04-12,Saturday,0
 2025-04-13,Sunday,0
-2025-04-14,Monday,1
+2025-04-14,Monday,0
 2025-04-15,Tuesday,1
 2025-04-16,Wednesday,1
 2025-04-17,Thursday,1
-2025-04-18,Friday,1
+2025-04-18,Friday,0
 2025-04-19,Saturday,0
 2025-04-20,Sunday,0
 2025-04-21,Monday,1
@@ -119,7 +119,7 @@ date,day,working_day
 2025-04-28,Monday,1
 2025-04-29,Tuesday,1
 2025-04-30,Wednesday,1
-2025-05-01,Thursday,1
+2025-05-01,Thursday,0
 2025-05-02,Friday,1
 2025-05-03,Saturday,0
 2025-05-04,Sunday,0
@@ -273,7 +273,7 @@ date,day,working_day
 2025-09-29,Monday,1
 2025-09-30,Tuesday,1
 2025-10-01,Wednesday,1
-2025-10-02,Thursday,1
+2025-10-02,Thursday,0
 2025-10-03,Friday,1
 2025-10-04,Saturday,0
 2025-10-05,Sunday,0
@@ -292,7 +292,7 @@ date,day,working_day
 2025-10-18,Saturday,0
 2025-10-19,Sunday,0
 2025-10-20,Monday,1
-2025-10-21,Tuesday,1
+2025-10-21,Tuesday,0
 2025-10-22,Wednesday,1
 2025-10-23,Thursday,1
 2025-10-24,Friday,1
