@@ -18,3 +18,17 @@ Successfully updated member1 on 2024-01-30 to off.
 
 Error:
 Error: Cannot mark a weekend (Sunday) as a working day without override enabled.
+
+----
+
+Print Report:
+$ python team_calendar_util.py --start_date 20240101 --end_date 20241231 --print_report
+
+Purge a Member:
+$ python team_calendar_util.py --purge_member member2
+
+Get Total Working Days for a Specific Member:
+$ python team_calendar_util.py --start_date 20240101 --end_date 20241231 --member member1
+
+Get Total Working Days for All Members:
+$ python team_calendar_util.py --start_date 20240101 --end_date 20241231
