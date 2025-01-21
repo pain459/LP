@@ -1,0 +1,20 @@
+Example Usage:
+
+Mark member1 as off (0) on 2024-01-30:
+$ python modify_working_day.py 20240130 member1 0
+
+Mark member2 as working (1) on a Saturday with override:
+$ python modify_working_day.py 20240127 member2 1 --allow_weekend_override
+
+Attempt to mark member3 as working on a weekend without override (will fail):
+$ python modify_working_day.py 20240128 member3 1
+
+----
+
+Output Examples:
+
+Success:
+Successfully updated member1 on 2024-01-30 to off.
+
+Error:
+Error: Cannot mark a weekend (Sunday) as a working day without override enabled.
