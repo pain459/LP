@@ -11,14 +11,14 @@ spec:
   pollingInterval: 30
   cooldownPeriod: 30
   minReplicaCount: 0
-  maxReplicaCount: 3
+  maxReplicaCount: 30
   triggers:
     - type: cron
       metadata:
         # This cron expression scales to 2 replicas from minute 0 to minute 5 of every hour
         # The "start" is inclusive, "end" is exclusive in KEDA.
         start: 0 * * * *
-        end: 2 * * * *
+        end: 1 * * * *
         timezone: Etc/UTC
-        desiredReplicas: "2"
+        desiredReplicas: "25"
 
