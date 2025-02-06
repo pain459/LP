@@ -1,0 +1,27 @@
+# file: deployment.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: keda-sample
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-deployment
+  namespace: keda-sample
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sample
+  template:
+    metadata:
+      labels:
+        app: sample
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:latest
+        ports:
+          - containerPort: 80
+

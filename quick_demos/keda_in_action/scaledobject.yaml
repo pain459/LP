@@ -1,0 +1,24 @@
+# file: scaledobject.yaml
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: sample-cron-scaler
+  namespace: keda-sample
+spec:
+  scaleTargetRef:
+    name: sample-deployment
+  # Check the ScaledObject every 30s (default is 30s)
+  pollingInterval: 30
+  cooldownPeriod: 30
+  minReplicaCount: 0
+  maxReplicaCount: 3
+  triggers:
+    - type: cron
+      metadata:
+        # This cron expression scales to 2 replicas from minute 0 to minute 5 of every hour
+        # The "start" is inclusive, "end" is exclusive in KEDA.
+        start: 0 * * * *
+        end: 2 * * * *
+        timezone: Etc/UTC
+        desiredReplicas: "2"
+
