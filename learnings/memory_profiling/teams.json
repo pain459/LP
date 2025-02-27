@@ -22,9 +22,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-1.company.com",
-        "image_name": "team_1/service:v5.3",
+        "image_name": "team_1/service:v7.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -66,9 +66,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-2.company.com",
-        "image_name": "team_2/service:v7.7",
+        "image_name": "team_2/service:v3.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -110,9 +110,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-3.company.com",
-        "image_name": "team_3/service:v1.2",
+        "image_name": "team_3/service:v9.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -154,9 +154,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-4.company.com",
-        "image_name": "team_4/service:v8.4",
+        "image_name": "team_4/service:v10.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -200,7 +200,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-5.company.com",
-        "image_name": "team_5/service:v2.2",
+        "image_name": "team_5/service:v1.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -244,7 +244,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-6.company.com",
-        "image_name": "team_6/service:v9.1",
+        "image_name": "team_6/service:v1.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -288,7 +288,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-7.company.com",
-        "image_name": "team_7/service:v9.7",
+        "image_name": "team_7/service:v9.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -330,9 +330,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-8.company.com",
-        "image_name": "team_8/service:v10.3",
+        "image_name": "team_8/service:v4.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -374,9 +374,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-9.company.com",
-        "image_name": "team_9/service:v6.6",
+        "image_name": "team_9/service:v6.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -418,9 +418,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-10.company.com",
-        "image_name": "team_10/service:v7.4",
+        "image_name": "team_10/service:v1.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -464,7 +464,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-11.company.com",
-        "image_name": "team_11/service:v7.0",
+        "image_name": "team_11/service:v1.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -506,9 +506,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-12.company.com",
-        "image_name": "team_12/service:v2.3",
+        "image_name": "team_12/service:v7.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -550,9 +550,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-13.company.com",
-        "image_name": "team_13/service:v6.1",
+        "image_name": "team_13/service:v8.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -596,7 +596,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-14.company.com",
-        "image_name": "team_14/service:v5.0",
+        "image_name": "team_14/service:v1.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -638,9 +638,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-15.company.com",
-        "image_name": "team_15/service:v6.2",
+        "image_name": "team_15/service:v5.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -682,9 +682,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-16.company.com",
-        "image_name": "team_16/service:v10.4",
+        "image_name": "team_16/service:v10.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -726,9 +726,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-17.company.com",
-        "image_name": "team_17/service:v2.4",
+        "image_name": "team_17/service:v1.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -770,9 +770,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-18.company.com",
-        "image_name": "team_18/service:v7.3",
+        "image_name": "team_18/service:v10.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -814,9 +814,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-19.company.com",
-        "image_name": "team_19/service:v1.6",
+        "image_name": "team_19/service:v4.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -860,7 +860,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-20.company.com",
-        "image_name": "team_20/service:v2.9",
+        "image_name": "team_20/service:v5.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -904,7 +904,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-21.company.com",
-        "image_name": "team_21/service:v6.0",
+        "image_name": "team_21/service:v1.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -948,7 +948,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-22.company.com",
-        "image_name": "team_22/service:v7.0",
+        "image_name": "team_22/service:v4.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -990,9 +990,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-23.company.com",
-        "image_name": "team_23/service:v2.4",
+        "image_name": "team_23/service:v6.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1036,7 +1036,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-24.company.com",
-        "image_name": "team_24/service:v5.7",
+        "image_name": "team_24/service:v7.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1078,9 +1078,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-25.company.com",
-        "image_name": "team_25/service:v8.7",
+        "image_name": "team_25/service:v9.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1122,9 +1122,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-26.company.com",
-        "image_name": "team_26/service:v10.1",
+        "image_name": "team_26/service:v9.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1168,7 +1168,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-27.company.com",
-        "image_name": "team_27/service:v10.1",
+        "image_name": "team_27/service:v6.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1212,7 +1212,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-28.company.com",
-        "image_name": "team_28/service:v1.8",
+        "image_name": "team_28/service:v8.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1256,7 +1256,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-29.company.com",
-        "image_name": "team_29/service:v1.5",
+        "image_name": "team_29/service:v3.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1298,9 +1298,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-30.company.com",
-        "image_name": "team_30/service:v2.9",
+        "image_name": "team_30/service:v10.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1342,9 +1342,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-31.company.com",
-        "image_name": "team_31/service:v1.4",
+        "image_name": "team_31/service:v9.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1386,9 +1386,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-32.company.com",
-        "image_name": "team_32/service:v4.0",
+        "image_name": "team_32/service:v9.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1430,9 +1430,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-33.company.com",
-        "image_name": "team_33/service:v4.2",
+        "image_name": "team_33/service:v10.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1474,9 +1474,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-34.company.com",
-        "image_name": "team_34/service:v6.2",
+        "image_name": "team_34/service:v5.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1518,9 +1518,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-35.company.com",
-        "image_name": "team_35/service:v2.1",
+        "image_name": "team_35/service:v10.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1564,7 +1564,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-36.company.com",
-        "image_name": "team_36/service:v8.4",
+        "image_name": "team_36/service:v7.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1606,9 +1606,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-37.company.com",
-        "image_name": "team_37/service:v4.9",
+        "image_name": "team_37/service:v9.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1650,9 +1650,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-38.company.com",
-        "image_name": "team_38/service:v4.5",
+        "image_name": "team_38/service:v5.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1694,9 +1694,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-39.company.com",
-        "image_name": "team_39/service:v5.5",
+        "image_name": "team_39/service:v1.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1738,9 +1738,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-40.company.com",
-        "image_name": "team_40/service:v7.7",
+        "image_name": "team_40/service:v5.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1782,9 +1782,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-41.company.com",
-        "image_name": "team_41/service:v7.8",
+        "image_name": "team_41/service:v4.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1826,9 +1826,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-42.company.com",
-        "image_name": "team_42/service:v3.8",
+        "image_name": "team_42/service:v7.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1872,7 +1872,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-43.company.com",
-        "image_name": "team_43/service:v3.7",
+        "image_name": "team_43/service:v1.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1916,7 +1916,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-44.company.com",
-        "image_name": "team_44/service:v9.5",
+        "image_name": "team_44/service:v7.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -1960,7 +1960,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-45.company.com",
-        "image_name": "team_45/service:v7.1",
+        "image_name": "team_45/service:v3.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2002,9 +2002,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-46.company.com",
-        "image_name": "team_46/service:v2.8",
+        "image_name": "team_46/service:v5.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2048,7 +2048,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-47.company.com",
-        "image_name": "team_47/service:v6.0",
+        "image_name": "team_47/service:v1.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2092,7 +2092,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-48.company.com",
-        "image_name": "team_48/service:v6.8",
+        "image_name": "team_48/service:v1.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2134,9 +2134,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-49.company.com",
-        "image_name": "team_49/service:v5.4",
+        "image_name": "team_49/service:v1.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2178,7 +2178,7 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-50.company.com",
         "image_name": "team_50/service:v3.8",
         "software_users": {
@@ -2222,9 +2222,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-51.company.com",
-        "image_name": "team_51/service:v3.8",
+        "image_name": "team_51/service:v4.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2266,9 +2266,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-52.company.com",
-        "image_name": "team_52/service:v6.7",
+        "image_name": "team_52/service:v8.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2312,7 +2312,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-53.company.com",
-        "image_name": "team_53/service:v6.3",
+        "image_name": "team_53/service:v4.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2356,7 +2356,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-54.company.com",
-        "image_name": "team_54/service:v10.7",
+        "image_name": "team_54/service:v4.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2400,7 +2400,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-55.company.com",
-        "image_name": "team_55/service:v7.6",
+        "image_name": "team_55/service:v5.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2442,9 +2442,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-56.company.com",
-        "image_name": "team_56/service:v10.4",
+        "image_name": "team_56/service:v5.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2488,7 +2488,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-57.company.com",
-        "image_name": "team_57/service:v2.2",
+        "image_name": "team_57/service:v9.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2530,9 +2530,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-58.company.com",
-        "image_name": "team_58/service:v1.9",
+        "image_name": "team_58/service:v5.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2574,9 +2574,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-59.company.com",
-        "image_name": "team_59/service:v1.4",
+        "image_name": "team_59/service:v10.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2618,9 +2618,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-60.company.com",
-        "image_name": "team_60/service:v3.1",
+        "image_name": "team_60/service:v10.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2662,9 +2662,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-61.company.com",
-        "image_name": "team_61/service:v3.6",
+        "image_name": "team_61/service:v3.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2706,9 +2706,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-62.company.com",
-        "image_name": "team_62/service:v3.3",
+        "image_name": "team_62/service:v3.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2752,7 +2752,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-63.company.com",
-        "image_name": "team_63/service:v10.8",
+        "image_name": "team_63/service:v3.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2796,7 +2796,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-64.company.com",
-        "image_name": "team_64/service:v3.1",
+        "image_name": "team_64/service:v9.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2838,9 +2838,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-65.company.com",
-        "image_name": "team_65/service:v7.4",
+        "image_name": "team_65/service:v2.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2882,9 +2882,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-66.company.com",
-        "image_name": "team_66/service:v7.3",
+        "image_name": "team_66/service:v2.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2926,9 +2926,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-67.company.com",
-        "image_name": "team_67/service:v2.9",
+        "image_name": "team_67/service:v6.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -2970,9 +2970,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-68.company.com",
-        "image_name": "team_68/service:v9.0",
+        "image_name": "team_68/service:v6.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3014,9 +3014,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-69.company.com",
-        "image_name": "team_69/service:v9.2",
+        "image_name": "team_69/service:v1.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3058,9 +3058,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-70.company.com",
-        "image_name": "team_70/service:v8.2",
+        "image_name": "team_70/service:v4.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3104,7 +3104,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-71.company.com",
-        "image_name": "team_71/service:v7.3",
+        "image_name": "team_71/service:v5.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3146,9 +3146,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-72.company.com",
-        "image_name": "team_72/service:v10.2",
+        "image_name": "team_72/service:v3.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3190,9 +3190,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-73.company.com",
-        "image_name": "team_73/service:v5.2",
+        "image_name": "team_73/service:v1.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3234,9 +3234,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-74.company.com",
-        "image_name": "team_74/service:v7.7",
+        "image_name": "team_74/service:v2.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3278,9 +3278,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-75.company.com",
-        "image_name": "team_75/service:v2.2",
+        "image_name": "team_75/service:v5.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3322,9 +3322,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-76.company.com",
-        "image_name": "team_76/service:v4.3",
+        "image_name": "team_76/service:v2.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3366,9 +3366,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-77.company.com",
-        "image_name": "team_77/service:v5.5",
+        "image_name": "team_77/service:v10.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3410,9 +3410,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-78.company.com",
-        "image_name": "team_78/service:v6.8",
+        "image_name": "team_78/service:v2.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3454,9 +3454,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-79.company.com",
-        "image_name": "team_79/service:v2.3",
+        "image_name": "team_79/service:v6.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3500,7 +3500,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-80.company.com",
-        "image_name": "team_80/service:v9.6",
+        "image_name": "team_80/service:v2.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3544,7 +3544,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-81.company.com",
-        "image_name": "team_81/service:v7.1",
+        "image_name": "team_81/service:v8.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3588,7 +3588,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-82.company.com",
-        "image_name": "team_82/service:v4.3",
+        "image_name": "team_82/service:v7.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3630,9 +3630,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-83.company.com",
-        "image_name": "team_83/service:v9.8",
+        "image_name": "team_83/service:v9.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3674,9 +3674,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-84.company.com",
-        "image_name": "team_84/service:v5.7",
+        "image_name": "team_84/service:v9.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3718,9 +3718,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-85.company.com",
-        "image_name": "team_85/service:v2.2",
+        "image_name": "team_85/service:v10.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3762,9 +3762,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-86.company.com",
-        "image_name": "team_86/service:v3.7",
+        "image_name": "team_86/service:v1.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3806,9 +3806,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-87.company.com",
-        "image_name": "team_87/service:v1.0",
+        "image_name": "team_87/service:v1.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3850,9 +3850,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-88.company.com",
-        "image_name": "team_88/service:v6.5",
+        "image_name": "team_88/service:v7.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3894,7 +3894,7 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-89.company.com",
         "image_name": "team_89/service:v1.1",
         "software_users": {
@@ -3940,7 +3940,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-90.company.com",
-        "image_name": "team_90/service:v5.0",
+        "image_name": "team_90/service:v9.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -3982,9 +3982,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-91.company.com",
-        "image_name": "team_91/service:v2.8",
+        "image_name": "team_91/service:v10.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4028,7 +4028,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-92.company.com",
-        "image_name": "team_92/service:v9.6",
+        "image_name": "team_92/service:v7.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4072,7 +4072,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-93.company.com",
-        "image_name": "team_93/service:v10.5",
+        "image_name": "team_93/service:v9.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4114,9 +4114,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-94.company.com",
-        "image_name": "team_94/service:v3.1",
+        "image_name": "team_94/service:v5.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4160,7 +4160,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-95.company.com",
-        "image_name": "team_95/service:v3.1",
+        "image_name": "team_95/service:v10.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4202,9 +4202,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-96.company.com",
-        "image_name": "team_96/service:v1.3",
+        "image_name": "team_96/service:v10.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4246,9 +4246,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-97.company.com",
-        "image_name": "team_97/service:v8.4",
+        "image_name": "team_97/service:v5.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4290,9 +4290,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-98.company.com",
-        "image_name": "team_98/service:v8.6",
+        "image_name": "team_98/service:v8.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4336,7 +4336,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-99.company.com",
-        "image_name": "team_99/service:v9.4",
+        "image_name": "team_99/service:v3.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4378,9 +4378,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-100.company.com",
-        "image_name": "team_100/service:v7.4",
+        "image_name": "team_100/service:v5.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4422,9 +4422,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-101.company.com",
-        "image_name": "team_101/service:v1.7",
+        "image_name": "team_101/service:v2.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4468,7 +4468,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-102.company.com",
-        "image_name": "team_102/service:v10.5",
+        "image_name": "team_102/service:v3.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4510,9 +4510,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-103.company.com",
-        "image_name": "team_103/service:v1.9",
+        "image_name": "team_103/service:v5.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4554,9 +4554,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-104.company.com",
-        "image_name": "team_104/service:v3.7",
+        "image_name": "team_104/service:v1.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4598,9 +4598,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-105.company.com",
-        "image_name": "team_105/service:v7.8",
+        "image_name": "team_105/service:v6.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4642,9 +4642,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-106.company.com",
-        "image_name": "team_106/service:v2.4",
+        "image_name": "team_106/service:v7.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4686,9 +4686,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-107.company.com",
-        "image_name": "team_107/service:v6.4",
+        "image_name": "team_107/service:v6.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4730,9 +4730,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-108.company.com",
-        "image_name": "team_108/service:v8.0",
+        "image_name": "team_108/service:v6.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4774,9 +4774,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-109.company.com",
-        "image_name": "team_109/service:v10.1",
+        "image_name": "team_109/service:v6.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4818,9 +4818,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-110.company.com",
-        "image_name": "team_110/service:v3.5",
+        "image_name": "team_110/service:v8.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4862,9 +4862,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-111.company.com",
-        "image_name": "team_111/service:v7.6",
+        "image_name": "team_111/service:v1.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4908,7 +4908,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-112.company.com",
-        "image_name": "team_112/service:v9.2",
+        "image_name": "team_112/service:v9.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4952,7 +4952,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-113.company.com",
-        "image_name": "team_113/service:v2.0",
+        "image_name": "team_113/service:v5.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -4994,9 +4994,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-114.company.com",
-        "image_name": "team_114/service:v6.3",
+        "image_name": "team_114/service:v7.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5040,7 +5040,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-115.company.com",
-        "image_name": "team_115/service:v2.3",
+        "image_name": "team_115/service:v7.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5082,9 +5082,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-116.company.com",
-        "image_name": "team_116/service:v7.0",
+        "image_name": "team_116/service:v1.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5126,9 +5126,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-117.company.com",
-        "image_name": "team_117/service:v3.2",
+        "image_name": "team_117/service:v3.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5172,7 +5172,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-118.company.com",
-        "image_name": "team_118/service:v3.5",
+        "image_name": "team_118/service:v6.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5214,9 +5214,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-119.company.com",
-        "image_name": "team_119/service:v5.5",
+        "image_name": "team_119/service:v4.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5258,9 +5258,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-120.company.com",
-        "image_name": "team_120/service:v4.6",
+        "image_name": "team_120/service:v9.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5304,7 +5304,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-121.company.com",
-        "image_name": "team_121/service:v10.9",
+        "image_name": "team_121/service:v2.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5348,7 +5348,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-122.company.com",
-        "image_name": "team_122/service:v7.4",
+        "image_name": "team_122/service:v8.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5390,9 +5390,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-123.company.com",
-        "image_name": "team_123/service:v1.1",
+        "image_name": "team_123/service:v1.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5434,9 +5434,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-124.company.com",
-        "image_name": "team_124/service:v8.2",
+        "image_name": "team_124/service:v6.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5478,9 +5478,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-125.company.com",
-        "image_name": "team_125/service:v1.2",
+        "image_name": "team_125/service:v3.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5522,9 +5522,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-126.company.com",
-        "image_name": "team_126/service:v10.8",
+        "image_name": "team_126/service:v10.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5568,7 +5568,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-127.company.com",
-        "image_name": "team_127/service:v10.6",
+        "image_name": "team_127/service:v3.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5610,9 +5610,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-128.company.com",
-        "image_name": "team_128/service:v7.0",
+        "image_name": "team_128/service:v3.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5656,7 +5656,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-129.company.com",
-        "image_name": "team_129/service:v7.1",
+        "image_name": "team_129/service:v6.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5698,9 +5698,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-130.company.com",
-        "image_name": "team_130/service:v10.5",
+        "image_name": "team_130/service:v8.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5742,9 +5742,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-131.company.com",
-        "image_name": "team_131/service:v1.3",
+        "image_name": "team_131/service:v3.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5786,9 +5786,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-132.company.com",
-        "image_name": "team_132/service:v4.3",
+        "image_name": "team_132/service:v7.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5832,7 +5832,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-133.company.com",
-        "image_name": "team_133/service:v4.3",
+        "image_name": "team_133/service:v10.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5874,9 +5874,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-134.company.com",
-        "image_name": "team_134/service:v1.9",
+        "image_name": "team_134/service:v2.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5918,9 +5918,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-135.company.com",
-        "image_name": "team_135/service:v4.1",
+        "image_name": "team_135/service:v9.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -5964,7 +5964,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-136.company.com",
-        "image_name": "team_136/service:v8.4",
+        "image_name": "team_136/service:v3.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6006,9 +6006,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-137.company.com",
-        "image_name": "team_137/service:v6.4",
+        "image_name": "team_137/service:v10.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6050,9 +6050,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-138.company.com",
-        "image_name": "team_138/service:v8.9",
+        "image_name": "team_138/service:v7.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6094,9 +6094,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-139.company.com",
-        "image_name": "team_139/service:v4.4",
+        "image_name": "team_139/service:v4.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6138,9 +6138,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-140.company.com",
-        "image_name": "team_140/service:v4.5",
+        "image_name": "team_140/service:v2.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6184,7 +6184,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-141.company.com",
-        "image_name": "team_141/service:v10.5",
+        "image_name": "team_141/service:v5.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6226,9 +6226,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-142.company.com",
-        "image_name": "team_142/service:v3.0",
+        "image_name": "team_142/service:v1.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6270,9 +6270,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-143.company.com",
-        "image_name": "team_143/service:v5.5",
+        "image_name": "team_143/service:v8.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6314,9 +6314,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-144.company.com",
-        "image_name": "team_144/service:v2.5",
+        "image_name": "team_144/service:v8.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6358,9 +6358,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-145.company.com",
-        "image_name": "team_145/service:v5.9",
+        "image_name": "team_145/service:v2.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6402,9 +6402,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-146.company.com",
-        "image_name": "team_146/service:v6.1",
+        "image_name": "team_146/service:v3.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6446,9 +6446,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-147.company.com",
-        "image_name": "team_147/service:v5.7",
+        "image_name": "team_147/service:v5.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6492,7 +6492,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-148.company.com",
-        "image_name": "team_148/service:v2.7",
+        "image_name": "team_148/service:v4.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6534,9 +6534,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-149.company.com",
-        "image_name": "team_149/service:v7.7",
+        "image_name": "team_149/service:v4.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6578,9 +6578,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-150.company.com",
-        "image_name": "team_150/service:v1.5",
+        "image_name": "team_150/service:v1.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6622,9 +6622,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-151.company.com",
-        "image_name": "team_151/service:v6.3",
+        "image_name": "team_151/service:v2.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6666,9 +6666,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-152.company.com",
-        "image_name": "team_152/service:v9.4",
+        "image_name": "team_152/service:v7.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6710,9 +6710,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-153.company.com",
-        "image_name": "team_153/service:v7.2",
+        "image_name": "team_153/service:v10.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6754,9 +6754,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-154.company.com",
-        "image_name": "team_154/service:v9.4",
+        "image_name": "team_154/service:v6.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6798,9 +6798,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-155.company.com",
-        "image_name": "team_155/service:v4.2",
+        "image_name": "team_155/service:v4.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6842,9 +6842,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-156.company.com",
-        "image_name": "team_156/service:v8.3",
+        "image_name": "team_156/service:v5.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6888,7 +6888,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-157.company.com",
-        "image_name": "team_157/service:v6.8",
+        "image_name": "team_157/service:v5.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6932,7 +6932,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-158.company.com",
-        "image_name": "team_158/service:v1.0",
+        "image_name": "team_158/service:v8.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -6974,9 +6974,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-159.company.com",
-        "image_name": "team_159/service:v6.2",
+        "image_name": "team_159/service:v4.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7018,9 +7018,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-160.company.com",
-        "image_name": "team_160/service:v7.9",
+        "image_name": "team_160/service:v10.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7062,9 +7062,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-161.company.com",
-        "image_name": "team_161/service:v10.3",
+        "image_name": "team_161/service:v6.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7106,9 +7106,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-162.company.com",
-        "image_name": "team_162/service:v5.6",
+        "image_name": "team_162/service:v3.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7152,7 +7152,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-163.company.com",
-        "image_name": "team_163/service:v2.9",
+        "image_name": "team_163/service:v2.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7194,9 +7194,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-164.company.com",
-        "image_name": "team_164/service:v5.1",
+        "image_name": "team_164/service:v3.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7240,7 +7240,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-165.company.com",
-        "image_name": "team_165/service:v6.7",
+        "image_name": "team_165/service:v2.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7282,9 +7282,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-166.company.com",
-        "image_name": "team_166/service:v9.6",
+        "image_name": "team_166/service:v1.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7328,7 +7328,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-167.company.com",
-        "image_name": "team_167/service:v9.0",
+        "image_name": "team_167/service:v6.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7370,9 +7370,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-168.company.com",
-        "image_name": "team_168/service:v3.7",
+        "image_name": "team_168/service:v9.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7416,7 +7416,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-169.company.com",
-        "image_name": "team_169/service:v10.6",
+        "image_name": "team_169/service:v3.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7460,7 +7460,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-170.company.com",
-        "image_name": "team_170/service:v3.5",
+        "image_name": "team_170/service:v2.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7502,9 +7502,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "canary",
         "lb_address": "lb-171.company.com",
-        "image_name": "team_171/service:v9.8",
+        "image_name": "team_171/service:v8.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7548,7 +7548,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-172.company.com",
-        "image_name": "team_172/service:v1.3",
+        "image_name": "team_172/service:v7.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7590,9 +7590,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-173.company.com",
-        "image_name": "team_173/service:v5.0",
+        "image_name": "team_173/service:v9.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7634,9 +7634,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-174.company.com",
-        "image_name": "team_174/service:v6.8",
+        "image_name": "team_174/service:v6.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7680,7 +7680,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-175.company.com",
-        "image_name": "team_175/service:v2.7",
+        "image_name": "team_175/service:v10.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7724,7 +7724,7 @@
         },
         "deployment_type": "rolling",
         "lb_address": "lb-176.company.com",
-        "image_name": "team_176/service:v8.2",
+        "image_name": "team_176/service:v4.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7766,9 +7766,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-177.company.com",
-        "image_name": "team_177/service:v2.3",
+        "image_name": "team_177/service:v9.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7810,9 +7810,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-178.company.com",
-        "image_name": "team_178/service:v1.7",
+        "image_name": "team_178/service:v2.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7854,9 +7854,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-179.company.com",
-        "image_name": "team_179/service:v5.3",
+        "image_name": "team_179/service:v6.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7898,9 +7898,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-180.company.com",
-        "image_name": "team_180/service:v4.7",
+        "image_name": "team_180/service:v1.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7942,9 +7942,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-181.company.com",
-        "image_name": "team_181/service:v3.4",
+        "image_name": "team_181/service:v6.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -7988,7 +7988,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-182.company.com",
-        "image_name": "team_182/service:v7.3",
+        "image_name": "team_182/service:v7.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8032,7 +8032,7 @@
         },
         "deployment_type": "blue-green",
         "lb_address": "lb-183.company.com",
-        "image_name": "team_183/service:v7.3",
+        "image_name": "team_183/service:v2.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8074,9 +8074,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-184.company.com",
-        "image_name": "team_184/service:v1.0",
+        "image_name": "team_184/service:v9.1",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8118,9 +8118,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-185.company.com",
-        "image_name": "team_185/service:v3.1",
+        "image_name": "team_185/service:v6.2",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8162,9 +8162,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-186.company.com",
-        "image_name": "team_186/service:v5.1",
+        "image_name": "team_186/service:v8.5",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8206,9 +8206,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "blue-green",
+        "deployment_type": "rolling",
         "lb_address": "lb-187.company.com",
-        "image_name": "team_187/service:v10.3",
+        "image_name": "team_187/service:v10.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8250,9 +8250,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-188.company.com",
-        "image_name": "team_188/service:v7.9",
+        "image_name": "team_188/service:v1.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8294,9 +8294,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-189.company.com",
-        "image_name": "team_189/service:v3.5",
+        "image_name": "team_189/service:v3.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8340,7 +8340,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-190.company.com",
-        "image_name": "team_190/service:v2.3",
+        "image_name": "team_190/service:v10.8",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8382,9 +8382,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-191.company.com",
-        "image_name": "team_191/service:v3.8",
+        "image_name": "team_191/service:v1.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8428,7 +8428,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-192.company.com",
-        "image_name": "team_192/service:v2.5",
+        "image_name": "team_192/service:v2.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8472,7 +8472,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-193.company.com",
-        "image_name": "team_193/service:v3.7",
+        "image_name": "team_193/service:v1.6",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8514,9 +8514,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "blue-green",
         "lb_address": "lb-194.company.com",
-        "image_name": "team_194/service:v1.0",
+        "image_name": "team_194/service:v8.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8558,9 +8558,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-195.company.com",
-        "image_name": "team_195/service:v10.5",
+        "image_name": "team_195/service:v9.9",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8602,9 +8602,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-196.company.com",
-        "image_name": "team_196/service:v6.4",
+        "image_name": "team_196/service:v10.0",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8648,7 +8648,7 @@
         },
         "deployment_type": "canary",
         "lb_address": "lb-197.company.com",
-        "image_name": "team_197/service:v10.3",
+        "image_name": "team_197/service:v10.7",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8690,9 +8690,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "blue-green",
         "lb_address": "lb-198.company.com",
-        "image_name": "team_198/service:v8.1",
+        "image_name": "team_198/service:v2.4",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8734,9 +8734,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "rolling",
+        "deployment_type": "canary",
         "lb_address": "lb-199.company.com",
-        "image_name": "team_199/service:v10.2",
+        "image_name": "team_199/service:v2.3",
         "software_users": {
             "layer1": {
                 "layer2": {
@@ -8778,9 +8778,9 @@
                 "prod_approver_3"
             ]
         },
-        "deployment_type": "canary",
+        "deployment_type": "rolling",
         "lb_address": "lb-200.company.com",
-        "image_name": "team_200/service:v6.0",
+        "image_name": "team_200/service:v1.9",
         "software_users": {
             "layer1": {
                 "layer2": {

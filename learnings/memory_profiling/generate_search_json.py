@@ -46,7 +46,7 @@ def generate_team(team_id):
     }
 
 @profile
-def generate_json_file(json_filename="teams.json", num_teams=200):
+def generate_json_file(json_filename="teams.json", num_teams=200000):
     """
     Generates a JSON file with 200 teams, each containing nested structures up to 6 levels deep.
     """
