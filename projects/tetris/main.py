@@ -36,7 +36,7 @@ Z = [['.....',
       '.00..',
       '.0...',
       '.....']]
-
+      
 I = [['..0..',
       '..0..',
       '..0..',
@@ -266,6 +266,29 @@ def draw_window(surface, grid, score=0):
     draw_grid(surface, grid)
     pygame.draw.rect(surface, (255, 0, 0), (top_left_x, top_left_y, play_width, play_height), 5)
 
+# New helper function: rotate a piece using a simple wall-kick system.
+def rotate_piece(piece, grid, direction):
+    original_rotation = piece.rotation
+    original_x = piece.x
+    original_y = piece.y
+    # Calculate new rotation index
+    piece.rotation = (piece.rotation + direction) % len(piece.shape)
+    
+    # SRS wall kick offsets for non I pieces (including Z)
+    # (These offsets are a simple version and can be tweaked for realism.)
+    offsets = [(0, 0), (-1, 0), (-1, 1), (0, -2), (-1, -2)]
+    
+    for offset in offsets:
+        piece.x = original_x + offset[0]
+        piece.y = original_y + offset[1]
+        if valid_space(piece, grid):
+            return True
+    # If all tests fail, revert to original state.
+    piece.rotation = original_rotation
+    piece.x = original_x
+    piece.y = original_y
+    return False
+
 # The main game loop
 def main(win):
     locked_positions = {}
@@ -320,9 +343,8 @@ def main(win):
                     if not valid_space(current_piece, grid):
                         current_piece.y -= 1
                 elif event.key == pygame.K_UP:
-                    current_piece.rotation = (current_piece.rotation + 1) % len(current_piece.shape)
-                    if not valid_space(current_piece, grid):
-                        current_piece.rotation = (current_piece.rotation - 1) % len(current_piece.shape)
+                    # Use our new rotation function with wall kicks.
+                    rotate_piece(current_piece, grid, 1)
 
         shape_pos = convert_shape_format(current_piece)
 
