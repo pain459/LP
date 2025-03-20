@@ -1,0 +1,21 @@
+version: "3.8"
+services:
+  hazelcast:
+    image: hazelcast/hazelcast:latest
+    container_name: hazelcast
+    ports:
+      - "5701:5701"
+
+  sensor:
+    build: .
+    container_name: sensor
+    command: python sensor.py
+    depends_on:
+      - hazelcast
+
+  aggregator:
+    build: .
+    container_name: aggregator
+    command: python aggregator.py
+    depends_on:
+      - hazelcast
