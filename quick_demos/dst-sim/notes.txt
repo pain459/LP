@@ -1,0 +1,9 @@
+ravik@COLDHEART:~$ docker exec -it ntp-server sh
+/ # chronyc manual on
+200 OK
+/ # chronyc settime "2025-03-28 17:36:00"
+200 OK
+Clock was -3537.13 seconds fast.  Frequency change = 0.00ppm, new frequency = -2609.79ppm
+/ # chronyc makestep
+200 OK
+/ # exit

@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  ntp-server:
+    build: ./ntp-server
+    container_name: ntp-server
+    networks:
+      - dst-net
+    cap_add:
+      - SYS_TIME
+    restart: unless-stopped
+
+  cron-env:
+    build: ./cron-env
+    container_name: cron-env
+    depends_on:
+      - ntp-server
+    networks:
+      - dst-net
+
+  time-web:
+    build: ./time-web
+    container_name: time-web
+    ports:
+      - "8080:5000"
+    cap_add:
+      - SYS_TIME
+    depends_on:
+      - ntp-server
+    networks:
+      - dst-net
+
+
+networks:
+  dst-net:
+    driver: bridge
