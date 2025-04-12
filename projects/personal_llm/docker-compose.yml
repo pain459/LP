@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  llama:
+    build: .
+    container_name: llama-llm
+    volumes:
+      - ./model:/app/model
+      - ./data:/app/data
+      - ./uploads:/app/uploads
+    ports:
+      - "8000:8000"  # FastAPI UI
+    command: ["bash", "startup.sh"]
+    stdin_open: true
+    tty: true
